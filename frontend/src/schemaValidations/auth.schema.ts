@@ -53,3 +53,11 @@ export const LoginRes = z.object({
     message: z.string()
 })
 export type LoginResType = z.TypeOf<typeof LoginRes>
+
+export const OtpBody = z.object({
+    pin: z.string().min(6, {
+        message: "Your one-time password must be 6 characters.",
+    }),
+}).strict()
+
+export type OtpBodyType = z.TypeOf<typeof OtpBody>

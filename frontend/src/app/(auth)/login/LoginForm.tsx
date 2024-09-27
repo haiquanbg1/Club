@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-
+import { useToast } from '@/hooks/use-toast'
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -15,9 +15,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { loginBody, LoginBodyType } from "@/schemaValidations/auth.schema"
+import authApiRequest from "@/apiRequest/auth"
 
 const formSchema = loginBody;
 export function LoginForm() {
+    const { toast } = useToast()
     const form = useForm<LoginBodyType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -26,10 +28,34 @@ export function LoginForm() {
         },
     })
 
-    function onSubmit(values: LoginBodyType) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: LoginBodyType) {
+        try {
+            const result = await authApiRequest.login(values)
+            toast({
+                description: result.payload.message
+                // description: "There was a problem with your request.",
+            })
+        } catch (error: any) {
+            console.log(error)
+            const errors = error.payload.errors as {
+                field: string
+                message: string
+            }[]
+            if (error.status === 422) {
+                errors.forEach((error) => {
+                    form.setError(error.field as 'username' | 'password', {
+                        type: 'server',
+                        message: error.message
+                    })
+                })
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                })
+            }
+        }
     }
     return (
         <Form {...form}>
