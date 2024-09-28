@@ -25,13 +25,14 @@ import { OtpBody, OtpBodyType, RegisterBody, RegisterBodyType } from "@/schemaVa
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import authApiRequest from "@/apiRequest/auth"
+import OtpForm from "./OtpForm"
+
 
 const formSchema = RegisterBody;
-const OtpSchema = OtpBody;
+
 export function RegisterForm() {
     const { toast } = useToast()
-    const [showOTP, setShowOTP] = useState(true)
-    const [OTP, setOTP] = useState("")
+    const [showOTP, setShowOTP] = useState(false)
     const form = useForm<RegisterBodyType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -41,21 +42,16 @@ export function RegisterForm() {
             confirmPassword: ''
         },
     })
-    const OtpForm = useForm<OtpBodyType>({
-        resolver: zodResolver(OtpSchema),
-        defaultValues: {
-            pin: ''
-        },
-    })
-    console.log(OTP)
-    async function onSubmit(values: RegisterBodyType) {
 
+    async function onSubmit(values: RegisterBodyType) {
+        setShowOTP(true)
         try {
-            const result = await authApiRequest.register(values)
+            const result = await authApiRequest.getOTP(values)
             toast({
                 description: result.payload.message
                 // description: "There was a problem with your request.",
             })
+            setShowOTP(true)
         } catch (error: any) {
             console.log(error)
             const errors = error.payload.errors as {
@@ -80,9 +76,7 @@ export function RegisterForm() {
 
     }
 
-    function onOtpSubmit(values: OtpBodyType) {
 
-    }
     return (
         <div className="w-full">
             {
@@ -94,7 +88,7 @@ export function RegisterForm() {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Nhập tên" {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
                                     </FormControl>
@@ -120,7 +114,7 @@ export function RegisterForm() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Nhập mật khẩu" type='password' {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
                                     </FormControl>
@@ -133,7 +127,7 @@ export function RegisterForm() {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Confirm Password</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Nhập lại mật khẩu" type='password' {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
                                     </FormControl>
@@ -147,44 +141,7 @@ export function RegisterForm() {
             }
             {
                 showOTP &&
-                <Form {...OtpForm}>
-                    <form onSubmit={OtpForm.handleSubmit(onOtpSubmit)} className="w-full space-y-6">
-                        <FormField
-                            control={OtpForm.control}
-                            name="pin"
-                            render={({ field }) => (
-                                <FormItem
-                                    className="w-full">
-                                    <FormLabel className="text-center block text-[20px] font-bold">One-Time Password</FormLabel>
-                                    <FormControl>
-                                        <InputOTP
-                                            maxLength={6}
-                                            {...field}
-                                            pattern={REGEXP_ONLY_DIGITS}
-                                            value={OTP}
-                                        >
-                                            <InputOTPGroup className="w-full">
-                                                <InputOTPSlot className="w-full" index={0} />
-                                                <InputOTPSlot className="w-full" index={1} />
-                                                <InputOTPSlot className="w-full" index={2} />
-                                                <InputOTPSlot className="w-full" index={3} />
-                                                <InputOTPSlot className="w-full" index={4} />
-                                                <InputOTPSlot className="w-full" index={5} />
-                                            </InputOTPGroup>
-                                        </InputOTP>
-                                    </FormControl>
-                                    <FormDescription className="text-center">
-                                        Hãy nhập OTP được gửi đến gmail của bạn.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="w-full flex justify-center">
-                            <Button type="submit" className="w-2/3 m-auto text-[20px] font-bold">Submit</Button>
-                        </div>
-                    </form>
-                </Form>
+                <OtpForm data={form.getValues()} />
             }
 
         </div>
