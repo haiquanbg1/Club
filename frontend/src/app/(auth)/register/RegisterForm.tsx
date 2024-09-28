@@ -30,7 +30,7 @@ const formSchema = RegisterBody;
 const OtpSchema = OtpBody;
 export function RegisterForm() {
     const { toast } = useToast()
-    const [showOTP, setShowOTP] = useState(false)
+    const [showOTP, setShowOTP] = useState(true)
     const [OTP, setOTP] = useState("")
     const form = useForm<RegisterBodyType>({
         resolver: zodResolver(formSchema),
@@ -49,6 +49,7 @@ export function RegisterForm() {
     })
     console.log(OTP)
     async function onSubmit(values: RegisterBodyType) {
+
         try {
             const result = await authApiRequest.register(values)
             toast({
@@ -76,6 +77,7 @@ export function RegisterForm() {
                 })
             }
         }
+
     }
 
     function onOtpSubmit(values: OtpBodyType) {

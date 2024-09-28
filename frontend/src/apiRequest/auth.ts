@@ -6,7 +6,7 @@ import { MessageResType } from "@/schemaValidations/common.schema";
 
 const authApiRequest = {
     login: (body: LoginBodyType) => http.post<LoginResType>('auth/login', body),
-    registerOTP: (OTP: string) => http.post<MessageResType>('auth/login/otp', OTP),
+    registerOTP: (OTP: string) => http.post<MessageResType>('auth/register/otp', OTP),
     register: (body: RegisterBodyType) => http.post<RegisterResType>('auth/register', body),
 }
 
