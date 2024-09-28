@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+
       User.belongsToMany(models.Role, {
         through: 'Member_Role',
         foreignKey: 'user_id',  // Khóa ngoại trỏ về User trong Member_Role
@@ -74,6 +75,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false, 
     }
+
 
   }, {
     sequelize,

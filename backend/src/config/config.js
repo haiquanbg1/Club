@@ -1,23 +1,31 @@
+require("dotenv").config();
+
 module.exports = {
   development: {
-    username: 'root',
-    password: '123456',
-    database: 'manage_club',
-    host: '127.0.0.1',
-    dialect: 'mysql'
+    username: process.env.mysql_user,
+    password: process.env.mysql_password,
+    database: process.env.mysql_database,
+    host: process.env.mysql_host,
+    port: process.env.mysql_port,
+    dialect: "mysql",
+    seederStorage: "json",
+    migrationStorage: "json",
+    migrationStoragePath: "sequelizeMigrate.json",
+    seederStoragePath: "sequelizeSeed.json",
   },
   test: {
-    username: 'root',
-    password: '123456',
-    database: 'manage_club',
-    host: '127.0.0.1',
-    dialect: 'mysql'
+    username: "root",
+    password: null,
+    database: "database_test",
+    host: "127.0.0.1",
+    dialect: "mysql"
   },
   production: {
-    username: 'root',
-    password: '123456',
-    database: 'manage_club',
-    host: '127.0.0.1',
-    dialect: 'mysql'
+    username: "root",
+    password: null,
+    database: "database_test",
+    host: "127.0.0.1",
+    dialect: "mysql"
+
   }
 };
