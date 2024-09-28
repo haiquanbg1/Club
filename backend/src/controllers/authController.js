@@ -1,15 +1,18 @@
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
-const User = require("../services/userService");
+const userService = require("../services/userService");
+const otpService = require("../services/otpService");
 const bcrypt = require("bcryptjs");
 const { createAccessToken, createRefreshToken } = require("../utils/jwt");
 const ms = require("ms");
+const otpGenerator = require("otp-generator");
+const mail = require("../utils/mail");
 
 const login = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const user = await User.findOne({ username });
+        const user = await userService.findOne({ username });
         if (!user) {
             return errorResponse(res, StatusCodes.NOT_FOUND, "Email không tồn tại");
         }
@@ -54,22 +57,23 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, birthday, gender, display_name } = req.body;
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashPassword = bcrypt.hashSync(password, salt);
 
     try {
-        const userExist = await User.findOne({ username });
-        if (userExist) {
-            return errorResponse(res, StatusCodes.CONFLICT, "Email đã tồn tại");
-        }
-        const user = await User.create({
+        const user = await userService.create({
+            birthday,
+            gender,
+            display_name,
             username,
             password: hashPassword,
         });
 
-        return successResponse(res, StatusCodes.CREATED, "Đăng ký thành công");
+        return successResponse(res, StatusCodes.CREATED, "Đăng ký thành công", {
+            username
+        });
     } catch (error) {
         return errorResponse(
             res,
@@ -93,8 +97,82 @@ const logout = async (req, res) => {
     }
 }
 
+const sendOTP = async (req, res) => {
+    const { username } = req.body;
+
+    const otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+        digits: true
+    });
+
+    try {
+        const userExist = await userService.findOne({ username });
+        if (userExist) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Email đã tồn tại");
+        }
+
+        await mail.sendVerificationEmail(username, otp);
+
+        const expire = new Date();
+        expire.setMinutes(expire.getMinutes() + 5);
+
+        await otpService.create({
+            email: username,
+            otp: otp,
+            expire
+        });
+
+        return successResponse(res, StatusCodes.OK, "Gửi thành công otp.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
+const verifyOTP = async (req, res) => {
+    const { username, otp } = req.body;
+    const time = new Date();
+
+    try {
+        const otpEx = await otpService.findOne({
+            email: username
+        });
+
+        if (otpEx.expire < time) {
+            return errorResponse(
+                res,
+                StatusCodes.CONFLICT,
+                "OTP đã hết hạn."
+            );
+        };
+
+        if (otpEx.otp != otp) {
+            return errorResponse(
+                res,
+                StatusCodes.CONFLICT,
+                "OTP không đúng."
+            );
+        }
+
+        return successResponse(res, StatusCodes.OK, "Xác thực OTP thành công.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     login,
     register,
-    logout
+    logout,
+    sendOTP,
+    verifyOTP
 }
