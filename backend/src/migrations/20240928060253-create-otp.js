@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       otp: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(6)
       },
       email: {
         type: Sequelize.STRING

@@ -7,7 +7,6 @@ const { createAccessToken, createRefreshToken } = require("../utils/jwt");
 const ms = require("ms");
 const otpGenerator = require("otp-generator");
 const mail = require("../utils/mail");
-const { verify } = require("jsonwebtoken");
 
 const login = async (req, res) => {
     try {
@@ -58,18 +57,23 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, birthday, gender, display_name } = req.body;
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashPassword = bcrypt.hashSync(password, salt);
 
     try {
         const user = await userService.create({
+            birthday,
+            gender,
+            display_name,
             username,
             password: hashPassword,
         });
 
-        return successResponse(res, StatusCodes.CREATED, "Đăng ký thành công");
+        return successResponse(res, StatusCodes.CREATED, "Đăng ký thành công", {
+            username
+        });
     } catch (error) {
         return errorResponse(
             res,
