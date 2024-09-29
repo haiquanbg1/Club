@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'sender',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
-      });  
+      });
     }
   }
   Message.init({
@@ -30,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Conversations', 
-        key: 'id', 
+        model: 'Conversations',
+        key: 'id',
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
@@ -40,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
-        model: 'Users', 
-        key: 'id', 
+        model: 'Users',
+        key: 'id',
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
@@ -53,7 +53,6 @@ module.exports = (sequelize, DataTypes) => {
     create_time: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
     },
   }, {
     sequelize,

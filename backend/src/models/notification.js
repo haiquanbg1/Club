@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Clubs', 
-        key: 'id'       
+        model: 'Clubs',
+        key: 'id'
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
@@ -34,12 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     create_time: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
     },
     modify_time: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,
