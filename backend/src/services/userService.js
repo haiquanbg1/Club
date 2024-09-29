@@ -21,7 +21,7 @@ const create = async (insertClause) => {
 };
 
 const drop = async (id) => {
-  return await User.delete({
+  return await User.destroy({
     where: {
       id: id,
     },

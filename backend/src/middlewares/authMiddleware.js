@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
     try {
         const decodedAccessToken = decodeAccessToken(accessToken);
 
-        req.jwtDecoded = decodedAccessToken;
+        req.user = decodedAccessToken;
         next();
     } catch (error) {
         console.log("Error from authMiddleware: ", error);
