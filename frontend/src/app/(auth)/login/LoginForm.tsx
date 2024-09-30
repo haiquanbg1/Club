@@ -35,20 +35,23 @@ export function LoginForm() {
                 description: result.payload.message
                 // description: "There was a problem with your request.",
             })
+            console.log(result)
         } catch (error: any) {
             console.log(error)
-            const errors = error.payload.errors as {
-                field: string
-                message: string
-            }[]
-            if (error.status === 422) {
-                errors.forEach((error) => {
-                    form.setError(error.field as 'username' | 'password', {
-                        type: 'server',
-                        message: error.message
-                    })
+            const errors = error.payload.message
+            if (error.status === 400) {
+                form.setError('password', {
+                    type: 'server',
+                    message: errors
                 })
-            } else {
+            }
+            else if (error.status === 404) {
+                form.setError('username', {
+                    type: 'server',
+                    message: errors
+                })
+            }
+            else {
                 toast({
                     variant: "destructive",
                     title: "Uh oh! Something went wrong.",

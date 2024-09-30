@@ -43,7 +43,7 @@ const request = async<Response>(
         status: res.status,
         payload
     }
-
+    // console.log(data)
     if (!res.ok) {
         throw new HttpError(data)
     }

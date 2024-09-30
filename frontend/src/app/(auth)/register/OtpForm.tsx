@@ -27,7 +27,9 @@ import { useToast } from "@/hooks/use-toast"
 import authApiRequest from "@/apiRequest/auth"
 
 const OtpSchema = OtpBody;
-export default function OtpForm({ data }: { data: RegisterBodyType }) {
+export default function OtpForm(
+    { data, setShowOtp, form }: { data: RegisterBodyType, setShowOtp: React.Dispatch<React.SetStateAction<boolean>>, form: any }) {
+    console.log(data)
     const { toast } = useToast()
     const OtpForm = useForm<OtpBodyType>({
         resolver: zodResolver(OtpSchema),
@@ -36,7 +38,15 @@ export default function OtpForm({ data }: { data: RegisterBodyType }) {
         },
     })
 
+    const sendOtp = () => {
+        authApiRequest.getOTP(data)
+    }
+
     async function onOtpSubmit(values: OtpBodyType) {
+        console.log({
+            ...values,
+            username: data.username
+        })
         try {
             const result = await authApiRequest.verifyOTP(
                 {
@@ -49,18 +59,21 @@ export default function OtpForm({ data }: { data: RegisterBodyType }) {
                 // description: "There was a problem with your request.",
             })
             await authApiRequest.register(data)
+            OtpForm.reset()
+            form.reset()
+            setShowOtp(false)
+
         } catch (error: any) {
-            console.log(error)
-            const errors = error.payload.errors as {
-                field: string
-                message: string
-            }[]
-            if (error.status === 422) {
-                errors.forEach((error) => {
-                    OtpForm.setError(error.field as 'otp', {
-                        type: 'server',
-                        message: error.message
-                    })
+            // console.log(error.payload)
+            const errors = error.payload.message
+            //     const errors = error.payload.errors as {
+            //         field: string
+            //         message: string
+            //     }[]
+            if (error.status === 409) {
+                OtpForm.setError('otp', {
+                    type: 'server',
+                    message: errors
                 })
             } else {
                 toast({
@@ -106,6 +119,9 @@ export default function OtpForm({ data }: { data: RegisterBodyType }) {
                         </FormItem>
                     )}
                 />
+                <div>
+                    <Button onClick={sendOtp}>Gửi lại otp</Button>
+                </div>
                 <div className="w-full flex justify-center">
                     <Button type="submit" className="w-2/3 m-auto text-[20px] font-bold">Submit</Button>
                 </div>

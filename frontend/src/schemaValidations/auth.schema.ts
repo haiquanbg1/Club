@@ -2,7 +2,9 @@ import { z } from "zod"
 
 export const RegisterBody = z
     .object({
-        name: z.string().trim().min(2).max(256),
+        display_name: z.string(),
+        gender: z.number(),
+        birthday: z.string(),
         username: z.string().email(),
         password: z.string().min(6).max(100),
         confirmPassword: z.string().min(6).max(100)
@@ -21,14 +23,7 @@ export const RegisterBody = z
 export type RegisterBodyType = z.TypeOf<typeof RegisterBody>
 
 export const RegisterRes = z.object({
-    data: z.object({
-        expiresAt: z.string(),
-        account: z.object({
-            id: z.number(),
-            name: z.string(),
-            email: z.string()
-        })
-    }),
+
     message: z.string()
 })
 export type RegisterResType = z.TypeOf<typeof RegisterRes>
@@ -42,15 +37,15 @@ export const loginBody = z.object({
 export type LoginBodyType = z.TypeOf<typeof loginBody>
 
 export const LoginRes = z.object({
+    message: z.string(),
     data: z.object({
-        token: z.string(),
-        account: z.object({
-            id: z.number(),
-            name: z.string(),
-            email: z.string()
-        })
-    }),
-    message: z.string()
+        user: z.object({
+            display_name: z.string(),
+            username: z.string()
+        }),
+        accessToken: z.string(),
+        refreshToken: z.string()
+    })
 })
 export type LoginResType = z.TypeOf<typeof LoginRes>
 
@@ -68,3 +63,26 @@ export const VerifyOtpBody = z.object({
 }).strict()
 
 export type VerifyOtpBodyType = z.TypeOf<typeof VerifyOtpBody>
+
+export function validateDate(dateString: string) {
+    // Regular Expression để kiểm tra định dạng yyyy/mm/dd
+    const regex = /^\d{4}\/\d{2}\/\d{2}$/;
+
+    // Kiểm tra định dạng có đúng không
+    if (!regex.test(dateString)) {
+        return false;
+    }
+
+    // Chia nhỏ chuỗi ngày tháng năm
+    const [year, month, day] = dateString.split('/').map(Number);
+
+    // Tạo đối tượng Date từ ngày tháng
+    const date = new Date(year, month - 1, day);
+
+    // Kiểm tra tính hợp lệ của ngày
+    if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+        return false;
+    }
+
+    return true;
+}

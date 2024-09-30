@@ -13,15 +13,25 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { REGEXP_ONLY_DIGITS } from "input-otp"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSlot,
-} from "@/components/ui/input-otp"
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 import { Input } from "@/components/ui/input"
-import { OtpBody, OtpBodyType, RegisterBody, RegisterBodyType } from "@/schemaValidations/auth.schema"
+import { OtpBody, OtpBodyType, RegisterBody, RegisterBodyType, validateDate } from "@/schemaValidations/auth.schema"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import authApiRequest from "@/apiRequest/auth"
@@ -36,15 +46,24 @@ export function RegisterForm() {
     const form = useForm<RegisterBodyType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: '',
+            display_name: '',
             username: "",
             password: "",
-            confirmPassword: ''
+            confirmPassword: '',
+            birthday: ""
         },
     })
 
+
     async function onSubmit(values: RegisterBodyType) {
-        setShowOTP(true)
+        console.log(values)
+        if (!validateDate(values.birthday)) {
+            form.setError('birthday', {
+                type: 'server',
+                message: "Định dạng ngày sinh không hợp lệ"
+            })
+            return
+        }
         try {
             const result = await authApiRequest.getOTP(values)
             toast({
@@ -53,17 +72,15 @@ export function RegisterForm() {
             })
             setShowOTP(true)
         } catch (error: any) {
-            console.log(error)
-            const errors = error.payload.errors as {
-                field: string
-                message: string
-            }[]
-            if (error.status === 422) {
-                errors.forEach((error) => {
-                    form.setError(error.field as 'username' | 'password', {
-                        type: 'server',
-                        message: error.message
-                    })
+            const errors = error.payload.message
+            //     const errors = error.payload.errors as {
+            //         field: string
+            //         message: string
+            //     }[]
+            if (error.status === 409) {
+                form.setError('username', {
+                    type: 'server',
+                    message: errors
                 })
             } else {
                 toast({
@@ -82,10 +99,10 @@ export function RegisterForm() {
             {
                 !showOTP &&
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full mb-[20px]">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full mt-[0px]">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="display_name"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
@@ -96,6 +113,43 @@ export function RegisterForm() {
                                 </FormItem>
                             )}
                         />
+                        <div className="flex justify-between space-x-1">
+                            <FormField
+                                control={form.control}
+                                name="birthday"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                        <FormLabel>D.O.B</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="YYYY/MM/DD" {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="gender"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                        <FormLabel>Gender</FormLabel>
+                                        <Select onValueChange={value => value === "Nam" ? form.setValue("gender", 1) : form.setValue("gender", 0)}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Chọn giới tính" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value={"Nam"}>Nam</SelectItem>
+                                                <SelectItem value={"Nữ"}>Nữ</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                        </div>
                         <FormField
                             control={form.control}
                             name="username"
@@ -141,9 +195,9 @@ export function RegisterForm() {
             }
             {
                 showOTP &&
-                <OtpForm data={form.getValues()} />
+                <OtpForm data={form.getValues()} setShowOtp={setShowOTP} form={form} />
             }
 
-        </div>
+        </div >
     )
 }
