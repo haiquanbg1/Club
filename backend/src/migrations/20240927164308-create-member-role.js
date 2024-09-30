@@ -3,12 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Member_Role', {
+    await queryInterface.createTable('member_role', {
       user_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'Users', 
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -18,19 +18,20 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Clubs', 
+          model: 'Clubs',
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      role_id: { 
+      role_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Roles', 
+          model: 'Roles',
           key: 'id'
         },
+        defaultValue: 1,
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
@@ -50,14 +51,14 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('Member_Role', {
+    await queryInterface.addConstraint('member_role', {
       fields: ['user_id', 'role_id', 'club_id', 'createdAt'],
       type: 'primary key',
-      name: 'pk_member_role' 
+      name: 'pk_member_role'
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Member_Role');
+    await queryInterface.dropTable('member_role');
   }
 };

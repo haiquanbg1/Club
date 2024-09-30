@@ -2,28 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Conversation_Participants', {
+    await queryInterface.createTable('conversation_participant', {
       conversation_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Conversations', 
+          model: 'Conversations',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        primaryKey: true 
+        primaryKey: true
       },
       user_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'Users',  
+          model: 'Users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        primaryKey: true 
+        primaryKey: true
       },
       joined_at: {
         type: Sequelize.DATE,
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Conversation_Participants');
+    await queryInterface.dropTable('conversation_participant');
   }
 };

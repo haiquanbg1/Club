@@ -1,5 +1,5 @@
 // const { Conversation } = require("../models/index");
-const Conversation = require("../models/conversation");
+const { Conversation } = require("../models/index");
 
 const create = async (insertClause) => {
     const conversation = Conversation.create(insertClause);

@@ -16,11 +16,11 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      converstation_id: {
+      conversation_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Conversations', 
+          model: 'Conversations',
           key: 'id'
         },
         onUpdate: 'CASCADE',

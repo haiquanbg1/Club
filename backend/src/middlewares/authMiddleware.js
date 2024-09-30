@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { errorResponse } = require("../utils/response");
 const { decodeAccessToken } = require("../utils/jwt");
+const userService = require("../services/userService");
 
 const authMiddleware = async (req, res, next) => {
     const accessToken = req.cookies?.accessToken;
@@ -16,7 +17,9 @@ const authMiddleware = async (req, res, next) => {
     try {
         const decodedAccessToken = decodeAccessToken(accessToken);
 
-        req.user = decodedAccessToken;
+        req.user = await userService.findOne({
+            id: decodedAccessToken.userId
+        });
         next();
     } catch (error) {
         console.log("Error from authMiddleware: ", error);

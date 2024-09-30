@@ -18,22 +18,22 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'club_id',
         as: 'notification',
       });
-      Club.belongsToMany(models.Role, { 
-        through: 'Member_Role',
+      Club.belongsToMany(models.Role, {
+        through: 'member_role',
         foreignKey: 'club_id',  // Khóa ngoại trỏ về Club trong Member_Role
         otherKey: 'role_id',    // Khóa ngoại trỏ về Role trong Member_Role
         as: 'roles'             // Alias để mô tả rõ ràng hơn rằng đây là các Role của Club
       });
-      
-      Club.belongsToMany(models.User, { 
-        through: 'Member_Role',
+
+      Club.belongsToMany(models.User, {
+        through: 'member_role',
         foreignKey: 'club_id',  // Khóa ngoại trỏ về Club trong Member_Role
         otherKey: 'user_id',    // Khóa ngoại trỏ về User trong Member_Role
         as: 'members'           // Alias để mô tả rằng đây là các User tham gia Club
       });
-      Club.hasOne(models.Conversation, { 
-        foreignKey: 'conversation_id', 
-        as: 'conversation' 
+      Club.hasOne(models.Conversation, {
+        foreignKey: 'conversation_id',
+        as: 'conversation'
       });
     }
   }

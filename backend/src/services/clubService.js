@@ -1,5 +1,4 @@
-const { where } = require("sequelize");
-const { Club } = require("../models/index");
+const { Club, member_role } = require("../models/index");
 
 const create = async (insertClause) => {
     const club = await Club.create(insertClause);
@@ -22,8 +21,17 @@ const drop = async (id) => {
     })
 }
 
+const addMember = async (club_id, user_id, role_id) => {
+    return await member_role.create({
+        club_id,
+        user_id,
+        role_id
+    });
+}
+
 module.exports = {
     create,
     update,
-    drop
+    drop,
+    addMember
 }

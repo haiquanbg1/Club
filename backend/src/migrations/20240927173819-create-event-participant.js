@@ -3,28 +3,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Event_Participant', {
+    await queryInterface.createTable('event_participant', {
       event_id: {
         type: Sequelize.TINYINT,
         allowNull: false,
         references: {
-          model: 'Events', 
+          model: 'Events',
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        primaryKey: true 
+        primaryKey: true
       },
       user_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'Users', 
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        primaryKey: true 
+        primaryKey: true
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +40,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Event_Participant');
+    await queryInterface.dropTable('event_participant');
   }
 };

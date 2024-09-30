@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Conversation extends Model {
     static associate(models) {
       Conversation.belongsToMany(models.User, {
-        through: 'Conversation_Participant',
+        through: 'conversation_participant',
         foreignKey: 'conversation_id',
         otherKey: 'user_id',
         as: 'participants'
@@ -24,14 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    create_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    modify_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    }
   }, {
     sequelize,
     modelName: 'Conversation',

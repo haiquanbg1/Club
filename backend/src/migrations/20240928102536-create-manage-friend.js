@@ -3,13 +3,13 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Manage_Friend', {
+    await queryInterface.createTable('manage_friend', {
       user_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         primaryKey: true,
         references: {
-          model: 'Users', 
+          model: 'Users',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         references: {
-          model: 'Users', 
+          model: 'Users',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -44,11 +44,11 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       },
-      
+
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Manage_Friend');
+    await queryInterface.dropTable('manage_friend');
   }
 };

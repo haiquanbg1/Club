@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Role.belongsToMany(models.User, {
-        through: 'Member_Role',
+        through: 'member_role',
         foreignKey: 'role_id',    // Khóa ngoại trỏ về Role trong Member_Role
         otherKey: 'user_id',       // Khóa ngoại trỏ về User trong Member_Role
         as: 'users'                 // Alias cho các User mà Role có
       });
-      
+
       Role.belongsToMany(models.Club, {
-        through: 'Member_Role',
+        through: 'member_role',
         foreignKey: 'role_id',    // Khóa ngoại trỏ về Role trong Member_Role
         otherKey: 'club_id',       // Khóa ngoại trỏ về Club trong Member_Role
         as: 'clubs'                 // Alias cho các Club mà Role có
