@@ -41,6 +41,9 @@ export default function OtpForm(
     const sendOtp = () => {
         authApiRequest.getOTP(data)
     }
+    const backHandle = () => {
+        setShowOtp(false)
+    }
 
     async function onOtpSubmit(values: OtpBodyType) {
         console.log({
@@ -119,8 +122,10 @@ export default function OtpForm(
                         </FormItem>
                     )}
                 />
-                <div>
-                    <Button onClick={sendOtp}>Gửi lại otp</Button>
+                <div className="flex justify-between">
+                    <Button onClick={backHandle} variant={"secondary"} className="text-red-500" >Quay lại</Button>
+
+                    <Button onClick={sendOtp} variant={"secondary"} className="text-blue-500">Gửi lại otp</Button>
                 </div>
                 <div className="w-full flex justify-center">
                     <Button type="submit" className="w-2/3 m-auto text-[20px] font-bold">Submit</Button>
