@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path');
 const {
   Model
 } = require('sequelize');
@@ -60,6 +61,11 @@ module.exports = (sequelize, DataTypes) => {
     birthday: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    avatar: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: path.join(__dirname, '../public/images/default.png')
     },
     username: {
       type: DataTypes.STRING(255),
