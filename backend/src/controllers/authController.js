@@ -168,10 +168,43 @@ const verifyOTP = async (req, res) => {
     }
 }
 
+const verifyCapcha = async (req, res) => {
+    const { "cf-turnstile-response": token } = req.body;
+    console.log(token)
+    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+
+    const verificationUrl = `https://challenges.cloudflare.com/turnstile/v0/siteverify`;
+    try {
+        // Gửi yêu cầu đến API của Cloudflare
+        const response = await fetch(verificationUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `secret=${secretKey}&response=${token}`,
+        });
+
+        const data = await response.json(); // Phân tích phản hồi từ API
+
+        if (data.success) {
+            // Nếu xác thực thành công
+            return res.json({ success: true, message: 'Captcha verified successfully.' });
+        } else {
+            // Nếu xác thực không thành công
+            return res.status(400).json({ success: false, errorCodes: data['error-codes'], messages: data.messages });
+        }
+    } catch (error) {
+        console.error("Error during verification:", error);
+        return res.status(500).json({ success: false, message: 'Server error during verification.' });
+    }
+
+}
+
 module.exports = {
     login,
     register,
     logout,
     sendOTP,
-    verifyOTP
+    verifyOTP,
+    verifyCapcha
 }

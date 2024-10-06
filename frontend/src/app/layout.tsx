@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 
 import { Roboto } from "next/font/google"
+import { usePathname } from "next/navigation";
 
 
 const roboto = Roboto({ subsets: ["vietnamese"], weight: ['100', '400', '700', '900'] })
@@ -14,7 +15,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  // const pathname = usePathname();
   return (
     <html lang='en' suppressHydrationWarning>
       <head />
@@ -27,7 +28,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header isAuth={false} />
+          <Header />
           {children}
 
         </ThemeProvider>
