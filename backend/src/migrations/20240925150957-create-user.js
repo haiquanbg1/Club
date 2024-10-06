@@ -1,5 +1,6 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
+const path = require("path");
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Users', {
@@ -20,6 +21,11 @@ module.exports = {
       birthday: {
         type: Sequelize.DATE,
         allowNull: true,
+      },
+      avatar: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+        defaultValue: path.join(__dirname, '../public/images/default.png')
       },
       username: {
         type: Sequelize.STRING(255),

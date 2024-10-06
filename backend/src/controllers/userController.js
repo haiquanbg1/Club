@@ -37,7 +37,25 @@ const findUser = async (req, res) => {
     });
 }
 
+const update = async (req, res) => {
+    const user = req.user;
+    const options = req.body;
+
+    try {
+        await userService.update(user.id, options);
+
+        return successResponse(res, StatusCodes.OK, "Cập nhật thông tin thành công.", options);
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     changeAvatar,
-    findUser
+    findUser,
+    update
 }

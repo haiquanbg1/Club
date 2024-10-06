@@ -1,11 +1,11 @@
 const { StatusCodes } = require("http-status-codes");
-const roleService = require("../services/roleService");
 const { errorResponse } = require("../utils/response");
 
-const managerMiddleware = async (req, res, next) => {
+const adminMiddleware = async (req, res, next) => {
+    const role_admin = req.user.admin_system;
+
     try {
-        const role_id = await roleService.findByUserAndClub(req.club_id, req.user.id);
-        if (role_id == 1) {
+        if (role_admin == 1) {
             return errorResponse(res, StatusCodes.PROXY_AUTHENTICATION_REQUIRED, "Bạn không có quyền này.");
         }
         next();
@@ -14,4 +14,4 @@ const managerMiddleware = async (req, res, next) => {
     }
 }
 
-module.exports = managerMiddleware;
+module.exports = adminMiddleware;
