@@ -16,16 +16,6 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      conversation_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Conversations',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

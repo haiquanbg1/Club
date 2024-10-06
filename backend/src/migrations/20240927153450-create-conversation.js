@@ -10,6 +10,16 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true, 
       },
+      club_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clubs',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
       name: {
         type: Sequelize.STRING(255),
         allowNull: false, 

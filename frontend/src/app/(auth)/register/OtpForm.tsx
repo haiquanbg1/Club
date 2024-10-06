@@ -25,12 +25,14 @@ import { OtpBody, OtpBodyType, RegisterBody, RegisterBodyType } from "@/schemaVa
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import authApiRequest from "@/apiRequest/auth"
+import { useRouter } from "next/navigation"
 
 const OtpSchema = OtpBody;
 export default function OtpForm(
     { data, setShowOtp, form }: { data: RegisterBodyType, setShowOtp: React.Dispatch<React.SetStateAction<boolean>>, form: any }) {
     console.log(data)
     const { toast } = useToast()
+    const router = useRouter()
     const OtpForm = useForm<OtpBodyType>({
         resolver: zodResolver(OtpSchema),
         defaultValues: {
@@ -62,7 +64,7 @@ export default function OtpForm(
             OtpForm.reset()
             form.reset()
             setShowOtp(false)
-
+            
         } catch (error: any) {
             // console.log(error.payload)
             const errors = error.payload.message
@@ -123,7 +125,7 @@ export default function OtpForm(
                     <Button onClick={sendOtp}>Gửi lại otp</Button>
                 </div>
                 <div className="w-full flex justify-center">
-                    <Button type="submit" className="w-2/3 m-auto text-[20px] font-bold">Submit</Button>
+                    <Button type="submit" className="w-2/3 m-auto text-[20px] font-bold" onClick={() => router.push('/login')}>Submit</Button>
                 </div>
             </form>
         </Form>

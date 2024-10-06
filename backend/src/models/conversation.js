@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'participants'
       });
 
-      // Liên kết Conversation với Club: 1 Club có 1 Conversation 
+      // Liên kết Conversation với Club: 1 Club có n Conversation 
       Conversation.belongsTo(models.Club, {
         foreignKey: 'club_id',
         as: 'club'

@@ -31,8 +31,8 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'user_id',    // Khóa ngoại trỏ về User trong Member_Role
         as: 'members'           // Alias để mô tả rằng đây là các User tham gia Club
       });
-      Club.hasOne(models.Conversation, {
-        foreignKey: 'conversation_id',
+      Club.hasMany(models.Conversation, {
+        foreignKey: 'club_id',
         as: 'conversation'
       });
     }
