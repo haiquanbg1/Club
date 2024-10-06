@@ -41,6 +41,7 @@ import OtpForm from "./OtpForm"
 const formSchema = RegisterBody;
 
 export function RegisterForm() {
+    const [loading, setLoading] = useState(false)
     const { toast } = useToast()
     const [showOTP, setShowOTP] = useState(false)
     const form = useForm<RegisterBodyType>({
@@ -56,7 +57,9 @@ export function RegisterForm() {
 
 
     async function onSubmit(values: RegisterBodyType) {
-        console.log(values)
+        // console.log(values)
+        if (loading) return
+        setLoading(true)
         if (!validateDate(values.birthday)) {
             form.setError('birthday', {
                 type: 'server',
@@ -89,6 +92,8 @@ export function RegisterForm() {
                     description: "There was a problem with your request.",
                 })
             }
+        } finally {
+            setLoading(false)
         }
 
     }
@@ -189,7 +194,7 @@ export function RegisterForm() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full text-[20px] font-bold">Đăng ký</Button>
+                        <Button disabled={loading} type="submit" className="w-full text-[20px] font-bold">Đăng ký</Button>
                     </form>
                 </Form>
             }

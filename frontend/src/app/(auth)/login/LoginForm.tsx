@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useToast } from '@/hooks/use-toast'
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 import {
     Form,
     FormControl,
@@ -16,9 +17,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { loginBody, LoginBodyType } from "@/schemaValidations/auth.schema"
 import authApiRequest from "@/apiRequest/auth"
+import { useRouter } from "next/navigation"
+import { env } from "process"
 
 const formSchema = loginBody;
 export function LoginForm() {
+    const router = useRouter()
     const { toast } = useToast()
     const form = useForm<LoginBodyType>({
         resolver: zodResolver(formSchema),
@@ -28,7 +32,36 @@ export function LoginForm() {
         },
     })
 
+    useEffect(() => {
+        // Load Turnstile script
+        const script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     async function onSubmit(values: LoginBodyType) {
+        const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
+
+        // Gửi token đến backend để xác minh CAPTCHA
+        const res = await fetch("http://localhost:8080/api/v1/auth/verify-turnstile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ "cf-turnstile-response": token }),
+        });
+        const result = await res.json();
+        if (!result.success) {
+            toast({
+                description: "Capcha error"
+                // description: "There was a problem with your request.",
+            })
+        }
         try {
             const result = await authApiRequest.login(values)
             toast({
@@ -36,6 +69,7 @@ export function LoginForm() {
                 // description: "There was a problem with your request.",
             })
             console.log(result)
+            router.push('/')
         } catch (error: any) {
             console.log(error)
             const errors = error.payload.message
@@ -89,6 +123,10 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
+                <div
+                    className="cf-turnstile"
+                    data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                ></div>
                 <Button type="submit" className="w-full text-[20px] font-bold">Đăng nhập</Button>
             </form>
         </Form>
