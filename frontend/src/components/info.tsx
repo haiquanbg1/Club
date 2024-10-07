@@ -53,7 +53,7 @@ export default function Info() {
                 <DropdownMenuItem onClick={logoutHandle}>
                     Đăng xuất
                 </DropdownMenuItem>
-                <DropdownMenuItem >
+                <DropdownMenuItem onClick={() => { router.push("/userProfile") }}>
                     View Profile
                 </DropdownMenuItem>
             </DropdownMenuContent>
