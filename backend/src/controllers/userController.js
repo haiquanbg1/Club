@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
+const fs = require("fs");
 
 const changeAvatar = async (req, res) => {
     const user = req.user;
@@ -13,6 +14,8 @@ const changeAvatar = async (req, res) => {
         await userService.update(user.id, {
             avatar: image.filename
         });
+
+        fs.unlinkSync(image.path);
 
         return successResponse(res, StatusCodes.OK, "Đổi avatar thành công.", {
             avatar: avatar.secure_url
@@ -68,7 +71,6 @@ const deleteUser = async (req, res) => {
         const user = await userService.findOne({
             username
         });
-
         await deleteImage("Avatar", user.avatar);
 
         await user.destroy();

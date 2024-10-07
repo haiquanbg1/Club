@@ -11,5 +11,6 @@ router.delete("/logout", authMiddleware, authController.logout);
 router.post("/sendOtp", authController.sendOTP);
 router.post("/verifyOtp", authController.verifyOTP);
 router.post("/verify-turnstile", authController.verifyCapcha);
+router.put("/refresh-token", authController.refreshToken);
 
 module.exports = router;

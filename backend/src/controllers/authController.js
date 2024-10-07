@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const userService = require("../services/userService");
 const otpService = require("../services/otpService");
 const bcrypt = require("bcryptjs");
-const { createAccessToken, createRefreshToken } = require("../utils/jwt");
+const { createAccessToken, createRefreshToken, decodeRefreshToken } = require("../utils/jwt");
 const ms = require("ms");
 const otpGenerator = require("otp-generator");
 const mail = require("../utils/mail");
@@ -197,7 +197,36 @@ const verifyCapcha = async (req, res) => {
         console.error("Error during verification:", error);
         return res.status(500).json({ success: false, message: 'Server error during verification.' });
     }
+}
 
+const refreshToken = async (req, res) => {
+    try {
+        const refreshTokenFromCookie = req.cookies?.refreshToken;
+
+        const decodedRefreshToken = decodeRefreshToken(refreshTokenFromCookie);
+        if (!decodedRefreshToken) {
+            return errorResponse(res, StatusCodes.UNAUTHORIZED, "Invalid token");
+        }
+
+        const newAccessToken = createAccessToken({
+            userId: decodedRefreshToken.userId,
+        });
+
+        res.cookie("accessToken", newAccessToken, {
+            httpOnly: true,
+            maxAge: ms("7d"),
+        });
+
+        return successResponse(res, StatusCodes.OK, "Refresh token thành công", {
+            accessToken: newAccessToken,
+        });
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
 }
 
 module.exports = {
@@ -206,5 +235,6 @@ module.exports = {
     logout,
     sendOTP,
     verifyOTP,
-    verifyCapcha
+    verifyCapcha,
+    refreshToken
 }
