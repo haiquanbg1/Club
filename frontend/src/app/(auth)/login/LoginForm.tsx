@@ -71,7 +71,7 @@ export function LoginForm() {
             console.log(result)
             router.push('/')
         } catch (error: any) {
-            console.log(error)
+            console.log(error.payload)
             const errors = error.payload.message
             if (error.status === 400) {
                 form.setError('password', {
