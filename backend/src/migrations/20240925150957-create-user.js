@@ -25,7 +25,7 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING(255),
         allowNull: false,
-        defaultValue: path.join(__dirname, '../public/images/default.png')
+        defaultValue: 'default'
       },
       username: {
         type: Sequelize.STRING(255),

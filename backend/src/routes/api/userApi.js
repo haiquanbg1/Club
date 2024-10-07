@@ -10,7 +10,7 @@ const router = express.Router();
 router.delete("/deleteUser", authMiddleware, adminMiddleware, userController.deleteUser);
 
 // user
-router.post("/changeAvatar", authMiddleware, upload.single('image'), userController.changeAvatar);
+router.patch("/changeAvatar", authMiddleware, upload.single('image'), userController.changeAvatar);
 router.get("/profile", authMiddleware, userController.findUser);
 router.patch("/update", authMiddleware, userController.update);
 router.delete("/delete", authMiddleware, userController.deleteAccount);

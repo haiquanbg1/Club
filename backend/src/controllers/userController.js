@@ -1,20 +1,21 @@
 const { StatusCodes } = require("http-status-codes");
 const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
+const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
 
 const changeAvatar = async (req, res) => {
     const user = req.user;
     const image = req.file;
 
     try {
-        if (user.avatar != image.path) {
-            await userService.update(user.id, {
-                avatar: image.path
-            });
-        }
+        const avatar = await uploadImage(image.path);
+
+        await userService.update(user.id, {
+            avatar: image.filename
+        });
 
         return successResponse(res, StatusCodes.OK, "Đổi avatar thành công.", {
-            avatar: image.path
+            avatar: avatar.secure_url
         });
     } catch (error) {
         return errorResponse(
@@ -28,13 +29,19 @@ const changeAvatar = async (req, res) => {
 const findUser = async (req, res) => {
     const user = req.user;
 
-    return successResponse(res, StatusCodes.OK, "Thành công.", {
-        display_name: user.display_name,
-        email: user.username,
-        avatar: user.avatar,
-        birthday: user.birthday,
-        gender: user.gender
-    });
+    try {
+        const avatar = await getImage('Avatar', user.avatar);
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", {
+            display_name: user.display_name,
+            email: user.username,
+            avatar: avatar,
+            birthday: user.birthday,
+            gender: user.gender
+        });
+    } catch (error) {
+
+    }
 }
 
 const update = async (req, res) => {
@@ -62,6 +69,8 @@ const deleteUser = async (req, res) => {
             username
         });
 
+        await deleteImage("Avatar", user.avatar);
+
         await user.destroy();
 
         return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
@@ -78,6 +87,8 @@ const deleteAccount = async (req, res) => {
     const user = req.user;
 
     try {
+        await deleteImage("Avatar", user.avatar);
+
         await user.destroy();
 
         return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
