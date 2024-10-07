@@ -6,8 +6,6 @@ const create = async (insertClause) => {
     return conversation;
 }
 
-const update =
-
-    module.exports = {
-        create,
-    }
+module.exports = {
+    create,
+}

@@ -40,16 +40,6 @@ module.exports = (sequelize, DataTypes) => {
   Club.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    conversation_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Conversations',
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

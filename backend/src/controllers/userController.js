@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const userService = require("../services/userService");
-const { successResponse } = require("../utils/response");
+const { successResponse, errorResponse } = require("../utils/response");
 
 const changeAvatar = async (req, res) => {
     const user = req.user;
@@ -54,8 +54,46 @@ const update = async (req, res) => {
     }
 }
 
+const deleteUser = async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        const user = await userService.findOne({
+            username
+        });
+
+        await user.destroy();
+
+        return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
+const deleteAccount = async (req, res) => {
+    const user = req.user;
+
+    try {
+        await user.destroy();
+
+        return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     changeAvatar,
     findUser,
-    update
+    update,
+    deleteUser,
+    deleteAccount
 }
