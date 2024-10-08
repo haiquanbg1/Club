@@ -60,14 +60,14 @@ export default function OtpForm(
                 }
             )
             toast({
-                description: result.payload.message
+                description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
             await authApiRequest.register(data)
             OtpForm.reset()
             form.reset()
             setShowOtp(false)
-            
+
         } catch (error: any) {
             // console.log(error.payload)
             const errors = error.payload.message

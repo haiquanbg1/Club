@@ -21,7 +21,7 @@ export default function Info() {
         try {
             const result = await authApiRequest.logout()
             toast({
-                description: result.payload.message
+                description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
             console.log(result)

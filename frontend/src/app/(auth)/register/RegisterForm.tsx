@@ -70,7 +70,7 @@ export function RegisterForm() {
         try {
             const result = await authApiRequest.getOTP(values)
             toast({
-                description: result.payload.message
+                description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
             setShowOTP(true)

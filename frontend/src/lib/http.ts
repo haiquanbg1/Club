@@ -15,9 +15,27 @@ export class HttpError extends Error {
         this.payload = payload
     }
 }
+// Hàm gọi API refresh token
+const refreshAccessToken = async (): Promise<boolean> => {
+    try {
+        const response = await fetch('http://localhost:8080/api/v1/auth/refresh-token', {
+            method: 'PUT',
+            credentials: 'include', // Để gửi cookie
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to refresh token');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error refreshing access token:', error);
+        return false;
+    }
+};
 
 const request = async<Response>(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
     url: string,
     options?: CustomOptions | undefined
 ) => {
@@ -38,16 +56,44 @@ const request = async<Response>(
         body,
         method
     })
-    const payload: Response = await res.json()
-    const data = {
-        status: res.status,
-        payload
+    if (res.status === 410) {
+        // Gọi API để làm mới token
+        const refreshed = await refreshAccessToken();
+
+        // Nếu refresh token thành công
+        if (!refreshed) {
+            // Thực hiện lại yêu cầu ban đầu sau khi token được làm mới
+            const res = await fetch(fullUrl, {
+                ...options,
+                headers: {
+                    ...baseHeaders,
+                    ...options?.headers
+                },
+                body,
+                method
+            })
+            const payload: Response = await res.json()
+            const data = {
+                status: res.status,
+                payload
+            }
+            if (!res.ok) {
+                throw new HttpError(data)
+            }
+            return data
+        }
+    } else {
+        const payload: Response = await res.json()
+        const data = {
+            status: res.status,
+            payload
+        }
+        if (!res.ok) {
+            throw new HttpError(data)
+        }
+        return data
     }
-    // console.log(data)
-    if (!res.ok) {
-        throw new HttpError(data)
-    }
-    return data
+
 }
 
 const http = {
@@ -77,6 +123,13 @@ const http = {
         options?: Omit<CustomOptions, 'body'> | undefined
     ) {
         return request<Response>('DELETE', url, { ...options, body })
+    },
+    patch<Response>(
+        url: string,
+        body: any,
+        options?: Omit<CustomOptions, 'body'> | undefined
+    ) {
+        return request<Response>('PATCH', url, { ...options, body })
     },
 }
 export default http

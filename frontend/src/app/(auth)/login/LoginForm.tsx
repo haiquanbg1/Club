@@ -65,7 +65,7 @@ export function LoginForm() {
         try {
             const result = await authApiRequest.login(values)
             toast({
-                description: result.payload.message
+                description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
             console.log(result)
