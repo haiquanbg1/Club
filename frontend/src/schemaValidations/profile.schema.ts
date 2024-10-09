@@ -21,3 +21,19 @@ export const UserProfileRes = z.object({
     })
 })
 export type UserProfileResType = z.TypeOf<typeof UserProfileRes>
+
+export const ChangePasswordForm = z.object({
+    curPass: z.string(),
+    newPass: z.string(),
+    newPassAgain: z.string()
+}).strict().superRefine(({ newPass, newPassAgain }, ctx) => {
+    if (newPass !== newPassAgain) {
+        ctx.addIssue({
+            code: 'custom',
+            message: 'Mật khẩu không khớp',
+            path: ['confirmPassword']
+        })
+    }
+})
+
+export type ChangePasswordFormType = z.TypeOf<typeof ChangePasswordForm>

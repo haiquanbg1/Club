@@ -43,7 +43,9 @@ export default function ProfileCard() {
                 </div>
                 <div className='flex justify-between h-[60px]'>
                     <div className='flex'>
-                        <div className='p-[40px] translate-y-[-40px] translate-x-5 rounded-full bottom-[-40px] left-[20px] border-[6px] border-[#3f3f3f] bg-red-50 w-[80px] h-[80px]'></div>
+                        <div className='p-[40px] translate-y-[-40px] translate-x-5 rounded-full bottom-[-40px] left-[20px] border-[6px] border-[#3f3f3f] bg-red-50 w-[80px] h-[80px]'>
+                            <img src={info?.data.avatar}></img>
+                        </div>
                         <div className='translate-x-5 translate-y-[10px]'>{info?.data.display_name}</div>
                     </div>
                     <div className='mt-[5px] pr-[10px]'>

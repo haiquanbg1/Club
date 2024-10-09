@@ -1,0 +1,80 @@
+'use client'
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { useToast } from "@/hooks/use-toast"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ChangePasswordForm, ChangePasswordFormType } from "@/schemaValidations/profile.schema"
+import userApiRequest from "@/apiRequest/userProfile"
+import { useState } from "react"
+
+const formSchema = ChangePasswordForm
+
+export default function ChangeAvatar() {
+    const [open, setOpen] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null);
+    const handleFileChange = (event: any) => {
+        setSelectedFile(event.target.files[0]);
+    };
+    const { toast } = useToast()
+    const form = useForm<ChangePasswordFormType>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            curPass: "",
+            newPass: "",
+            newPassAgain: ""
+        },
+    })
+    const handleUpload = async () => {
+        const formData = new FormData();
+        formData.append('file', selectedFile || "");
+        console.log(selectedFile)
+        try {
+            const res = await userApiRequest.changeAvatar({ file: formData })
+        } catch (error: any) {
+            console.error('Error uploading image:', error.payload);
+        }
+    };
+    return (
+        <div className='w-full'>
+            <h3 className='text-[20px] mb-[10px]'>Ảnh đại diện</h3>
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                    <Button variant={"blue"} className="text-[14px] p-[5px] bg-[#4F75FF]">Đổi ảnh đại diện </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                            Make changes to your profile here. Click save when you're done.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div>
+                        <input type="file" onChange={handleFileChange} />
+                        <button onClick={handleUpload}>Upload</button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
+    )
+}

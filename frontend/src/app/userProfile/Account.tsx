@@ -1,6 +1,17 @@
 'use client'
 import React from 'react'
-import { Button } from '@/components/ui/button'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import userApiRequest from '@/apiRequest/userProfile'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
@@ -10,7 +21,6 @@ export default function Account() {
     const handleDelete = async () => {
         try {
             const res = await userApiRequest.delete();
-            console.log(res)
             router.push("/login")
         }
         catch (error: any) {
@@ -27,7 +37,25 @@ export default function Account() {
         <div className='w-full'>
             <h3 className='mb-[10px]'>Ngưng sử dụng tài khoản</h3>
             <div>
-                <Button variant={"destructive"} className="text-[14px] p-[5px] " onClick={handleDelete}>Xóa tài khoản </Button>
+
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button variant={"destructive"} className="text-[14px] p-[5px] " >Xóa tài khoản </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Bạn chắc chắn muốn xóa tài khoản?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your
+                                account and remove your data from our servers.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDelete}>Xác nhận</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
     )

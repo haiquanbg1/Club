@@ -35,7 +35,6 @@ const findUser = async (req, res) => {
 
     try {
         const avatar = await getImage('Avatar', user.avatar);
-
         return successResponse(res, StatusCodes.OK, "Thành công.", {
             display_name: user.display_name,
             email: user.username,
@@ -109,26 +108,32 @@ const deleteAccount = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const { oldPassword, newPassword } = req.body;
+    const { curPass, newPass } = req.body;
+    console.log(curPass)
+    console.log(newPass)
     const user = req.user;
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
-    const hashPassword = bcrypt.hashSync(newPassword, salt);
+    const hashPassword = bcrypt.hashSync(newPass, salt);
 
     try {
-        const checkPassword = bcrypt.compareSync(oldPassword, user.password);
+        const checkPassword = bcrypt.compareSync(curPass, user.password);
+        console.log(curPass, user.password)
         if (!checkPassword) {
             return errorResponse(
                 res,
                 StatusCodes.BAD_REQUEST,
                 "Mật khẩu không chính xác"
             );
+
         }
 
         await userService.update(user.id, {
             password: hashPassword
         });
+
+        return successResponse(res, StatusCodes.OK, "Đổi password thành công.");
     } catch (error) {
         return errorResponse(
             res,

@@ -4,6 +4,7 @@ import ProfileCard from './profileCard'
 import Password from './Password'
 import Account from './Account'
 import ChangeWindow from './ChangeWindow'
+import ChangeAvatar from './ChangeAvatar'
 export default function UserProfilePage() {
 
     return (
@@ -14,6 +15,7 @@ export default function UserProfilePage() {
             <ProfileCard />
             <Password />
             <Account />
+            <ChangeAvatar />
         </div>
     )
 }
