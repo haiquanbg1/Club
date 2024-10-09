@@ -25,8 +25,8 @@ const uploadImage = async (filePath) => {
 
 const getImage = async (folderName, fileName) => {
     try {
-        const result = await cloudinary.api.resource(`${folderName}/${fileName}`);
-        return result.secure_url;  // URL an toàn của ảnh
+        const result = await cloudinary.url(`${folderName}/${fileName}`, { secure: true });
+        return result;  // URL an toàn của ảnh
     } catch (error) {
         console.error('Lỗi khi lấy ảnh:', error);
     }
