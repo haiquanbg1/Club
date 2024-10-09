@@ -3,6 +3,7 @@ const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
 const fs = require("fs");
+const bcrypt = require("bcryptjs");
 
 const changeAvatar = async (req, res) => {
     const user = req.user;
@@ -43,7 +44,11 @@ const findUser = async (req, res) => {
             gender: user.gender
         });
     } catch (error) {
-
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
     }
 }
 
@@ -103,10 +108,41 @@ const deleteAccount = async (req, res) => {
     }
 }
 
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const user = req.user;
+
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashPassword = bcrypt.hashSync(newPassword, salt);
+
+    try {
+        const checkPassword = bcrypt.compareSync(oldPassword, user.password);
+        if (!checkPassword) {
+            return errorResponse(
+                res,
+                StatusCodes.BAD_REQUEST,
+                "Mật khẩu không chính xác"
+            );
+        }
+
+        await userService.update(user.id, {
+            password: hashPassword
+        });
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     changeAvatar,
     findUser,
     update,
     deleteUser,
-    deleteAccount
+    deleteAccount,
+    changePassword
 }

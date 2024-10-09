@@ -14,5 +14,6 @@ router.patch("/changeAvatar", authMiddleware, upload.single('image'), userContro
 router.get("/profile", authMiddleware, userController.findUser);
 router.patch("/update", authMiddleware, userController.update);
 router.delete("/delete", authMiddleware, userController.deleteAccount);
+router.patch("/changePassword", authMiddleware, userController.changePassword);
 
 module.exports = router;

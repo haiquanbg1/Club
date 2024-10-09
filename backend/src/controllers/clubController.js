@@ -6,7 +6,7 @@ const { StatusCodes } = require("http-status-codes");
 const create = async (req, res) => {
     const user = req.user;
     const { name, description } = req.body;
-    // tạo conversation, club, add member
+    // tạo club, add member
 
     try {
         const club = await clubService.create({
@@ -28,10 +28,34 @@ const create = async (req, res) => {
     }
 }
 
+// const changeAvatar = async (req, res) => {
+//     const image = req.file;
+//     const {club_id} = req.body;
+
+//     try {
+//         const club = await clubService.findOne
+//     } catch (error) {
+
+//     }
+// }
+
+const findAllClubByUser = async (req, res) => {
+    const user = req.user;
+
+    try {
+        const club = await clubService.findAll(user.id);
+
+        return successResponse(res, StatusCodes.OK, "Lấy clb thành công.", club);
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 const update = {
 
 }
 
 module.exports = {
-    create
+    create,
+    findAllClubByUser
 }

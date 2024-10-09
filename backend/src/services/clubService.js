@@ -1,5 +1,25 @@
 const { Club, member_role } = require("../models/index");
 
+const findOne = async (whereClause) => {
+    const club = await Club.findOne(whereClause);
+    return club;
+}
+
+const findAll = async (user_id) => {
+    const club = await member_role.findAll({
+        include: [
+            {
+                model: Club,
+                as: 'clubs'
+            }
+        ],
+        where: {
+            user_id
+        }
+    });
+    return club;
+}
+
 const create = async (insertClause) => {
     const club = await Club.create(insertClause);
     return club;
@@ -33,5 +53,7 @@ module.exports = {
     create,
     update,
     drop,
-    addMember
+    addMember,
+    findOne,
+    findAll
 }

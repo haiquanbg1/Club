@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    avatar: {
+      type: DataTypes.STRING,
+      defaultValue: 'default'
+    },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
