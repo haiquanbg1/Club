@@ -32,25 +32,28 @@ const formSchema = ChangePasswordForm
 
 export default function ChangeAvatar() {
     const [open, setOpen] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null);
-    const handleFileChange = (event: any) => {
-        setSelectedFile(event.target.files[0]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
     };
     const { toast } = useToast()
-    const form = useForm<ChangePasswordFormType>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            curPass: "",
-            newPass: "",
-            newPassAgain: ""
-        },
-    })
     const handleUpload = async () => {
         const formData = new FormData();
-        formData.append('file', selectedFile || "");
-        console.log(selectedFile)
+        formData.append('image', selectedFile ? selectedFile : "");
+        formData.forEach((value, key) => {
+            console.log(key, value);  // In ra từng key và value trong FormData
+        });
         try {
-            const res = await userApiRequest.changeAvatar({ file: formData })
+            // const res = await userApiRequest.changeAvatar(formData)
+            const res = await fetch('http://localhost:8080/api/v1/user/changeAvatar', {
+                credentials: 'include',
+                method: 'PATCH',
+                body: formData, // FormData sẽ được gửi đúng định dạng
+            });
+            console.log(res)
+            setOpen(false)
         } catch (error: any) {
             console.error('Error uploading image:', error.payload);
         }

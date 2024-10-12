@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 const changeAvatar = async (req, res) => {
     const user = req.user;
     const image = req.file;
-
     try {
         const avatar = await uploadImage(image.path);
 

@@ -47,6 +47,7 @@ function convertDateFormat(dateString: string) {
 }
 
 export default function ChangeWindow({ display_name, birthDay }: { display_name: string, birthDay: string }) {
+    const [open, setOpen] = useState(false)
     const [name, setName] = useState("")
     const [birth, setBirth] = useState("")
     const handleSubmitName = async () => {
@@ -57,6 +58,7 @@ export default function ChangeWindow({ display_name, birthDay }: { display_name:
                 }
             )
             console.log(result?.payload)
+            setName("")
         } catch (error: any) {
             console.log(error.payload)
         }
@@ -69,12 +71,13 @@ export default function ChangeWindow({ display_name, birthDay }: { display_name:
                 }
             )
             console.log(result?.payload)
+            setBirth("")
         } catch (error: any) {
             console.log(error.payload)
         }
     }
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant={"reset"} className='pt-[2px] pb-[2px] text-[14px] bg-[#282828]'>Chỉnh sửa hồ sơ người dùng</Button>
             </DialogTrigger>
