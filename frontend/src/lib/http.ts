@@ -4,7 +4,6 @@ import { normalizePath } from "./utils"
 
 type CustomOptions = Omit<RequestInit, 'method'> & {
     baseUrl?: string | undefined,
-    form?: boolean
 }
 
 export class HttpError extends Error {
@@ -35,68 +34,62 @@ const refreshAccessToken = async (): Promise<boolean> => {
     }
 };
 
+
 const request = async<Response>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
     url: string,
     options?: CustomOptions | undefined
 ) => {
-    const body = options?.body ? JSON.stringify(options.body) : undefined
-    const check = options?.form
-    const baseHeaders = {
-        // 'Content-Type': 'application/json',
-        'Content-type': 'multipart/form-data',
+    let body: FormData | string | undefined = undefined
+    if (options?.body instanceof FormData) {
+        body = options.body
+    } else if (options?.body) {
+        body = JSON.stringify(options.body)
     }
-
+    const baseHeaders: {
+        [key: string]: string
+    } =
+        body instanceof FormData
+            ? {}
+            : {
+                'Content-Type': 'application/json'
+            }
     const baseUrl = options?.baseUrl === undefined ? envConfig.NEXT_PUBLIC_API_ENDPOINT : options.baseUrl
-
     const fullUrl = url.startsWith("/") ? `${baseUrl}${url}` : `${baseUrl}/${url}`
 
-    const res = await fetch(fullUrl, {
+    let res = await fetch(fullUrl, {
         ...options,
         headers: {
             ...baseHeaders,
             ...options?.headers
-        },
+        } as any,
         body,
         method
     })
     if (res.status === 410) {
-        // Gọi API để làm mới token
         const refreshed = await refreshAccessToken();
-
-        // Nếu refresh token thành công
-        if (!refreshed) {
-            // Thực hiện lại yêu cầu ban đầu sau khi token được làm mới
-            const res = await fetch(fullUrl, {
+        if (refreshed) {
+            // Thực hiện lại yêu cầu sau khi làm mới token
+            res = await fetch(fullUrl, {
                 ...options,
                 headers: {
                     ...baseHeaders,
                     ...options?.headers
-                },
-                body,
-                method
-            })
-            const payload: Response = await res.json()
-            const data = {
-                status: res.status,
-                payload
-            }
-            if (!res.ok) {
-                throw new HttpError(data)
-            }
-            return data
+                } as any,
+                method,
+            });
         }
-    } else {
-        const payload: Response = await res.json()
-        const data = {
-            status: res.status,
-            payload
-        }
-        if (!res.ok) {
-            throw new HttpError(data)
-        }
-        return data
     }
+
+    const payload: Response = await res.json();
+    const data = {
+        status: res.status,
+        payload
+    }
+    if (!res.ok) {
+        throw new HttpError(data);
+    }
+    return data;
 
 }
 
