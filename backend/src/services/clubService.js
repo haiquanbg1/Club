@@ -41,19 +41,10 @@ const drop = async (id) => {
     })
 }
 
-const addMember = async (club_id, user_id, role_id) => {
-    return await member_role.create({
-        club_id,
-        user_id,
-        role_id
-    });
-}
-
 module.exports = {
     create,
     update,
     drop,
-    addMember,
     findOne,
     findAll
 }

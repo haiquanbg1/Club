@@ -3,8 +3,7 @@ import { LoginResType } from "@/schemaValidations/auth.schema"
 import { normalizePath } from "./utils"
 
 type CustomOptions = Omit<RequestInit, 'method'> & {
-    baseUrl?: string | undefined,
-    form?: boolean
+    baseUrl?: string | undefined
 }
 
 export class HttpError extends Error {
@@ -41,12 +40,9 @@ const request = async<Response>(
     options?: CustomOptions | undefined
 ) => {
     const body = options?.body ? JSON.stringify(options.body) : undefined
-    const check = options?.form
     const baseHeaders = {
-        // 'Content-Type': 'application/json',
-        'Content-type': 'multipart/form-data',
+        'Content-Type': 'application/json',
     }
-
     const baseUrl = options?.baseUrl === undefined ? envConfig.NEXT_PUBLIC_API_ENDPOINT : options.baseUrl
 
     const fullUrl = url.startsWith("/") ? `${baseUrl}${url}` : `${baseUrl}/${url}`
