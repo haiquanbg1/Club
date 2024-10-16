@@ -9,7 +9,7 @@ const userApiRequest = {
     delete: () => http.delete<MessageResType>('user/delete', {}, { credentials: 'include' }),
     update: (body: any) => http.patch<UserProfileResType>('user/update', body, { credentials: 'include' }),
     changePassword: (body: ChangePasswordFormType) => http.patch<any>('user/changePassword', body, { credentials: 'include' }),
-    changeAvatar: (body: any) => http.patch<any>('user/changeAvatar', body, { credentials: 'include' }),
+    changeAvatar: (body: FormData) => http.patch<any>('user/changeAvatar', body, { credentials: 'include' }),
 }
 
 export default userApiRequest
