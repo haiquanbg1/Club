@@ -3,16 +3,12 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from '../components/ui/dropdown-menu'
-import { Button } from '../components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
-import { useToast } from '../hooks/use-toast'
-import authApiRequest from "../apiRequest/auth"
-import { useNavigate } from "react-router-dom"
-
-
-
-import React from 'react'
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useToast } from '@/hooks/use-toast'
+import authApiRequest from "@/apiRequest/auth"
+import { useNavigate } from 'react-router-dom'
 
 export default function Info() {
     const navigate = useNavigate()
@@ -53,7 +49,7 @@ export default function Info() {
                 <DropdownMenuItem onClick={logoutHandle}>
                     Đăng xuất
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => { navigate("/userProfile") }}>
+                <DropdownMenuItem onClick={() => { navigate("/me") }}>
                     View Profile
                 </DropdownMenuItem>
             </DropdownMenuContent>

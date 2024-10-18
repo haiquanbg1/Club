@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -20,15 +19,14 @@ import {
 } from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input"
-import { OtpBody, OtpBodyType, RegisterBody, RegisterBodyType, validateDate } from "@/schemaValidations/auth.schema"
+import { RegisterBody, RegisterBodyType, validateDate } from "@/schemaValidations/auth.schema"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import OtpForm from "./OtpForm"
-
+import authApiRequest from "@/apiRequest/auth"
 const formSchema = RegisterBody;
 
 export function RegisterForm() {
-
     const [loading, setLoading] = useState(false)
     const { toast } = useToast()
     const [showOTP, setShowOTP] = useState(false)
@@ -56,9 +54,33 @@ export function RegisterForm() {
             return
         }
         try {
-            123
+            const res = await authApiRequest.getOTP(values)
+            // const res = axios.post(`${import.meta.env.VITE_PUBLIC_API_ENDPOINT}/auth/sendOtp`, values)
+            toast({
+                description: res?.payload.message
+                // description: "There was a problem with your request.",
+            })
+            setShowOTP(true)
         } catch (error: any) {
-
+            console.log(1)
+            console.log(error.payload)
+            const errors = error.payload.message
+            //     const errors = error.payload.errors as {
+            //         field: string
+            //         message: string
+            //     }[]
+            if (error.status === 409) {
+                form.setError('username', {
+                    type: 'server',
+                    message: errors
+                })
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                })
+            }
         } finally {
             setLoading(false)
         }

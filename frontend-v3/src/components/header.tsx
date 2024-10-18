@@ -1,7 +1,8 @@
-import React from 'react'
+'use client'
+import { Link } from 'react-router-dom'
 import { ModeToggle } from './mode-toggle'
 import Info from './info'
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 
 
 
@@ -13,6 +14,12 @@ export default function Header() {
         <div >
             {!isAuth &&
                 <ul className='space-y-4 items-center justify-end pt-[4px] '>
+                    {/* <li>
+                        <Link href='/login'>Đăng nhập</Link>
+                    </li>
+                    <li>
+                        <Link href='/register'>Đăng ký</Link>
+                    </li> */}
                     <li>
                         <Info></Info>
                     </li>

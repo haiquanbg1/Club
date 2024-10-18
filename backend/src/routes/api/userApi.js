@@ -1,13 +1,13 @@
 const express = require("express");
 const userController = require("../../controllers/userController");
 const authMiddleware = require("../../middlewares/authMiddleware");
-const adminMiddleware = require("../../middlewares/adminMiddleware");
+// const adminMiddleware = require("../../middlewares/adminMiddleware");
 const { upload } = require("../../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
-// admin
-router.delete("/deleteUser", authMiddleware, adminMiddleware, userController.deleteUser);
+// // admin
+// router.delete("/deleteUser", authMiddleware, adminMiddleware, userController.deleteUser);
 
 // user
 router.patch("/changeAvatar", authMiddleware, upload.single('image'), userController.changeAvatar);

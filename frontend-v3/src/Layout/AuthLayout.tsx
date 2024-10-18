@@ -1,13 +1,11 @@
 // import Header from "../components/header";
-import { ModeToggle } from '@/components/mode-toggle.tsx'
-
+import Header from '@/components/header';
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
         <div >
-            {/* <Header /> */}
+            <Header />
             <div >
-
                 <div >{children}</div>
             </div>
         </div>

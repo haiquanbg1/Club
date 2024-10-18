@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { loginBody, LoginBodyType } from "@/schemaValidations/auth.schema"
-
+import authApiRequest from "@/apiRequest/auth"
+import { useNavigate } from "react-router-dom"
 const formSchema = loginBody;
 export default function LoginForm() {
+    const navigate = useNavigate()
     const { toast } = useToast()
     const form = useForm<LoginBodyType>({
         resolver: zodResolver(formSchema),
@@ -37,8 +39,55 @@ export default function LoginForm() {
         };
     }, []);
 
-    const onSubmit = (values: any) => {
+    const onSubmit = async (values: any) => {
+        const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
 
+        // Gửi token đến backend để xác minh CAPTCHA
+        const res = await fetch("http://localhost:8080/api/v1/auth/verify-turnstile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ "cf-turnstile-response": token }),
+        });
+        const result = await res.json();
+        if (!result.success) {
+            toast({
+                description: "Capcha error"
+                // description: "There was a problem with your request.",
+            })
+        }
+        try {
+            const result = await authApiRequest.login(values)
+            toast({
+                description: result?.payload.message
+                // description: "There was a problem with your request.",
+            })
+            console.log(result)
+            navigate('/')
+        } catch (error: any) {
+            console.log(error.payload)
+            const errors = error.payload.message
+            if (error.status === 400) {
+                form.setError('password', {
+                    type: 'server',
+                    message: errors
+                })
+            }
+            else if (error.status === 404) {
+                form.setError('username', {
+                    type: 'server',
+                    message: errors
+                })
+            }
+            else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                })
+            }
+        }
     }
     return (
         <Form {...form}>
@@ -71,7 +120,7 @@ export default function LoginForm() {
                 />
                 <div
                     className="cf-turnstile"
-                    data-sitekey={import.meta.env.VITE_PUBLIC_API_ENDPOINT}
+                    data-sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
                 ></div>
                 <Button type="submit" className="w-full text-[20px] font-bold">Đăng nhập</Button>
             </form>
