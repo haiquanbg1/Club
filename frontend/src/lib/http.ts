@@ -1,6 +1,8 @@
 import envConfig from "@/config"
 import { LoginResType } from "@/schemaValidations/auth.schema"
 import { normalizePath } from "./utils"
+import { any } from "zod"
+import { cookies } from "next/headers"
 
 type CustomOptions = Omit<RequestInit, 'method'> & {
     baseUrl?: string | undefined,
@@ -80,7 +82,6 @@ const request = async<Response>(
             });
         }
     }
-
     const payload: Response = await res.json();
     const data = {
         status: res.status,
@@ -90,7 +91,6 @@ const request = async<Response>(
         throw new HttpError(data);
     }
     return data;
-
 }
 
 const http = {

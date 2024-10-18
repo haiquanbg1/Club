@@ -13,7 +13,7 @@ export default function Header() {
     return (
         <div >
             {!isAuth &&
-                <ul className='flex space-x-4 items-center justify-end pt-[4px] pr-[20px]'>
+                <ul className='space-y-4 items-center justify-end pt-[4px] '>
                     {/* <li>
                         <Link href='/login'>Đăng nhập</Link>
                     </li>

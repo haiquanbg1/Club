@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
-import envConfig from "@/config";
+import envConfig from '../config';
 
 type CustomOptions = AxiosRequestConfig;
 
@@ -15,7 +15,7 @@ export class HttpError extends Error {
 
 // Tạo instance của Axios với cấu hình mặc định
 const apiClient: AxiosInstance = axios.create({
-    baseURL: envConfig.NEXT_PUBLIC_API_ENDPOINT,
+    baseURL: envConfig.VITE_PUBLIC_API_ENDPOINT,
     headers: {
         'Content-Type': 'application/json',
     },
