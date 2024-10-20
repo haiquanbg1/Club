@@ -1,11 +1,59 @@
 // const { Conversation } = require("../models/index");
-const { Conversation } = require("../models/index");
+const { Conversation, ConversationParticipant } = require("../models/index");
 
 const create = async (insertClause) => {
     const conversation = Conversation.create(insertClause);
     return conversation;
 }
 
+const update = async (id, updateClause) => {
+    return await Conversation.update(updateClause, {
+        where: {
+            id
+        }
+    });
+}
+
+const drop = async (id) => {
+    return await Conversation.destroy({
+        where: {
+            id : id
+        }
+    })
+}
+
+
+const findOne = async (whereClause) => {
+    const conversation = await Conversation.findOne(whereClause);
+    return conversation;
+}
+
+// find all conver in one club
+const findAllForClub = async (club_id) => {
+    const conversations = await Conversation.findAll({
+        where: {
+            club_id : club_id
+        }
+    });
+    return conversations;
+}
+
+// find all conver in one user từ conver này lọc tiếp theo findAllForClub
+const findAllForUser = async (user_id) => {
+    const conversations = await ConversationParticipant.findAll({
+        include: [
+            {
+                model: Conversation,
+                as: 'conversation'
+            }
+        ],
+        where: {
+            user_id : user_id
+        }
+    });
+    return conversations;
+}
+
 module.exports = {
-    create,
+    create, update, drop, findOne, findAllForClub, findAllForUser
 }

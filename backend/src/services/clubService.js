@@ -5,6 +5,7 @@ const findOne = async (whereClause) => {
     return club;
 }
 
+// find all clubs of one user
 const findAll = async (user_id) => {
     const club = await member_role.findAll({
         include: [
