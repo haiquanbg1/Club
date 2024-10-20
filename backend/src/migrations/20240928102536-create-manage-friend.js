@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('manage_friend', {
       user_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.UUID,
         allowNull: false,
         primaryKey: true,
         references: {
@@ -16,7 +16,7 @@ module.exports = {
         onUpdate: 'CASCADE',
       },
       friend_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.UUID,
         allowNull: false,
         primaryKey: true,
         references: {

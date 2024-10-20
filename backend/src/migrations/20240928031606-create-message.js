@@ -20,7 +20,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       sender_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Users',
@@ -36,7 +36,7 @@ module.exports = {
       sent_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), 
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       createdAt: {
         allowNull: false,

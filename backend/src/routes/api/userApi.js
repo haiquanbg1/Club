@@ -6,9 +6,6 @@ const { upload } = require("../../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
-// // admin
-// router.delete("/deleteUser", authMiddleware, adminMiddleware, userController.deleteUser);
-
 // user
 router.patch("/changeAvatar", authMiddleware, upload.single('image'), userController.changeAvatar);
 router.get("/profile", authMiddleware, userController.findUser);

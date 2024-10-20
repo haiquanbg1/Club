@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     user_id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },

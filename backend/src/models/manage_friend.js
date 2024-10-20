@@ -28,12 +28,12 @@ module.exports = (sequelize, DataTypes) => {
 
   ManageFriend.init({
     user_id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },
     friend_id: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },

@@ -28,6 +28,8 @@ const findAll = async (club_id) => {
         },
         order: [[{ model: User, as: 'users' }, 'display_name', 'ASC']]
     });
+
+    return member;
 }
 
 module.exports = {

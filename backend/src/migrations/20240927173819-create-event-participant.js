@@ -16,7 +16,7 @@ module.exports = {
         primaryKey: true
       },
       user_id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Users',
