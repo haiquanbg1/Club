@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   User.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     display_name: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -76,16 +81,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    admin_system: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    }
-
 
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'users'
   });
 
   return User;

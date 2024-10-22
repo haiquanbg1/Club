@@ -8,6 +8,6 @@ const router = express.Router();
 router.post("/add", authMiddleware, managerMiddleware, memberController.addMember);
 router.delete("/delete", authMiddleware, managerMiddleware, memberController.deleteMember);
 router.delete("/out", authMiddleware, memberController.deleteMember);
-router.get("/",)
+router.get("/", authMiddleware, memberController.findUserInClub);
 
 module.exports = router;

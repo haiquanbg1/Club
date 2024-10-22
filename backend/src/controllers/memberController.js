@@ -4,17 +4,14 @@ const { successResponse, errorResponse } = require("../utils/response");
 const roles = require("../utils/role");
 
 const addMember = async (req, res) => {
-    const { club_id } = req.body;
-    const user = req.user;
+    const { club_id, user_id } = req.body;
     const role_id = roles.user;
 
     try {
-        await memberService.addMember(club_id, user.id, role_id);
+        await memberService.addMember(club_id, user_id, role_id);
 
-        return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.", {
-            name: user.display_name
-        });
-    } catch {
+        return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
+    } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }
