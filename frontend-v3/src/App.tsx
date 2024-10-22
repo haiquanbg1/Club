@@ -3,12 +3,13 @@ import DefaultLayout from "./Layout/DefaultLayout"
 import AuthLayout from "./Layout/AuthLayout"
 import { publicRoutes } from './routes';
 import { ThemeProvider } from '@/components/theme-provider';
+import ClubLayout from './Layout/ClubLayout';
 
 
 interface RouteConfig {
   path: string;
   component: React.FC; // Giả định rằng các component là các functional components
-  layout?: 'authLayout' | undefined; // Cách xác định layout
+  layout?: string | undefined
 }
 function App() {
 
@@ -26,7 +27,20 @@ function App() {
                   path={route.path}
                   element={
                     <Layout>
-                      <Page />
+                      {
+                        route.layout === 'clubLayout' &&
+                        (
+                          <ClubLayout>
+                            <Page />
+                          </ClubLayout>
+                        )
+                      }
+                      {
+                        route.layout !== 'clubLayout' &&
+                        (
+                          <Page />
+                        )
+                      }
                     </Layout>}
                 />
               );
