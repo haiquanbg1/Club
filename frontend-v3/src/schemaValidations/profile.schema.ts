@@ -22,6 +22,14 @@ export const UserProfileRes = z.object({
 })
 export type UserProfileResType = z.TypeOf<typeof UserProfileRes>
 
+export const ChangeAvatarRes = z.object({
+    message: z.string(),
+    data: z.object({
+        avatar: z.string(),
+    })
+})
+export type ChangeAvatarResType = z.TypeOf<typeof ChangeAvatarRes>
+
 export const ChangePasswordForm = z.object({
     curPass: z.string(),
     newPass: z.string(),

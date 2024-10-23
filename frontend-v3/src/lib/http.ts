@@ -23,7 +23,7 @@ const apiClient: AxiosInstance = axios.create({
 // Hàm gọi API refresh token
 const refreshAccessToken = async (): Promise<boolean> => {
     try {
-        const response = await apiClient.put('/api/v1/auth/refresh-token');
+        const response = await apiClient.put('/auth/refresh-token');
         if (response.status !== 200) {
             throw new Error('Failed to refresh token');
         }

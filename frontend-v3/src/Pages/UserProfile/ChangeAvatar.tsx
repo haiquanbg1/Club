@@ -24,9 +24,9 @@ export default function ChangeAvatar() {
     const handleUpload = async () => {
         const formData = new FormData();
         formData.append('image', selectedFile ? selectedFile : "");
-        formData.forEach((value, key) => {
-            console.log(key, value);  // In ra từng key và value trong FormData
-        });
+        // formData.forEach((value, key) => {
+        //     console.log(key, value);  // In ra từng key và value trong FormData
+        // });
         try {
             // const res = await userApiRequest.changeAvatar(formData)
             // const res = await fetch('http://localhost:8080/api/v1/user/changeAvatar', {
@@ -34,7 +34,8 @@ export default function ChangeAvatar() {
             //     method: 'PATCH',
             //     body: formData, // FormData sẽ được gửi đúng định dạng
             // });
-            const res = userApiRequest.changeAvatar(formData)
+            const res = await userApiRequest.changeAvatar(formData)
+            localStorage.setItem("avatar", res.payload.data.avatar)
             console.log(res)
             setOpen(false)
         } catch (error: any) {

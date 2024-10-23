@@ -63,6 +63,8 @@ export default function LoginForm() {
                 description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
+            localStorage.setItem("name", result.payload.data.user.display_name)
+            localStorage.setItem("avatar", result.payload.data.user.avatar)
             console.log(result)
             navigate('/')
         } catch (error: any) {

@@ -6,7 +6,8 @@ const routes = {
     club: '/club/:id',
     chat: '/chat',
     clubProfile: '/clubProfile/:id',
-    event: "/event/:id"
+    event: "/event/:id",
+    createClub: "/createClub"
 };
 
 export default routes;

@@ -4,6 +4,7 @@ const userService = require("../services/userService");
 const otpService = require("../services/otpService");
 const bcrypt = require("bcryptjs");
 const { createAccessToken, createRefreshToken, decodeRefreshToken } = require("../utils/jwt");
+const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
 const ms = require("ms");
 const otpGenerator = require("otp-generator");
 const mail = require("../utils/mail");
@@ -39,11 +40,12 @@ const login = async (req, res) => {
             // sameSite: "none",
             maxAge: ms("7 days"),
         });
-
+        const avatar = await getImage('Avatar', user.avatar);
         return successResponse(res, StatusCodes.OK, "Đăng nhập thành công", {
             user: {
                 display_name: user.display_name,
                 username: user.username,
+                avatar
             },
             accessToken,
             refreshToken,

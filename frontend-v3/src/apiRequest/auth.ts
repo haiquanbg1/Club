@@ -1,5 +1,5 @@
 import http from "../lib/http";
-import { LoginBodyType, LoginResType, OtpBodyType, RegisterBodyType, RegisterResType, VerifyOtpBodyType } from "../schemaValidations/auth.schema";
+import { LoginBodyType, LoginResType, RegisterBodyType, RegisterResType, VerifyOtpBodyType } from "../schemaValidations/auth.schema";
 import { MessageResType } from "../schemaValidations/common.schema";
 
 

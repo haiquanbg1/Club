@@ -37,6 +37,7 @@ export default function Info() {
             <DropdownMenuTrigger asChild>
                 <Button variant='noOutline' size='icon'>
                     <Avatar>
+                        <AvatarImage src={localStorage.getItem("avatar") || ""} alt="" />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <span className='sr-only'>Toggle theme</span>
@@ -44,7 +45,7 @@ export default function Info() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
                 <DropdownMenuItem >
-                    My name
+                    {localStorage.getItem('name')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={logoutHandle}>
                     Đăng xuất
