@@ -45,16 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('pending', 'accepted', 'blocked'),
       allowNull: false,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   }, {
     sequelize,
     modelName: 'ManageFriend',

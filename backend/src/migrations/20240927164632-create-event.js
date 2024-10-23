@@ -10,7 +10,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      club_id: {  
+      club_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -21,27 +21,27 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       name: {
-        type: Sequelize.STRING(100),  
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
       description: {
-        type: Sequelize.STRING(255),  
+        type: Sequelize.STRING(255),
         allowNull: true,
       },
       start_time: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      create_time: {
-        type: Sequelize.DATE,
+      createdAt: {
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      modify_time: {
-        type: Sequelize.DATE,
+      updatedAt: {
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
-      }
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+      },
     });
   },
 

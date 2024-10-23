@@ -50,10 +50,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    create_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
   }, {
     sequelize,
     modelName: 'Message',

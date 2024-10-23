@@ -30,15 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    create_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    modify_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    }
+    description: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Notification',

@@ -42,14 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false
     },
-    create_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    modify_time: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    }
   }, {
     sequelize,
     modelName: 'Event',
