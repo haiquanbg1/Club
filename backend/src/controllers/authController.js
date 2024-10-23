@@ -72,6 +72,7 @@ const register = async (req, res) => {
             password: hashPassword,
         });
 
+
         return successResponse(res, StatusCodes.CREATED, "Đăng ký thành công");
     } catch (error) {
         return errorResponse(
