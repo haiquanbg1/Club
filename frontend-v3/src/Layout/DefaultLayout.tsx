@@ -51,8 +51,8 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
     const navigate = useNavigate()
     return (
-        <div className='flex overflow-auto'>
-            <div className="p-2 justify-between h-screen items-end flex flex-col w-[60px]">
+        <div className='flex h-screen overflow-hidden'>
+            <div className=" p-2 justify-between h-full flex flex-col w-[60px] overflow-y-auto scrollbar-hide">
                 <div>
                     <div className="mb-4" onClick={() => navigate("/")}>
                         <TooltipProvider>
@@ -95,13 +95,13 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 </div>
 
-                <div className="absolute bottom-2">
+                <div className="mt-auto">
                     <Header />
                     {/* <ModeToggle></ModeToggle> */}
                 </div>
             </div>
 
-            <div className="w-full">{children}</div>
+            <div className="w-full h-full overflow-auto">{children}</div>
 
         </div>
     );

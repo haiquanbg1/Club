@@ -1,16 +1,21 @@
 const friendService = require("../services/friendService");
+const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
 
 const addFriend = async (req, res) => {
-    const { user_id, display_name } = req.body;
+    const { user_id } = req.body;
     const user = req.user;
 
     try {
+        const friend = await userService.findOne({
+            id: user_id
+        });
+
         await friendService.create({
             user_id: user.id,
             friend_id: user_id,
-            display_name,
+            display_name: friend.display_name,
             status: 'pending'
         });
 

@@ -1,4 +1,4 @@
-import { GetClubResType, RegisterClubBodyType, RegisterClubResType } from "@/schemaValidations/Club.schema";
+import { GetClubResType, RegisterClubBodyType, RegisterClubResType } from "@/schemaValidations/club.schema";
 import http from "../lib/http";
 
 

@@ -16,7 +16,7 @@ function App() {
   return (
     <ThemeProvider >
       <Router>
-        <div >
+        <div className='h-screen overflow-hidden scrollbar-hide'>
           <Routes>
             {publicRoutes.map((route: RouteConfig, index: any) => {
               const Layout = route.layout === 'authLayout' ? AuthLayout : DefaultLayout

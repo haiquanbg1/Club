@@ -42,7 +42,8 @@ export const LoginRes = z.object({
         user: z.object({
             display_name: z.string(),
             username: z.string(),
-            avatar: z.string()
+            avatar: z.string(),
+            id: z.string()
         }),
         accessToken: z.string(),
         refreshToken: z.string()
