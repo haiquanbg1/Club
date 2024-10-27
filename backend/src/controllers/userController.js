@@ -39,7 +39,8 @@ const findUser = async (req, res) => {
             email: user.username,
             avatar: avatar,
             birthday: user.birthday,
-            gender: user.gender
+            gender: user.gender,
+            id: user.id
         });
     } catch (error) {
         return errorResponse(

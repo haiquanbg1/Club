@@ -17,7 +17,8 @@ export const UserProfileRes = z.object({
         email: z.string(),
         avatar: z.string(),
         birthday: z.string(),
-        gender: z.number()
+        gender: z.number(),
+        id: z.string()
     })
 })
 export type UserProfileResType = z.TypeOf<typeof UserProfileRes>

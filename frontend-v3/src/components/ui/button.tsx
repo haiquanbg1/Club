@@ -21,6 +21,8 @@ const buttonVariants = cva(
         noOutline: "bg-background focus-visible:outline-none",
         blue: "bg-[#4F75FF] hover:bg-[#6439FF]",
         reset: "",
+        accept: "bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700",
+        denied: "bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
       },
       size: {
         default: "h-10 px-4 py-2",

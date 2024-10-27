@@ -33,14 +33,14 @@ const acceptFriend = async (req, res) => {
         await friendService.update(user_id, user.id, {
             status: 'accepted'
         });
-
+        console.log(1)
         await friendService.create({
             user_id: user.id,
             friend_id: user_id,
             display_name,
             status: 'accepted'
         });
-
+        console.log(2)
         return successResponse(res, StatusCodes.OK, "Hai người đã thành bạn bè.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
@@ -125,3 +125,8 @@ module.exports = {
     deleteFriend,
     getFriendStartWith
 }
+
+//"3e5329b9-7161-4228-b12e-f2dbba708e10"
+//bbe43b48-ae6b-4484-8e7b-a901dad3735b
+//7634079a-1e0e-42d2-92fd-603deca3b778
+//f57fe667-1b7b-4ad0-abd2-f1badf006613

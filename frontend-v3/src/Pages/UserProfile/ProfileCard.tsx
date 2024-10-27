@@ -45,7 +45,10 @@ export default function ProfileCard() {
                         <div className=' translate-y-[-40px] translate-x-5 rounded-full bottom-[-40px] left-[20px] border-[8px] border-[#3f3f3f] bg-red-50 w-[100px] h-[100px]'>
                             <img className='w-full h-full object-cover rounded-full' src={info?.data.avatar}></img>
                         </div>
-                        <div className='translate-x-5 translate-y-[10px]'>{info?.data.display_name}</div>
+                        <div className='translate-x-5 translate-y-[10px]'>
+                            <p>{info?.data.display_name}</p>
+                            {/* <p>{info?.data.id}</p> */}
+                        </div>
                     </div>
                     <div className='mt-[5px] pr-[10px]'>
                         <ChangeWindow display_name={info?.data.display_name || ""} birthDay={convertDay(info?.data.birthday)} />
@@ -57,6 +60,16 @@ export default function ProfileCard() {
                             <div>
                                 <div className='text-[16px] text-[#ccc]'>Tên hiển thị</div>
                                 <div className='text-[14px]'>{info?.data.display_name}</div>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+
+                        <div className='flex justify-between mb-[20px]'>
+                            <div>
+                                <div className='text-[16px] text-[#ccc]'>Id người dùng</div>
+                                <div className='text-[14px]'>{info?.data.id}</div>
                             </div>
                             <div>
 

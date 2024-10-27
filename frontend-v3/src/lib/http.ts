@@ -34,6 +34,30 @@ const refreshAccessToken = async (): Promise<boolean> => {
     }
 };
 
+// Cấu hình interceptor để xử lý tự động refresh token
+apiClient.interceptors.response.use(
+    response => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
+        if (error.response?.status === 410 && !originalRequest._retry) {
+            originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
+            const refreshed = await refreshAccessToken();
+
+            if (refreshed) {
+                return apiClient(originalRequest); // Retry request với token mới
+            }
+        }
+
+        // Nếu lỗi khác hoặc không refresh thành công
+        return Promise.reject(new HttpError({
+            status: error.response?.status,
+            payload: error.response?.data,
+        }));
+    }
+);
+
 // Hàm request chung
 const request = async <Response>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
@@ -59,18 +83,18 @@ const request = async <Response>(
             payload: response.data,
         };
     } catch (error: any) {
-        // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
-        if (error.response?.status === 410 && !error.config._retry) {
-            error.config._retry = true;
-            const refreshed = await refreshAccessToken();
-            if (refreshed) {
-                const retryResponse: AxiosResponse<Response> = await apiClient.request(error.config);
-                return {
-                    status: retryResponse.status,
-                    payload: retryResponse.data,
-                };
-            }
-        }
+        // // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
+        // if (error.response?.status === 410 && !error.config._retry) {
+        //     error.config._retry = true;
+        //     const refreshed = await refreshAccessToken();
+        //     if (refreshed) {
+        //         const retryResponse: AxiosResponse<Response> = await apiClient.request(error.config);
+        //         return {
+        //             status: retryResponse.status,
+        //             payload: retryResponse.data,
+        //         };
+        //     }
+        // }
 
         // Nếu lỗi khác hoặc không refresh thành công
         throw new HttpError({
