@@ -16,10 +16,12 @@ const update = async (user_id, friend_id, updateClause) => {
 }
 
 const findOne = async (user_id, friend_id, status) => {
-    return await ManageFriend.findOne({
-        user_id,
-        friend_id,
-        status
+    return await ManageFriend.findAll({
+        where: {
+            user_id,
+            friend_id,
+            status
+        }
     });
 }
 
@@ -54,7 +56,7 @@ const findAllPending = async (user_id) => {
         include: [{
             model: User,
             as: 'user',
-            attributes: []
+            attributes: ['avatar']
         }],
         where: {
             friend_id: user_id,

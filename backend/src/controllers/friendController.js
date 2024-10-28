@@ -2,29 +2,22 @@ const friendService = require("../services/friendService");
 const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
+const cloudinary = require("../utils/cloudinary");
 
 const addFriend = async (req, res) => {
     const { user_id } = req.body;
     const user = req.user;
 
     try {
-        const is_sent = await friendService.findOne({
-            user_id: user.id,
-            friend_id: user_id,
-            status: 'pending'
-        })
+        const is_sent = await friendService.findOne(user.id, user_id, 'pending')
 
-        if (is_sent) {
+        if (is_sent[0]) {
             return errorResponse(res, StatusCodes.CONFLICT, "Bạn đã gửi yêu cầu cho người này rồi.")
         }
 
-        const is_pending = await friendService.findOne({
-            user_id: user_id,
-            friend_id: user.id,
-            status: 'pending'
-        });
+        const is_pending = await friendService.findOne(user_id, user.id, 'pending');
 
-        if (is_pending) {
+        if (is_pending[0]) {
             return errorResponse(res, StatusCodes.CONFLICT, "Người dùng đã gửi yêu cầu cho bạn, vui lòng kiểm tra danh sách.");
         }
 
@@ -71,7 +64,18 @@ const getAllPending = async (req, res) => {
     try {
         const friends = await friendService.findAllPending(user.id);
 
-        return successResponse(res, StatusCodes.OK, "Thành công.", friends);
+        const data = await friends.map(async friend => {
+            const image = await cloudinary.getImage("Avatar", friend.user.avatar);
+
+            return {
+                user_id: friend.user_id,
+                friend_id: friend.friend_id,
+                display_name: friend.display_name,
+                avatar: image
+            }
+        });
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
