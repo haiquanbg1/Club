@@ -8,6 +8,16 @@ const addFriend = async (req, res) => {
     const user = req.user;
 
     try {
+        const is_sent = await friendService.findOne({
+            user_id: user.id,
+            friend_id: user_id,
+            status: 'pending'
+        })
+
+        if (is_sent) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Bạn đã gửi yêu cầu cho người này rồi.")
+        }
+
         const is_pending = await friendService.findOne({
             user_id: user_id,
             friend_id: user.id,

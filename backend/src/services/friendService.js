@@ -15,6 +15,14 @@ const update = async (user_id, friend_id, updateClause) => {
     });
 }
 
+const findOne = async (user_id, friend_id, status) => {
+    return await ManageFriend.findOne({
+        user_id,
+        friend_id,
+        status
+    });
+}
+
 const drop = async (id1, id2) => {
     return await ManageFriend.destroy({
         where: {
@@ -80,5 +88,5 @@ const findFriendWithKey = async (user_id, key) => {
 
 module.exports = {
     create, update, drop, findAllForOneUser,
-    findAllPending, findFriendWithKey
+    findAllPending, findFriendWithKey, findOne
 }
