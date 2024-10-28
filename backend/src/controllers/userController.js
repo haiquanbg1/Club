@@ -35,6 +35,7 @@ const findUser = async (req, res) => {
     try {
         const avatar = await getImage('Avatar', user.avatar);
         return successResponse(res, StatusCodes.OK, "Thành công.", {
+            id: user.id,
             display_name: user.display_name,
             email: user.username,
             avatar: avatar,
@@ -69,11 +70,11 @@ const update = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    const { username } = req.body;
+    const { id } = req.body;
 
     try {
         const user = await userService.findOne({
-            username
+            id
         });
         await deleteImage("Avatar", user.avatar);
 

@@ -31,7 +31,7 @@ const findAllForOneUser = async (user_id) => {
         include: [{
             model: User,
             as: 'friend',
-            attributes: []
+            attributes: ['avatar']
         }],
         where: {
             user_id: user_id,
@@ -67,7 +67,7 @@ const findFriendWithKey = async (user_id, key) => {
                         [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
                     }
                 },
-                attributes: []
+                attributes: ['avatar']
             }
         ],
         where: {

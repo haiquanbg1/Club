@@ -8,6 +8,16 @@ const addFriend = async (req, res) => {
     const user = req.user;
 
     try {
+        const is_pending = await friendService.findOne({
+            user_id: user_id,
+            friend_id: user.id,
+            status: 'pending'
+        });
+
+        if (is_pending) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Người dùng đã gửi yêu cầu cho bạn, vui lòng kiểm tra danh sách.");
+        }
+
         const friend = await userService.findOne({
             id: user_id
         });
@@ -33,14 +43,12 @@ const acceptFriend = async (req, res) => {
         await friendService.update(user_id, user.id, {
             status: 'accepted'
         });
-        console.log(1)
         await friendService.create({
             user_id: user.id,
             friend_id: user_id,
             display_name,
             status: 'accepted'
         });
-        console.log(2)
         return successResponse(res, StatusCodes.OK, "Hai người đã thành bạn bè.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
