@@ -64,16 +64,18 @@ const getAllPending = async (req, res) => {
     try {
         const friends = await friendService.findAllPending(user.id);
 
-        const data = await friends.map(async friend => {
-            const image = await cloudinary.getImage("Avatar", friend.user.avatar);
+        let data = []
 
-            return {
-                user_id: friend.user_id,
-                friend_id: friend.friend_id,
-                display_name: friend.display_name,
+        for (let i = 0; i < friends.length; i++) {
+            const image = await cloudinary.getImage("Avatar", friends[i].user.avatar);
+
+            data.push({
+                user_id: friends[i].user_id,
+                friend_id: friends[i].friend_id,
+                display_name: friends[i].display_name,
                 avatar: image
-            }
-        });
+            });
+        }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
@@ -128,8 +130,17 @@ const getFriendStartWith = async (req, res) => {
     try {
         const friends = await friendService.findFriendWithKey(user.id, text);
 
-        if (!friends[0]) {
-            return errorResponse(res, StatusCodes.NOT_FOUND, "Không tìm thấy.");
+        let data = []
+
+        for (let i = 0; i < friends.length; i++) {
+            const image = await cloudinary.getImage("Avatar", friends[i].user.avatar);
+
+            data.push({
+                user_id: friends[i].user_id,
+                friend_id: friends[i].friend_id,
+                display_name: friends[i].display_name,
+                avatar: image
+            });
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", friends);
@@ -147,8 +158,3 @@ module.exports = {
     deleteFriend,
     getFriendStartWith
 }
-
-//"3e5329b9-7161-4228-b12e-f2dbba708e10"
-//bbe43b48-ae6b-4484-8e7b-a901dad3735b
-//7634079a-1e0e-42d2-92fd-603deca3b778
-//f57fe667-1b7b-4ad0-abd2-f1badf006613
