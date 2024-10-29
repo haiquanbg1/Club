@@ -6,7 +6,7 @@ const create = async (req, res) => {
     const { club_id, name } = req.body;
 
     try {
-        const conversation = conversationService.create({
+        const conversation = await conversationService.create({
             club_id,
             name
         });
@@ -23,6 +23,8 @@ const create = async (req, res) => {
         );
     }
 }
+
+// const update = async
 
 module.exports = {
     create
