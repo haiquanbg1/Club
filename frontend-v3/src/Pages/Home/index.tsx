@@ -1,4 +1,3 @@
-
 import AddFriendForm from "./AddFriendForm"
 import PendingFriendCard from "@/components/PendingFriendCard"
 import { useEffect, useState } from "react"
@@ -11,6 +10,7 @@ interface PendingUser {
     user_id: string;
     friend_id: string;
     display_name: string;
+    avatar: string
 }
 export default function Home() {
     const [pending, setPending] = useState<PendingUser[]>([])
@@ -41,7 +41,7 @@ export default function Home() {
                     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
                         {pending.map((user, index) => (
                             <div key={index}>
-                                <PendingFriendCard senderId={user.user_id} senderName={user.display_name} resetPendingList={getPending} />
+                                <PendingFriendCard senderId={user.user_id} senderName={user.display_name} avatar={user.avatar} resetPendingList={getPending} />
                             </div>
                         ))}
 
