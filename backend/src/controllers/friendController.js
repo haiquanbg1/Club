@@ -125,6 +125,7 @@ const deleteFriend = async (req, res) => {
 
 const getFriendStartWith = async (req, res) => {
     const { text } = req.query;
+    console.log(text)
     const user = req.user;
 
     try {
