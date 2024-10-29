@@ -133,7 +133,7 @@ const getFriendStartWith = async (req, res) => {
         let data = []
 
         for (let i = 0; i < friends.length; i++) {
-            const image = await cloudinary.getImage("Avatar", friends[i].user.avatar);
+            const image = await cloudinary.getImage("Avatar", friends[i].friend.avatar);
 
             data.push({
                 user_id: friends[i].user_id,
@@ -143,7 +143,7 @@ const getFriendStartWith = async (req, res) => {
             });
         }
 
-        return successResponse(res, StatusCodes.OK, "Thành công.", friends);
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
