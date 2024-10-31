@@ -7,6 +7,8 @@ const apiRouter = require("../routes/api");
 const cookieParser = require("cookie-parser");
 var session = require("express-session");
 const { corsOptions } = require("../config/corsOptions");
+const http = require('http');
+const socketIo = require('socket.io');
 
 module.exports = (app) => {
     app.use(
@@ -42,4 +44,41 @@ module.exports = (app) => {
         res.status(err.status || 500);
         res.send(err);
     });
+
+
+    // server for socket
+    const server = http.createServer(app);
+    const io = socketIo(server, {
+        cors: ["http://127.0.0.1:5500", 'http://localhost:5173/']
+    });
+
+    io.on('connection', (socket) => {
+        console.log('New client connected');
+
+        // Lắng nghe sự kiện 'message' từ máy khách
+        socket.on('message', (msg) => {
+            console.log('Message from client:', msg);
+
+            // Gửi lại sự kiện 'message' đến tất cả các máy khách
+            io.emit('message', `'Hello from server', 'message client' + ${msg}`);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Client disconnected');
+        });
+
+        
+    });
+
+    app.get('/', (req, res) => {
+        res.send('Hello from Express and Socket.IO!');
+    });
+
+    // Bắt đầu lắng nghe trên một cổng cụ thể, ví dụ: cổng 8080
+    const port = process.env.PORT || 8080;
+    server.listen(port, () => {
+        console.log(`Server is listening on port ${port}`);
+    });
+
+    return server;
 };

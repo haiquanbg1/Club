@@ -4,7 +4,8 @@ import AuthLayout from "./Layout/AuthLayout"
 import { publicRoutes } from './routes';
 import { ThemeProvider } from '@/components/theme-provider';
 import ClubLayout from './Layout/ClubLayout';
-
+import { io } from 'socket.io-client';
+import { useEffect } from 'react';
 
 interface RouteConfig {
   path: string;
@@ -12,6 +13,30 @@ interface RouteConfig {
   layout?: string | undefined
 }
 function App() {
+
+  const socket = io('http://localhost:8080');
+
+  function connectSocket() {
+    socket.on('connect', () => {
+      // console.log(socket);
+
+      socket.emit('message', 'Hello from vite-react');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+  
+    // Lắng nghe các sự kiện khác từ máy chủ nếu cần
+    socket.on('message', (msg) => {
+      console.log('Message from server:', msg);
+    });
+  }
+
+  useEffect(() => {
+    connectSocket();
+  }, []);
+
 
   return (
     <ThemeProvider >
