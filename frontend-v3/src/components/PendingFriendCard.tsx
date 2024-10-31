@@ -1,7 +1,7 @@
 import FriendApiRequest from "@/apiRequest/friend";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-export default function PendingFriendCard({ senderId, senderName, resetPendingList }: { senderId: string, senderName: string, resetPendingList: () => Promise<void> }) {
+export default function PendingFriendCard({ senderId, senderName, avatar, resetPendingList }: { senderId: string, senderName: string, avatar: string, resetPendingList: () => Promise<void> }) {
     const handleAccept = async () => {
         try {
             await FriendApiRequest.accept({ user_id: senderId, display_name: senderName })
@@ -23,6 +23,7 @@ export default function PendingFriendCard({ senderId, senderName, resetPendingLi
         <div className="border-[1px] border-[#ccc] border-[solid] p-4">
             <div className="flex items-center mb-4">
                 <Avatar className="mr-3">
+                    <AvatarImage src={avatar} />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <p>{senderName}</p>

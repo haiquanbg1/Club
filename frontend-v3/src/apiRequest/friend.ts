@@ -6,7 +6,7 @@ const FriendApiRequest = {
     pending: () => http.get<GetPendingResType>('friend/pending'),
     accept: (body: { user_id: string, display_name: string }) => http.post('/friend/accept', body),
     deny: (body: { user_id: string }) => http.delete('/friend/deny', body),
-    getAllFriend: () => http.get('/friend/')
+    getFriend: (body: string) => http.get<GetPendingResType>(`/friend?text=${body}`)
 }
 
 export default FriendApiRequest
