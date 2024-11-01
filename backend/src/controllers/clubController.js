@@ -3,6 +3,7 @@ const memberService = require("../services/memberService");
 const roles = require("../utils/role");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
+const { getImage } = require("../utils/cloudinary");
 
 const create = async (req, res) => {
     const user = req.user;
@@ -57,9 +58,21 @@ const findAllClubByUser = async (req, res) => {
     const user = req.user;
 
     try {
-        const club = await clubService.findAll(user.id);
+        const clubs = await clubService.findAll(user.id);
 
-        return successResponse(res, StatusCodes.OK, "Lấy clb thành công.", club);
+        let data = [];
+
+        for (let i = 0; i < clubs.length; i++) {
+            const image = await getImage("Avatar", clubs[i].avatar);
+
+            data.push({
+                id: clubs[i].id,
+                name: clubs[i].name,
+                avatar: image
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Lấy clb thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
