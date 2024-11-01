@@ -6,5 +6,8 @@ const managerMiddleware = require("../../middlewares/managerMiddleware");
 const router = express.Router();
 
 router.post("/create", authMiddleware, managerMiddleware, conversationController.create);
+router.patch("/update", authMiddleware, managerMiddleware, conversationController.update);
+router.delete("/delete", authMiddleware, managerMiddleware, conversationController.drop);
+router.get("/:club_id", authMiddleware, conversationController.findAllInClub);
 
 module.exports = router;
