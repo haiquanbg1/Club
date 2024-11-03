@@ -1,4 +1,4 @@
-import { RegisterClubBody, RegisterClubBodyType } from "@/schemaValidations/Club.schema"
+import { RegisterClubBody, RegisterClubBodyType } from "@/schemaValidations/club.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -13,10 +13,21 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import ClubApiRequest from "@/apiRequest/club"
+import { Label } from "@/components/ui/label"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+
 
 
 const formSchema = RegisterClubBody
 export default function CreateClubForm() {
+    const { toast } = useToast()
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
+    };
     const form = useForm<RegisterClubBodyType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -25,11 +36,18 @@ export default function CreateClubForm() {
         },
     })
     const onSubmit = async (values: RegisterClubBodyType) => {
-        console.log(1)
+        const formData: FormData = new FormData();
+        formData.append("userData", JSON.stringify(values));
+        formData.append('avatar', selectedFile ? selectedFile : "");
         try {
-            const res = await ClubApiRequest.create(values)
+            const res = await ClubApiRequest.create(formData)
             console.log(res)
+            setSelectedFile(null)
             form.reset()
+            toast({
+                description: "Tạo câu lạc bộ thành công"
+                // description: "There was a problem with your request.",
+            })
         } catch (errors: any) {
             console.log(errors.payload.message)
         }
@@ -63,7 +81,11 @@ export default function CreateClubForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full text-[20px] font-bold">Đăng nhập</Button>
+                <div className="grid w-full  items-center gap-3">
+                    <Label htmlFor="picture">Chọn ảnh đại diện</Label>
+                    <Input id="picture" type="file" onChange={handleFileChange} />
+                </div>
+                <Button type="submit" className="w-full text-[20px] font-bold">Đăng ký câu lạc bộ</Button>
             </form>
         </Form>
     )

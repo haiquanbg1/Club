@@ -41,7 +41,7 @@ export default function ListFriend() {
         return () => clearTimeout(delayDebounceFn);
     }, [search])
     return (
-        <div className="w-[300px] bg-gray-700 overflow-auto p-2">
+        <div className="w-[300px] bg-[#252525] overflow-auto p-2">
             <h3 className="text-center text-[20px] mb-3">Bạn bè</h3>
             <Input className="mb-2 bg-transparent focus-visible:ring-0 focus:outline-none focus:ring-none border-[white] ring-offset-0" placeholder="Nhập tên bạn bè" onChange={e => setSearch(e.target.value)} />
             {listFriend.map((friend, index) => (

@@ -22,9 +22,11 @@ import ClubApiRequest from "@/apiRequest/club";
 
 interface Club {
     name: string;
-    description: string;
+    id: string;
     avatar: string;
 }
+
+
 function DefaultLayout({ children }: { children: React.ReactNode }) {
     const [clubs, setClubs] = useState<Club[]>([
     ]);
@@ -35,9 +37,9 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                 const response = await ClubApiRequest.get()
                 console.log(response)
                 const clubsData = response.payload.data.map((item) => ({
-                    name: item.clubs.name || "",
-                    description: item.clubs.description,
-                    avatar: item.clubs.avatar,
+                    name: item.name || "",
+                    id: item.id,
+                    avatar: item.avatar,
                 }));
                 // Giả sử API trả về mảng các object có cấu trúc tương tự Item
                 setClubs(clubsData);

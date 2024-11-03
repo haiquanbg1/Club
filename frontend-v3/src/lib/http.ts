@@ -42,10 +42,13 @@ apiClient.interceptors.response.use(
 
         // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
         if (error.response?.status === 410 && !originalRequest._retry) {
+            console.log("lỗi 410")
             originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
             const refreshed = await refreshAccessToken();
-
+            console.log("đã thành công")
+            console.log(refreshed)
             if (refreshed) {
+                console.log("gọi lại")
                 return apiClient(originalRequest); // Retry request với token mới
             }
         }

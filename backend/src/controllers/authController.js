@@ -225,6 +225,7 @@ const refreshToken = async (req, res) => {
             accessToken: newAccessToken,
         });
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

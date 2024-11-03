@@ -19,13 +19,9 @@ export type RegisterClubResType = z.TypeOf<typeof RegisterClubRes>
 export const GetClubRes = z.object({
     message: z.string(),
     data: z.array(z.object({
-        clubs: z.object({
-            name: z.string(),
-            description: z.string(),
-            avatar: z.string()
-        }),
-        roleId: z.string(),
-        clubId: z.string()
+        name: z.string(),
+        avatar: z.string(),
+        id: z.string()
     }))
 })
     .strict()

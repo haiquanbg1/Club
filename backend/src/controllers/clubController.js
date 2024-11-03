@@ -3,25 +3,31 @@ const memberService = require("../services/memberService");
 const roles = require("../utils/role");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
-const { getImage } = require("../utils/cloudinary");
+const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
+const fs = require("fs")
 
 const create = async (req, res) => {
     const user = req.user;
-    const { name, description } = req.body;
+    const { name, description } = JSON.parse(req.body.userData)
+    const image = req.file
     // tạo club, add member
 
     try {
+        const avatar = await uploadImage(image.path);
         const club = await clubService.create({
             name,
             description,
+            avatar: image.filename
         });
 
+        fs.unlinkSync(image.path);
         await memberService.addMember(club.id, user.id, roles.manager);
 
         return successResponse(res, StatusCodes.CREATED, {
             club: name
         });
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -61,13 +67,14 @@ const findAllClubByUser = async (req, res) => {
         const clubs = await clubService.findAll(user.id);
 
         let data = [];
+        console.log(clubs)
 
         for (let i = 0; i < clubs.length; i++) {
-            const image = await getImage("Avatar", clubs[i].avatar);
+            const image = await getImage("Avatar", clubs[i].clubs.avatar);
 
             data.push({
-                id: clubs[i].id,
-                name: clubs[i].name,
+                id: clubs[i].clubs.id,
+                name: clubs[i].clubs.name,
                 avatar: image
             });
         }
