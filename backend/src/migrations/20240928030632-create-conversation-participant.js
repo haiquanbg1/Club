@@ -25,10 +25,9 @@ module.exports = {
         onDelete: 'CASCADE',
         primaryKey: true
       },
-      joined_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      display_name: {
+        type: Sequelize.STRING(255),
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

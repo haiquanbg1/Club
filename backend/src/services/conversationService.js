@@ -1,5 +1,7 @@
 // const { Conversation } = require("../models/index");
+const { where } = require("sequelize");
 const { Conversation, ConversationParticipant, User } = require("../models/index");
+const { Op } = require("sequelize")
 
 const create = async (insertClause) => {
     const conversation = Conversation.create(insertClause);
@@ -59,18 +61,35 @@ const findAllUser = async (conversation_id) => {
         include: [
             {
                 model: User,
-                as: 'participant'
+                as: 'participant',
+                attributes: ['avatar']
             }
         ],
         where: {
-            conversation_id
+            conversation_id,
+            display_name: {
+                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+            }
         }
     });
 
     return participant;
 }
 
+const addParticipant = async (insertClause) => {
+    return await ConversationParticipant.create(insertClause);
+}
+
+const outConversation = async (conversation_id, user_id) => {
+    return await ConversationParticipant.destroy({
+        where: {
+            conversation_id,
+            user_id
+        }
+    });
+}
+
 module.exports = {
     create, update, drop, findOne, findAllForClub, findAllForUser,
-    findAllUser
+    findAllUser, addParticipant, outConversation
 }

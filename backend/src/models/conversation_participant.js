@@ -39,10 +39,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
     },
-    joined_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
+    display_name: {
+      type: DataTypes.STRING(255),
+      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,

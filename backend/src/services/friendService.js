@@ -72,16 +72,14 @@ const findFriendWithKey = async (user_id, key) => {
             {
                 model: User,
                 as: 'friend',
-                where: {
-                    display_name: {
-                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-                    }
-                },
                 attributes: ['avatar']
             }
         ],
         where: {
-            user_id
+            user_id,
+            display_name: {
+                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+            }
         }
     });
 

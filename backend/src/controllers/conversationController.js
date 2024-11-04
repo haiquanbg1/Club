@@ -86,11 +86,12 @@ const findAllInClub = async (req, res) => {
     }
 }
 
-const findAllUser = async (req, res) => {
+const findAllUserWithKey = async (req, res) => {
     const { conversation_id } = req.params;
+    const { text } = req.query;
 
     try {
-        const participants = await conversationService.findAllUser(conversation_id);
+        const participants = await conversationService.findAllUser(conversation_id, text);
 
         const data = [];
 
@@ -115,5 +116,5 @@ module.exports = {
     update,
     drop,
     findAllInClub,
-    findAllUser
+    findAllUserWithKey
 }
