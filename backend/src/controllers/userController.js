@@ -30,7 +30,14 @@ const changeAvatar = async (req, res) => {
 }
 
 const findUser = async (req, res) => {
-    const user = req.user;
+    const { user_id } = req.params;
+    let user = req.user;
+
+    if (user_id) {
+        user = await userService.findOne({
+            id: user_id
+        });
+    }
 
     try {
         const avatar = await getImage('Avatar', user.avatar);

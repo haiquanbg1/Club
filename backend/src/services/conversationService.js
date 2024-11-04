@@ -1,5 +1,5 @@
 // const { Conversation } = require("../models/index");
-const { Conversation, ConversationParticipant } = require("../models/index");
+const { Conversation, ConversationParticipant, User } = require("../models/index");
 
 const create = async (insertClause) => {
     const conversation = Conversation.create(insertClause);
@@ -17,7 +17,7 @@ const update = async (id, updateClause) => {
 const drop = async (id) => {
     return await Conversation.destroy({
         where: {
-            id : id
+            id: id
         }
     })
 }
@@ -32,7 +32,7 @@ const findOne = async (whereClause) => {
 const findAllForClub = async (club_id) => {
     const conversations = await Conversation.findAll({
         where: {
-            club_id : club_id
+            club_id: club_id
         }
     });
     return conversations;
@@ -48,12 +48,29 @@ const findAllForUser = async (user_id) => {
             }
         ],
         where: {
-            user_id : user_id
+            user_id: user_id
         }
     });
     return conversations;
 }
 
+const findAllUser = async (conversation_id) => {
+    const participant = await ConversationParticipant.findAll({
+        include: [
+            {
+                model: User,
+                as: 'participant'
+            }
+        ],
+        where: {
+            conversation_id
+        }
+    });
+
+    return participant;
+}
+
 module.exports = {
-    create, update, drop, findOne, findAllForClub, findAllForUser
+    create, update, drop, findOne, findAllForClub, findAllForUser,
+    findAllUser
 }

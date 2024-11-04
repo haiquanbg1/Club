@@ -30,7 +30,7 @@ const deleteMember = async (req, res) => {
 }
 
 const findUserInClub = async (req, res) => {
-    const { club_id } = req.body;
+    const { club_id } = req.params;
 
     try {
         const member = await memberService.findAll(club_id);

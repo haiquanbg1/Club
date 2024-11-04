@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const conversationService = require("../services/conversationService");
 const { successResponse, errorResponse } = require("../utils/response");
+const cloudinary = require("../utils/cloudinary");
 
 const create = async (req, res) => {
     const { club_id, name } = req.body;
@@ -85,9 +86,34 @@ const findAllInClub = async (req, res) => {
     }
 }
 
+const findAllUser = async (req, res) => {
+    const { conversation_id } = req.params;
+
+    try {
+        const participants = await conversationService.findAllUser(conversation_id);
+
+        const data = [];
+
+        for (let i = 0; i < participants.length; i++) {
+            const image = await cloudinary.getImage("Avatar", participants[i].participant.avatar);
+
+            data.push({
+                user_id: participants[i].participant.id,
+                display_name: participants[i].participant.display_name,
+                avatar: image
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 module.exports = {
     create,
     update,
     drop,
-    findAllInClub
+    findAllInClub,
+    findAllUser
 }
