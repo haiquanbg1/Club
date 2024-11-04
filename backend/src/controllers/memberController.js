@@ -17,6 +17,18 @@ const addMember = async (req, res) => {
 }
 
 const deleteMember = async (req, res) => {
+    const { club_id, user_id } = req.body;
+
+    try {
+        await memberService.deleteMember(club_id, user_id);
+
+        return successResponse(res, StatusCodes.OK, "Thành công.");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
+const outMember = async (req, res) => {
     const { club_id } = req.body;
     const user = req.user;
 
@@ -31,7 +43,6 @@ const deleteMember = async (req, res) => {
 
 const findUserInClub = async (req, res) => {
     const { club_id } = req.params;
-
     try {
         const member = await memberService.findAll(club_id);
 
@@ -44,5 +55,6 @@ const findUserInClub = async (req, res) => {
 module.exports = {
     addMember,
     deleteMember,
+    outMember,
     findUserInClub
 }

@@ -17,10 +17,11 @@ import {
 interface Member {
     name: string,
     avatar: string,
-    id: string
+    id: string,
+    noMore: boolean
 }
 
-export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id }: Member) {
+export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, noMore = false }: Member) {
     return (
         <div className="flex items-center">
             <Avatar className="mr-2">
@@ -28,17 +29,18 @@ export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id }: 
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>{name}</div>
-            <div className="ml-auto cursor-pointer">
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem>
-                            <div className="text-red-600">Xóa khỏi câu lạc bộ</div>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+            {!noMore &&
+                (<div className="ml-auto cursor-pointer">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>
+                                <div className="text-red-600">Xóa khỏi câu lạc bộ</div>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>)
+            }
         </div>
     )
 }

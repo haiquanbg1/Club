@@ -50,6 +50,10 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
     }, []);
+    const handleSelectClub = (club_id: string, club_name: string) => {
+        localStorage.setItem('club_id', club_id)
+        navigate(`/club/${club_name}`)
+    }
 
     const navigate = useNavigate()
     return (
@@ -74,7 +78,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     {
                         clubs.map((club, index) => (
-                            <div className="mb-3" key={index} onClick={() => navigate(`/club/${club.name}`)}>
+                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.name)}>
                                 <TooltipProvider key={index}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
