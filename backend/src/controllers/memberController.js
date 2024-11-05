@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const memberService = require("../services/memberService");
+const friendService = require("../services/friendService");
 const { successResponse, errorResponse } = require("../utils/response");
 const roles = require("../utils/role");
 const cloudinary = require("../utils/cloudinary");
@@ -12,6 +13,38 @@ const addMember = async (req, res) => {
         await memberService.addMember(club_id, user_id, role_id);
 
         return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
+const listToAddMember = async (req, res) => {
+    const user = req.user;
+    const { club_id } = req.params;
+    const data = [];
+
+    try {
+        const friends = await friendService.findAll(user.id);
+
+        for (let i = 0; i < friends.length; i++) {
+            const friend = friends[i];
+
+            const member = await memberService.findOne(club_id, friend.friend_id);
+
+            if (!member) {
+                continue;
+            }
+
+            const image = await cloudinary.getImage("Avatar", friend.friend.avatar);
+
+            data.push({
+                user_id: friend.friend_id,
+                display_name: friend.friend.display_name,
+                avatar: image
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
@@ -69,5 +102,6 @@ module.exports = {
     addMember,
     deleteMember,
     outMember,
-    findUserInClub
+    findUserInClub,
+    listToAddMember
 }
