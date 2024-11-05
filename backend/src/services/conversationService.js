@@ -70,7 +70,8 @@ const findAllUser = async (conversation_id) => {
             display_name: {
                 [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
             }
-        }
+        },
+        order: [['display_name', 'ASC']]
     });
 
     return participant;

@@ -111,10 +111,55 @@ const findAllUserWithKey = async (req, res) => {
     }
 }
 
+const addParticipant = async (req, res) => {
+    const { conversation_id } = req.body;
+    const user = req.user;
+
+    try {
+        await conversationService.addParticipant({
+            conversation_id,
+            user_id: user.id,
+            display_name: user.display_name
+        });
+
+        return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
+const outConversation = async (req, res) => {
+    const user = req.user;
+    const { conversation_id } = req.body;
+
+    try {
+        await conversationService.outConversation(conversation_id, user.id);
+
+        return successResponse(res, StatusCodes.OK, "Rời câu lạc bộ thành công.");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
+const kick = async (req, res) => {
+    const { conversation_id, user_id } = req.body;
+
+    try {
+        await conversationService.outConversation(conversation_id, user_id);
+
+        return successResponse(res, StatusCodes.OK, "Đã xoá người dùng khỏi nhóm chat.");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 module.exports = {
     create,
     update,
     drop,
     findAllInClub,
-    findAllUserWithKey
+    findAllUserWithKey,
+    addParticipant,
+    outConversation,
+    kick
 }
