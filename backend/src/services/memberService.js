@@ -34,10 +34,6 @@ const findAll = async (club_id) => {
 
 const findOne = async (club_id, user_id) => {
     const member = await member_role.findOne({
-        include: [{
-            model: User,
-            as: 'users'
-        }],
         where: {
             club_id,
             user_id

@@ -21,31 +21,30 @@ const addMember = async (req, res) => {
 const listToAddMember = async (req, res) => {
     const user = req.user;
     const { club_id } = req.params;
+    // const club_id = 17
     const data = [];
 
     try {
         const friends = await friendService.findAll(user.id);
-
         for (let i = 0; i < friends.length; i++) {
-            const friend = friends[i];
+            const member = await memberService.findOne(club_id, friends[i].friend_id);
 
-            const member = await memberService.findOne(club_id, friend.friend_id);
-
-            if (!member) {
+            if (member) {
                 continue;
             }
 
-            const image = await cloudinary.getImage("Avatar", friend.friend.avatar);
+            const image = await cloudinary.getImage("Avatar", friends[i].friend.avatar);
 
             data.push({
-                user_id: friend.friend_id,
-                display_name: friend.friend.display_name,
+                user_id: friends[i].friend_id,
+                display_name: friends[i].friend.display_name,
                 avatar: image
             });
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }
@@ -83,11 +82,11 @@ const findUserInClub = async (req, res) => {
         const data = [];
 
         for (let i = 0; i < members.length; i++) {
-            const image = await cloudinary.getImage("Avatar", members[i].user.avatar);
+            const image = await cloudinary.getImage("Avatar", members[i].users.avatar);
 
             data.push({
                 user_id: members[i].user_id,
-                display_name: members[i].user.display_name,
+                display_name: members[i].users.display_name,
                 avatar: image
             });
         }
