@@ -99,9 +99,22 @@ const update = async (req, res) => {
     }
 }
 
+const drop = async (req, res) => {
+    const { club_id } = req.body;
+
+    try {
+        await clubService.drop(club_id);
+
+        return successResponse(res, StatusCodes.OK, "Xoá clb thành công .");
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 module.exports = {
     create,
     findAllClubByUser,
     changeAvatar,
-    update
+    update,
+    drop
 }
