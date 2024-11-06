@@ -5,11 +5,18 @@ const cloudinary = require("../utils/cloudinary");
 
 const create = async (req, res) => {
     const { club_id, name } = req.body;
+    const user = req.user;
 
     try {
         const conversation = await conversationService.create({
             club_id,
             name
+        });
+
+        await conversationService.addParticipant({
+            conversation_id: conversation.id,
+            user_id: user.id,
+            display_name: user.display_name
         });
 
         return successResponse(res, StatusCodes.CREATED, `Tạo đoạn chat ${name} thành công.`, {
