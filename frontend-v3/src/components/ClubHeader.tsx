@@ -1,4 +1,4 @@
-import { Button } from "./ui/button.tsx";
+import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 
 export default function ClubHeader() {
