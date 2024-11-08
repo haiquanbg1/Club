@@ -4,6 +4,7 @@ export default function ClubPage() {
     return (
         <div>
             <ClubHeader />
+            <div></div>
         </div>
     )
 }

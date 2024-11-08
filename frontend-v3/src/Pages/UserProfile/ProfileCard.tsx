@@ -18,7 +18,7 @@ export default function ProfileCard() {
     const [info, setInfo] = useState<UserProfileResType>()
     const getInfo = async () => {
         try {
-            const result = await userApiRequest.getProfile()
+            const result = await userApiRequest.getProfile("")
             setInfo(result?.payload)
             console.log(result?.payload)
         } catch (error: any) {

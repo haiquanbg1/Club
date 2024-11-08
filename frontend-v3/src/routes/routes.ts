@@ -10,6 +10,7 @@ import EventPage from "@/Pages/Event";
 import CreateClubPage from "@/Pages/CreateClub";
 import FriendPage from "@/Pages/Friend";
 import ReportPage from "@/Pages/Report";
+import NotificationPage from "@/Pages/NotiPage";
 
 // Public routes
 const publicRoutes = [
@@ -20,6 +21,7 @@ const publicRoutes = [
     { path: routeConfig.routes.club, component: ClubPage, layout: "clubLayout" },
     { path: routeConfig.routes.chat, component: ChatPage, layout: "clubLayout" },
     { path: routeConfig.routes.event, component: EventPage, layout: "clubLayout" },
+    { path: routeConfig.routes.notification, component: NotificationPage, layout: "clubLayout" },
     { path: routeConfig.routes.createClub, component: CreateClubPage },
     { path: routeConfig.routes.friend, component: FriendPage },
     { path: routeConfig.routes.report, component: ReportPage },

@@ -9,7 +9,8 @@ const routes = {
     event: "/event/:id",
     createClub: "/createClub",
     friend: "/friend",
-    report: "/report"
+    report: "/report",
+    notification: "/club/:id/notification"
 };
 
 export default routes;
