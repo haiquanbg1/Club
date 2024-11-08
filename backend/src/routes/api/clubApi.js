@@ -10,5 +10,6 @@ router.post("/create", authMiddleware, upload.single("avatar"), clubController.c
 router.get("/", authMiddleware, clubController.findAllClubByUser);
 router.patch("/changeAvatar", authMiddleware, managerMiddleware, upload.single("avatar"), clubController.changeAvatar);
 router.patch("/update", authMiddleware, managerMiddleware, clubController.update);
+router.delete("/delete", authMiddleware, managerMiddleware, clubController.drop);
 
 module.exports = router;

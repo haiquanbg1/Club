@@ -30,7 +30,7 @@ const changeAvatar = async (req, res) => {
 }
 
 const findUser = async (req, res) => {
-    const { user_id } = req.params;
+    const { user_id } = req.query?.user_id;
     let user = req.user;
 
     if (user_id) {
@@ -47,8 +47,7 @@ const findUser = async (req, res) => {
             email: user.username,
             avatar: avatar,
             birthday: user.birthday,
-            gender: user.gender,
-            id: user.id
+            gender: user.gender
         });
     } catch (error) {
         return errorResponse(

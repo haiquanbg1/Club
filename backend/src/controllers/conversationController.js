@@ -107,7 +107,7 @@ const findAllUserWithKey = async (req, res) => {
 
             data.push({
                 user_id: participants[i].participant.id,
-                display_name: participants[i].participant.display_name,
+                display_name: participants[i].display_name,
                 avatar: image
             });
         }
@@ -119,13 +119,12 @@ const findAllUserWithKey = async (req, res) => {
 }
 
 const addParticipant = async (req, res) => {
-    const { conversation_id } = req.body;
-    const user = req.user;
+    const { conversation_id, user_id } = req.body;
 
     try {
         await conversationService.addParticipant({
             conversation_id,
-            user_id: user.id,
+            user_id,
             display_name: user.display_name
         });
 
@@ -142,7 +141,7 @@ const outConversation = async (req, res) => {
     try {
         await conversationService.outConversation(conversation_id, user.id);
 
-        return successResponse(res, StatusCodes.OK, "Rời câu lạc bộ thành công.");
+        return successResponse(res, StatusCodes.OK, "Rời nhóm chat thành công.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }

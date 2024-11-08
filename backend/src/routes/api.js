@@ -7,6 +7,9 @@ const conversation = require("./api/conversationApi");
 const member = require("./api/memberApi");
 const friend = require("./api/friendApi");
 const event = require("./api/eventApi");
+const notification = require("./api/notificationApi");
+const report = require("./api/reportApi");
+const message = require("./api/messageApi");
 
 const router = express.Router();
 
@@ -17,5 +20,9 @@ router.use("/event", event);
 router.use("/conversation", conversation);
 router.use("/member", member);
 router.use("/friend", friend);
+router.use("/event", event);
+router.use("/notification", notification);
+router.use("/report", report);
+router.use("/message", message);
 
 module.exports = router;
