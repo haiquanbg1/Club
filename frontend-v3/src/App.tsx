@@ -31,7 +31,12 @@ function App() {
     socket.on('message', (msg) => {
       console.log('Message from server:', msg);
     });
+
+    socket.on('on-chat', (msg) => {
+      console.log(msg);
+    })
   }
+
 
   useEffect(() => {
     connectSocket();

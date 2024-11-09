@@ -49,15 +49,14 @@ module.exports = (app) => {
     // server for socket
     const server = http.createServer(app);
     const io = socketIo(server, {
-        cors: ["http://127.0.0.1:5500", 'http://localhost:5173/']
+        cors: ["http://127.0.0.1:5500", 'http://localhost:5173']
     });
 
     io.on('connection', (socket) => {
-        console.log('New client connected');
-
+        // console.log('New client connected');  
         // Lắng nghe sự kiện 'message' từ máy khách
         socket.on('message', (msg) => {
-            console.log('Message from client:', msg);
+            console.log('Message from client:', msg); 
 
             // Gửi lại sự kiện 'message' đến tất cả các máy khách
             io.emit('message', `'Hello from server', 'message client' + ${msg}`);
@@ -67,12 +66,13 @@ module.exports = (app) => {
             console.log('Client disconnected');
         });
 
-        
-    });
+        socket.on('on-chat', (msg) => {
+            // console.log({ msg })
+            io.emit('on-chat', msg)
+        })
 
-    app.get('/', (req, res) => {
-        res.send('Hello from Express and Socket.IO!');
     });
+    
 
     // Bắt đầu lắng nghe trên một cổng cụ thể, ví dụ: cổng 8080
     const port = process.env.PORT || 8080;

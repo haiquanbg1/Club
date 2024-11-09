@@ -7,10 +7,19 @@ export default {
 	],
 	theme: {
 		extend: {
+			fontSize: {
+				'min': '10px', // Thêm kích thước font tùy chỉnh
+				'medium': '24px',
+				'large': '36px',
+				'amin': '14px'
+			},
+			fontFamily: {
+				sans: ['"Noto Sans"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
 			},
 			colors: {
 				background: 'hsl(var(--background))',
@@ -56,6 +65,14 @@ export default {
 			}
 		}
 	},
+	variants: {
+		scrollbar: ['rounded'],
+	},
+	plugins: [
+		require('tailwind-scrollbar'),
+		require('tailwind-scrollbar-hide'),
+		require("tailwindcss-animate")
+	],
 	plugins: [require('tailwind-scrollbar-hide'), require("tailwindcss-animate")],
 }
 
