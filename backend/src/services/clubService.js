@@ -6,12 +6,17 @@ const findOne = async (whereClause) => {
 }
 
 // find all clubs of one user
-const findAll = async (user_id) => {
+const findAll = async (user_id, club_id) => {
     const club = await member_role.findAll({
         include: [
             {
                 model: Club,
-                as: 'clubs'
+                as: 'clubs',
+                ...(club_id && {
+                    where: {
+                        id: club_id
+                    }
+                })
             }
         ],
         where: {

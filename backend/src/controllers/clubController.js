@@ -62,12 +62,12 @@ const changeAvatar = async (req, res) => {
 
 const findAllClubByUser = async (req, res) => {
     const user = req.user;
+    const club_id = req.query?.club_id;
 
     try {
-        const clubs = await clubService.findAll(user.id);
+        const clubs = await clubService.findAll(user.id, club_id);
 
         let data = [];
-        console.log(clubs)
 
         for (let i = 0; i < clubs.length; i++) {
             const image = await getImage("Avatar", clubs[i].clubs.avatar);
@@ -111,10 +111,25 @@ const drop = async (req, res) => {
     }
 }
 
+const findOne = async (req, res) => {
+    const { club_id } = req.query;
+
+    try {
+        const club = await clubService.findOne({
+            id: club_id
+        });
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", club);
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 module.exports = {
     create,
     findAllClubByUser,
     changeAvatar,
     update,
-    drop
+    drop,
+    findOne
 }
