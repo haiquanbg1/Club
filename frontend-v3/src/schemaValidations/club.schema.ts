@@ -27,3 +27,20 @@ export const GetClubRes = z.object({
     .strict()
 export type GetClubResType = z.TypeOf<typeof GetClubRes>
 
+export const EventBody = z.object({
+    club_id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    start_time: z.date()
+})
+
+export type EventBodyType = z.TypeOf<typeof EventBody>
+
+export const SendEventBody = z.object({
+    club_id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    start_time: z.string()
+})
+
+export type SendEventBodyType = z.TypeOf<typeof SendEventBody>

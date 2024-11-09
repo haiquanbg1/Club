@@ -75,7 +75,7 @@ export default function CreateClubForm() {
                         <FormItem>
                             <FormLabel>Mô tả về câu lạc bộ</FormLabel>
                             <FormControl>
-                                <Input placeholder="Nhập mô tả về câu lạc bộ" type='password' {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
+                                <Input placeholder="Nhập mô tả về câu lạc bộ"  {...field} className="focus-visible:ring-2 focus-visible:ring-offset-10" />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

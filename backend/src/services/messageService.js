@@ -30,23 +30,31 @@ const findOne = async (whereClause) => {
 const findAllForOneUserInOneConver = async (user_id, conversation_id) => {
     const messages = await Message.findAll({
         where: {
-            sender_id : user_id, 
-            conversation_id : conversation_id
+            sender_id: user_id,
+            conversation_id: conversation_id
         }
     });
     return messages;
 }
 
 // find all mes of conver
-const findAllForOneConver = async (conversation_id) => {
+const findAll = async (conversation_id, limit, offset) => {
     const messages = await Message.findAll({
+        include: [{
+            model: User,
+            as: "sender",
+            attributes: ['display_name', 'avatar']
+        }],
         where: {
-            conversation_id : conversation_id
-        }
+            conversation_id: conversation_id
+        },
+        limit: limit, // Giới hạn số lượng bản ghi trả về
+        offset: offset, // Bỏ qua số bản ghi dựa trên trang hiện tại
+        order: [['createdAt', 'DESC']]
     });
     return messages;
 }
 
 module.exports = {
-    create, update, drop, findOne, findAllForOneUserInOneConver, findAllForOneConver
+    create, update, drop, findOne, findAllForOneUserInOneConver, findAll
 };

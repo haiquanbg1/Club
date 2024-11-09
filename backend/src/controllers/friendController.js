@@ -100,7 +100,7 @@ const getAllFriend = async (req, res) => {
     const user = req.user;
 
     try {
-        const friends = await friendService.findAllForOneUser(user.id);
+        const friends = await friendService.findAll(user.id);
 
         return successResponse(res, StatusCodes.OK, "Thành công.", friends);
     } catch (error) {

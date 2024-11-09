@@ -3,7 +3,7 @@ const roleService = require("../services/roleService");
 const { errorResponse } = require("../utils/response");
 
 const managerMiddleware = async (req, res, next) => {
-    const { club_id } = req.body;
+    const club_id = req.body.club_id || req.params.club_id;
 
     try {
         const role_id = await roleService.findByUserAndClub(club_id, req.user.id);

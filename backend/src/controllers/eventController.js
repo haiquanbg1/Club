@@ -1,28 +1,26 @@
 const { StatusCodes } = require("http-status-codes");
-const conversationService = require("../services/conversationService");
+const eventService = require("../services/eventService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 
 const create = async (req, res) => {
-    const { club_id, name } = req.body;
+    const { club_id, name, description, start_time } = req.body;
     const user = req.user;
 
     try {
-        const conversation = await conversationService.create({
+        const event = await eventService.create({
             club_id,
-            name
+            name,
+            description,
+            start_time
         });
 
-        await conversationService.addParticipant({
-            conversation_id: conversation.id,
-            user_id: user.id,
-            display_name: user.display_name
+        await eventService.addParticipant({
+            event_id: event.id,
+            user_id: user.id
         });
 
-        return successResponse(res, StatusCodes.CREATED, `Tạo đoạn chat ${name} thành công.`, {
-            club_id,
-            name
-        });
+        return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");
     } catch (error) {
         return errorResponse(
             res,
@@ -33,15 +31,19 @@ const create = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const { conversation_id, name } = req.body;
+    const { event_id, name, description, start_time } = req.body;
+
+    const updateClause = Object.assign(
+        {},
+        name && { name },
+        description && { description },
+        start_time && { start_time }
+    );
 
     try {
-        await conversationService.update(
-            conversation_id,
-            { name }
-        );
+        await eventService.update(event_id, updateClause);
 
-        return successResponse(res, StatusCodes.OK, `Tên đoạn chat đã được đổi thành ${name}`);
+        return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
     } catch (error) {
         return errorResponse(
             res,
@@ -52,13 +54,13 @@ const update = async (req, res) => {
 }
 
 const drop = async (req, res) => {
-    const { conversation_id } = req.body;
+    const { event_id } = req.body;
     try {
-        await conversationService.drop(
-            conversation_id
+        await eventService.drop(
+            event_id
         );
 
-        return successResponse(res, StatusCodes.OK, `Đã xoá đoạn chat.`);
+        return successResponse(res, StatusCodes.OK, `Đã xoá hoạt động.`);
     } catch (error) {
         return errorResponse(
             res,
@@ -72,14 +74,14 @@ const findAllInClub = async (req, res) => {
     const { club_id } = req.params;
 
     try {
-        const conversations = await conversationService.findAllForClub(club_id);
+        const events = await eventService.findAllForClub(club_id);
 
         const data = [];
 
-        for (let i = 0; i < conversations.length; i++) {
+        for (let i = 0; i < events.length; i++) {
             data.push({
-                conversation_id: conversations[i].id,
-                name: conversations[i].name
+                event_id: events[i].id,
+                name: events[i].name
             });
         }
 
@@ -94,20 +96,20 @@ const findAllInClub = async (req, res) => {
 }
 
 const findAllUserWithKey = async (req, res) => {
-    const { conversation_id } = req.params;
+    const { event_id } = req.params;
     const { text } = req.query;
 
     try {
-        const participants = await conversationService.findAllUser(conversation_id, text);
+        const participants = await eventService.findAllUser(event_id, text);
 
         const data = [];
 
         for (let i = 0; i < participants.length; i++) {
-            const image = await cloudinary.getImage("Avatar", participants[i].participant.avatar);
+            const image = await cloudinary.getImage("Avatar", participants[i].user.avatar);
 
             data.push({
-                user_id: participants[i].participant.id,
-                display_name: participants[i].display_name,
+                user_id: participants[i].user.id,
+                display_name: participants[i].user.display_name,
                 avatar: image
             });
         }
@@ -119,11 +121,11 @@ const findAllUserWithKey = async (req, res) => {
 }
 
 const addParticipant = async (req, res) => {
-    const { conversation_id, user_id } = req.body;
+    const { event_id, user_id } = req.body;
 
     try {
-        await conversationService.addParticipant({
-            conversation_id,
+        await eventService.addParticipant({
+            event_id,
             user_id,
             display_name: user.display_name
         });
@@ -134,26 +136,26 @@ const addParticipant = async (req, res) => {
     }
 }
 
-const outConversation = async (req, res) => {
+const outEvent = async (req, res) => {
     const user = req.user;
-    const { conversation_id } = req.body;
+    const { event_id } = req.body;
 
     try {
-        await conversationService.outConversation(conversation_id, user.id);
+        await eventService.outEvent(event_id, user.id);
 
-        return successResponse(res, StatusCodes.OK, "Rời nhóm chat thành công.");
+        return successResponse(res, StatusCodes.OK, "Rời hoạt động thành công.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }
 
 const kick = async (req, res) => {
-    const { conversation_id, user_id } = req.body;
+    const { event_id, user_id } = req.body;
 
     try {
-        await conversationService.outConversation(conversation_id, user_id);
+        await eventService.outevent(event_id, user_id);
 
-        return successResponse(res, StatusCodes.OK, "Đã xoá người dùng khỏi nhóm chat.");
+        return successResponse(res, StatusCodes.OK, "Đã xoá người dùng khỏi hoạt động.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
@@ -162,10 +164,10 @@ const kick = async (req, res) => {
 module.exports = {
     create,
     update,
-    drop,
+    kick,
+    outEvent,
     findAllInClub,
     findAllUserWithKey,
     addParticipant,
-    outConversation,
-    kick
+    drop
 }

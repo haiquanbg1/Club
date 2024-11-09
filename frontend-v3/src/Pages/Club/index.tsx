@@ -1,5 +1,10 @@
+import ClubHeader from "@/components/ClubHeader";
+
 export default function ClubPage() {
     return (
-        <div>Chào mừng đến với câu lạc bộ Nemui</div>
+        <div>
+            <ClubHeader />
+            <div></div>
+        </div>
     )
 }

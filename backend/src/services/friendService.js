@@ -36,12 +36,12 @@ const drop = async (id1, id2) => {
 
 
 // find all friend of user 
-const findAllForOneUser = async (user_id) => {
+const findAll = async (user_id) => {
     const friends = await ManageFriend.findAll({
         include: [{
             model: User,
             as: 'friend',
-            attributes: ['avatar']
+            attributes: ['avatar', 'display_name']
         }],
         where: {
             user_id: user_id,
@@ -77,6 +77,7 @@ const findFriendWithKey = async (user_id, key) => {
         ],
         where: {
             user_id,
+            status: 'accepted',
             display_name: {
                 [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
             }
@@ -87,6 +88,6 @@ const findFriendWithKey = async (user_id, key) => {
 }
 
 module.exports = {
-    create, update, drop, findAllForOneUser,
+    create, update, drop, findAll,
     findAllPending, findFriendWithKey, findOne
 }

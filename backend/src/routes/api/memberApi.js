@@ -9,5 +9,6 @@ router.post("/add", authMiddleware, managerMiddleware, memberController.addMembe
 router.delete("/delete", authMiddleware, managerMiddleware, memberController.deleteMember);
 router.delete("/out", authMiddleware, memberController.outMember);
 router.get("/:club_id", authMiddleware, memberController.findUserInClub);
+router.get("/add/:club_id", authMiddleware, managerMiddleware, memberController.listToAddMember);
 
 module.exports = router;

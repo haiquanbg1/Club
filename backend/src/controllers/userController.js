@@ -30,7 +30,7 @@ const changeAvatar = async (req, res) => {
 }
 
 const findUser = async (req, res) => {
-    const { user_id } = req.params;
+    const { user_id } = req.query?.user_id;
     let user = req.user;
 
     if (user_id) {
@@ -47,8 +47,7 @@ const findUser = async (req, res) => {
             email: user.username,
             avatar: avatar,
             birthday: user.birthday,
-            gender: user.gender,
-            id: user.id
+            gender: user.gender
         });
     } catch (error) {
         return errorResponse(
@@ -61,10 +60,17 @@ const findUser = async (req, res) => {
 
 const update = async (req, res) => {
     const user = req.user;
-    const options = req.body;
+    const { birthday, gender, display_name } = req.body;
+
+    const updateClause = Object.assign(
+        {},
+        birthday && { birthday },
+        gender && { gender },
+        display_name && { display_name }
+    );
 
     try {
-        await userService.update(user.id, options);
+        await userService.update(user.id, updateClause);
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thông tin thành công.", options);
     } catch (error) {
