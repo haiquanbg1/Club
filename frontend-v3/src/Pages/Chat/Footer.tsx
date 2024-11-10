@@ -6,9 +6,12 @@ import { FaPaperPlane, FaSmile} from 'react-icons/fa';
 type Props = {
     className?: string;
     author: string;
+    socketRef: React.RefObject<any>;
+    messageList: string[];
+    setMessagesList: (messages: string[]) => void;
 }
 
-export default function Footer({ className, author }: Props) {
+export default function Footer({ className, author, socketRef, messageList, setMessagesList }: Props) {
 
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -19,8 +22,13 @@ export default function Footer({ className, author }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Xử lý gửi tin nhắn ở đây
-        console.log('Message sent:', message);
+        // Gửi tin nhắn qua socket
+        if (socketRef.current) {
+            socketRef.current.emit('on-chat', message);
+        }
+        // Thêm tin nhắn mới vào danh sách và cập nhật trạng thái
+        const newMessageList = [...messageList, message];
+        setMessagesList(newMessageList);
         setMessage(''); // Xóa nội dung input sau khi gửi
     };
 

@@ -24,7 +24,7 @@ export default function Avatar({
       <AvatarRadix.Root
         className={`${getSizeStyle(
           size
-        )} bg-blackA3 inline-flex select-none items-center justify-center overflow-hidden rounded-full align-middle`}
+        )} bg-gray-700 inline-flex select-none items-center justify-center overflow-hidden rounded-full align-middle`}
       >
         <AvatarRadix.Image
           className="h-full w-full rounded-[inherit] object-cover"
