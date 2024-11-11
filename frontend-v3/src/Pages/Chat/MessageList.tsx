@@ -11,6 +11,9 @@ type MessageListProps = {
 function MessageList({ socketRef, messageList, setMessagesList }: MessageListProps) {
 
   useEffect(() => {
+
+    // fetch Message List from DB
+
     const handleNewMessage = (message: string) => {
       messageList.push(message);
       setMessagesList(messageList);

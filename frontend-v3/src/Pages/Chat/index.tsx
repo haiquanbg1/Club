@@ -46,7 +46,7 @@ export default function ChatPage() {
     }, []);
 
     return (
-        <div className="h-screen flex-auto flex flex-col bg-gray-700 relative">
+        <div className="h-screen flex flex-col bg-gray-700 relative">
             <ScrollArea.Root className="w-full overflow-y-auto p-4 mt-5
                 [&::-webkit-scrollbar]:w-2
                 [&::-webkit-scrollbar-track]:rounded-full
@@ -57,10 +57,8 @@ export default function ChatPage() {
                 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
                 <Header author="Thang" id="shachi1234"/>
                 <MessageList socketRef={socketRef} messageList={messagesList} setMessagesList={setMessagesList} />
-                
-                
             </ScrollArea.Root>
-            <Footer className="bottom-2 w-full mt-2" author="Thang" socketRef={socketRef} messageList={messagesList} setMessagesList={setMessagesList} />
+            <Footer className="bottom-0 w-full mt-2 fixed" author="Thang" socketRef={socketRef} messageList={messagesList} setMessagesList={setMessagesList} />
         </div>
     )
 }
