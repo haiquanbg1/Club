@@ -49,8 +49,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'ManageFriend',
     tableName: 'manage_friend',
-    timestamps: true, // Để Sequelize tự động quản lý createdAt và updatedAt
-    underscored: true, // Để sử dụng tên trường kiểu snake_case (vd: created_at)
   });
 
   return ManageFriend;

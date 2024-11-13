@@ -1,15 +1,23 @@
-
 import Avatar from './Avatar';
 
-export default function ChatInfo() {
+type Props = {
+    author: string;
+    id: string;
+};
+
+
+export default function ChatInfo({author, id} : Props) {
     return (
-        <div>
+        <div className='flex hover:shadow-lg p-1 rounded cursor-pointer'>
             <Avatar
-                    className={""}
-                    size="lg"
-                    name="Thang"
+                    size='lg'
+                    name={author}
                     imgSrc='/images/thang.png'
                 />
+            <div className='ml-3 justify-center align-middle'>
+                <span>{author}</span>
+                <p className='text-sm font-medium text-gray-500'>{id}</p>
+            </div>
         </div>
     )
 }

@@ -48,7 +48,7 @@ const getSizeStyle = (size: Size) => {
     case "md":
       return "h-[40px] w-[40px] text-[18px]";
     case "lg":
-      return "h-[80px] w-[80px] text-[40px]";
+      return "h-[50px] w-[50px] text-[30px]";
     default:
       return "h-[40px] w-[40px] text-[20px]";
   }

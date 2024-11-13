@@ -59,7 +59,6 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'DirectMessage',
       tableName: 'direct_messages',
-      timestamps: true, // Đảm bảo có createdAt và updatedAt
     }
   );
 

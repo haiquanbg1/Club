@@ -1,6 +1,7 @@
 // import * as ScrollArea from '@radix-ui/react-scroll-area';
+import { any } from 'zod';
 import Message from './Message';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 
 type MessageListProps = {
   socketRef: React.RefObject<any>;
@@ -15,8 +16,7 @@ function MessageList({ socketRef, messageList, setMessagesList }: MessageListPro
     // fetch Message List from DB
 
     const handleNewMessage = (message: string) => {
-      messageList.push(message);
-      setMessagesList(messageList);
+      setMessagesList((prevMessages: string[]) => [...prevMessages, message]);
     };
 
     if (socketRef.current) {

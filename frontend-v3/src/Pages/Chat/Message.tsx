@@ -14,6 +14,11 @@ type author = {
     imgSrc: string;
 }
 
+type content = {
+    text: string;
+    image: string; // file
+}
+
 const isOneDayBefore = (date: Date) => {
     return moment(date).isBefore(moment().subtract(1, "days"));
 };
@@ -30,6 +35,13 @@ export default function Message({
         }
 
         return moment(date).format("MMMM D, YYYY, HH:mm");
+    };
+
+    const handleMessage = (content: string) => {
+        // mess text bthg
+
+        // mes anh
+    
     };
 
     return (

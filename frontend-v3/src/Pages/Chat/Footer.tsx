@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { FaPaperPlane, FaSmile } from 'react-icons/fa';
+import { CgAdd } from "react-icons/cg";
+import { FiImage } from "react-icons/fi";
 
 type Props = {
     className?: string;
     author: string;
     socketRef: React.RefObject<any>;
-    messageList: string[];
     setMessagesList: (messages: string[]) => void;
 }
 
-export default function Footer({ className, author, socketRef, messageList, setMessagesList }: Props) {
-
+export default function Footer({ className, author, socketRef, setMessagesList }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -25,9 +25,9 @@ export default function Footer({ className, author, socketRef, messageList, setM
         // Gửi tin nhắn qua socket
         if (socketRef.current) {
             socketRef.current.emit('on-chat', message);
-            messageList.push(message);
-            setMessagesList(messageList);
         }
+        // Thêm tin nhắn mới vào danh sách và cập nhật trạng thái
+        setMessagesList((prevMessages) => [...prevMessages, message]);
         setMessage(''); // Xóa nội dung input sau khi gửi
     };
 
@@ -36,34 +36,42 @@ export default function Footer({ className, author, socketRef, messageList, setM
     };
 
     return (
-        <>
-            <div className={`${className} relative`}>
-                <form
-                    onSubmit={handleSubmit}
-                    className="w-full flex items-center p-4 bg-gray-800">
-                    <input
-                        id="msg"
-                        type="text"
-                        placeholder={`Nhắn ${author}`}
-                        required
-                        value={message}
-                        onChange={handleChange}
-                        className='w-full p-2 bg-gray-700 text-white rounded-md'
-                    />
-                    <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="ml-4 p-2 bg-blue-500 text-white rounded-md flex items-center">
-                        <FaSmile />
-                    </button>
-                    <button type="submit" className="ml-4 p-2 bg-blue-500 text-white rounded-md flex items-center">
-                        <FaPaperPlane className="mr-2" />
-                        Send
-                    </button>
-                </form>
-                {showEmojiPicker && (
-                    <div className="absolute bottom-full right-2 m-4">
-                        <Picker data={data} onEmojiSelect={addEmoji} />
-                    </div>
-                )}
-            </div>
-        </>
-    )
+        <div className={`${className} relative flex mb-1`}>
+            <button className='w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer'>
+                <CgAdd size={20}/>
+            </button>
+            <button className='w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer'>
+                <FiImage size={20}/>
+            </button>
+
+            <form
+                onSubmit={handleSubmit}
+                className="w-full h-9 p-1 text-white bg-gray-800 rounded-3xl flex items-center relative">
+                <input
+                    id="msg"
+                    type="text"
+                    value={message}
+                    placeholder={`Aa`}
+                    required
+                    onChange={handleChange}
+                    className='flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none'
+                />
+                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0">
+                    <FaSmile  size={18}/>
+                </button>
+
+            </form>
+            <button type="submit" className="ml-2 mr-2 p-2 bg-blue-500 text-white rounded-3xl flex items-center"
+                onClick={handleSubmit}>
+                <FaPaperPlane size={18} />
+            </button>
+
+
+            {showEmojiPicker && (
+                <div className="absolute bottom-full right-2 m-4">
+                    <Picker data={data} onEmojiSelect={addEmoji} />
+                </div>
+            )}
+        </div>
+    );
 }
