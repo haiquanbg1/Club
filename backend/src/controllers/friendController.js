@@ -72,7 +72,7 @@ const getAllPending = async (req, res) => {
             data.push({
                 user_id: friends[i].user_id,
                 friend_id: friends[i].friend_id,
-                display_name: friends[i].display_name,
+                display_name: friends[i].user.display_name,
                 avatar: image
             });
         }

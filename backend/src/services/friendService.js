@@ -56,7 +56,7 @@ const findAllPending = async (user_id) => {
         include: [{
             model: User,
             as: 'user',
-            attributes: ['avatar']
+            attributes: ['avatar', 'display_name']
         }],
         where: {
             friend_id: user_id,

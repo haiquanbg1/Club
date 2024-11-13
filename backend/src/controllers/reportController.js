@@ -36,6 +36,18 @@ const update = async (req, res) => {
     }
 }
 
+const findAll = async (req, res) => {
+    const { report_id } = req.query;
+    const { club_id } = req.params;
+
+    try {
+        const report = await 
+    } catch (error) {
+
+    }
+
+}
+
 module.exports = {
     create,
     update
