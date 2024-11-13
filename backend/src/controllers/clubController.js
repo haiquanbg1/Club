@@ -38,11 +38,11 @@ const create = async (req, res) => {
 
 const changeAvatar = async (req, res) => {
     const image = req.file;
-    const { club_id } = req.body;
+    const id = req.body.club_id
     try {
         const avatar = await uploadImage(image.path);
 
-        await clubService.update(club_id, {
+        await clubService.update(id, {
             avatar: image.filename
         });
 
@@ -63,7 +63,7 @@ const changeAvatar = async (req, res) => {
 const findAllClubByUser = async (req, res) => {
     const user = req.user;
     const club_id = req.query?.club_id;
-
+    console.log(club_id)
     try {
         const clubs = await clubService.findAll(user.id, club_id);
 
@@ -86,11 +86,12 @@ const findAllClubByUser = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const { club_id, name } = req.body;
+    const { club_id, name, description } = req.body;
 
     try {
         const club = await clubService.update(club_id, {
-            name
+            name,
+            description
         });
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thành công.", club);

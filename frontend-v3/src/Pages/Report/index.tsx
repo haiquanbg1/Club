@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 export default function ReportPage() {
     const navigate = useNavigate()
+    const { club_id } = useParams()
     return (
         <div className="bg-[#A0A0A0] h-screen flex flex-col">
             <div className="w-full  bg-[#434242] p-2 flex justify-between items-center">
                 <h1 className="font-bold text-2xl">Báo cáo</h1>
-                <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate("/")}></ArrowLeft>
+                <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate(`/club/${club_id}`)}></ArrowLeft>
             </div>
             <div className=" lg:pl-[200px] flex-1  lg:pr-[200px] xl:pl-[300px] xl:pr-[300px] 2xl:pl-[400px] 2xl:pr-[400px] ">
                 <div className="bg-[#040404] h-full flex flex-col overflow-auto p-4 space-y-4">

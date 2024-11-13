@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast"
 import MemberApiRequest from "@/apiRequest/member";
 import MemberAdd from "./MemberAdd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 
@@ -26,15 +26,21 @@ interface Member {
 }
 
 export default function MemberBox() {
+    // const location = useLocation();
     const navigate = useNavigate()
     const { toast } = useToast()
     const [members, setMembers] = useState<Member[]>([])
+    const { id } = useParams()
+
+    // console.log(id)
+    // console.log(location)
     const getMember = async () => {
-        if (localStorage.getItem("club_id") == "") {
-            navigate("/")
-        }
+        // const clubId = location.pathname.slice(5)
+        // if (localStorage.getItem("club_id") == "") {
+        //     navigate("/")
+        // }
         try {
-            const response = await MemberApiRequest.get(localStorage.getItem("club_id") || "")
+            const response = await MemberApiRequest.get(id || "")
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);

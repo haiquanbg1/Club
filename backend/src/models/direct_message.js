@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  
+
   DirectMessage.init(
     {
       sender_id: {
