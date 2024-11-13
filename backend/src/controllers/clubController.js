@@ -86,11 +86,12 @@ const findAllClubByUser = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const { club_id, name } = req.body;
+    const { club_id, name, description } = req.body;
 
     try {
         const club = await clubService.update(club_id, {
-            name
+            name,
+            description
         });
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thành công.", club);

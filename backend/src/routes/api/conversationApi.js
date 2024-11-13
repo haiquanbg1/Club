@@ -9,9 +9,9 @@ router.post("/create", authMiddleware, managerMiddleware, conversationController
 router.patch("/update", authMiddleware, managerMiddleware, conversationController.update);
 router.delete("/delete", authMiddleware, managerMiddleware, conversationController.drop);
 router.get("/:club_id", authMiddleware, conversationController.findAllInClub);
-router.get("/:conversation_id", authMiddleware, conversationController.findAllUserWithKey);
-router.post("/add", authMiddleware, managerMiddleware, conversationController.addParticipant);
-router.delete("/kick", authMiddleware, managerMiddleware, conversationController.kick);
+router.get("/participant/:conversation_id", authMiddleware, conversationController.findAllUserWithKey);
+router.post("/participant/add", authMiddleware, managerMiddleware, conversationController.addParticipant);
+router.delete("/participant/kick", authMiddleware, managerMiddleware, conversationController.kick);
 router.delete("/out", authMiddleware, conversationController.outConversation);
 
 module.exports = router;

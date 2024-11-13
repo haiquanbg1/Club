@@ -6,6 +6,11 @@ const create = async (insertClause) => {
 }
 
 const update = async (id, updateClause) => {
+    // Lọc bỏ các trường có giá trị undefined
+    updateClause = Object.fromEntries(
+        Object.entries(updateClause).filter(([_, value]) => value !== undefined)
+    );
+
     return await Report.update(updateClause, {
         where: {
             id
@@ -30,7 +35,7 @@ const findOne = async (whereClause) => {
 const findAllOfClub = async (club_id) => {
     const reports = await Report.findAll({
         where: {
-            club_id : club_id
+            club_id: club_id
         }
     });
     return reports;
