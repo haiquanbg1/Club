@@ -4,6 +4,7 @@ const routes = {
     register: 'register',
     userProfile: '/me',
     club: '/club/:id',
+    conversation: '/club/:id/conversation/:id',
     chat: '/chat',
     clubProfile: '/clubProfile/:id',
     event: "/event/:id",

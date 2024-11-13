@@ -4,6 +4,7 @@ import data from '@emoji-mart/data';
 import { FaPaperPlane, FaSmile } from 'react-icons/fa';
 import { CgAdd } from "react-icons/cg";
 import { FiImage } from "react-icons/fi";
+import { useRef, useEffect } from 'react';
 
 type Props = {
     className?: string;
@@ -15,6 +16,7 @@ type Props = {
 export default function Footer({ className, author, socketRef, setMessagesList }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const emojiPickerRef = useRef<HTMLDivElement>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
@@ -31,9 +33,23 @@ export default function Footer({ className, author, socketRef, setMessagesList }
         setMessage(''); // Xóa nội dung input sau khi gửi
     };
 
+    const handleClickOutside = (e: MouseEvent) => {
+        if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+            setShowEmojiPicker(false);
+        }
+
+    };
+
     const addEmoji = (emoji: any) => {
         setMessage(prevMessage => prevMessage + emoji.native);
     };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className={`${className} relative flex mb-1`}>
@@ -68,7 +84,7 @@ export default function Footer({ className, author, socketRef, setMessagesList }
 
 
             {showEmojiPicker && (
-                <div className="absolute bottom-full right-2 m-4">
+                <div ref={emojiPickerRef} className="absolute bottom-full right-2 m-4">
                     <Picker data={data} onEmojiSelect={addEmoji} />
                 </div>
             )}

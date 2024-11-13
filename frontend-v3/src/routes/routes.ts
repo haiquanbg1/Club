@@ -12,6 +12,8 @@ import FriendPage from "@/Pages/Friend";
 import ReportPage from "@/Pages/Report";
 import NotificationPage from "@/Pages/NotiPage";
 import ClubInfoPage from "@/Pages/ClubInfo";
+import ChatClubPage from "@/Pages/ChatClub";
+import { Component } from "react";
 
 // Public routes
 const publicRoutes = [
@@ -27,7 +29,7 @@ const publicRoutes = [
     { path: routeConfig.routes.createClub, component: CreateClubPage },
     { path: routeConfig.routes.friend, component: FriendPage },
     { path: routeConfig.routes.report, component: ReportPage },
-
+    { path: routeConfig.routes.conversation, component: ChatClubPage, layout: "clubLayout" },
 ];
 
 const privateRoutes = [];
