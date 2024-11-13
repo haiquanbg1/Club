@@ -52,8 +52,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'EventParticipant',
     tableName: 'event_participant',
-    timestamps: true, // Để Sequelize tự động quản lý createdAt và updatedAt
     underscored: true, // Sử dụng tên trường kiểu snake_case
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   });
 
   return EventParticipant;

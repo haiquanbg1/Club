@@ -57,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'ConversationParticipant',
     tableName: 'conversation_participant',
-    timestamps: true, // Để tự động thêm createdAt và updatedAt
   });
 
   return ConversationParticipant;

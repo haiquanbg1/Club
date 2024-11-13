@@ -5,6 +5,7 @@ const cloudinary = require("../utils/cloudinary");
 
 const create = async (req, res) => {
     const { club_id, name, description, start_time } = req.body;
+    console.log(req.body)
     const user = req.user;
 
     try {
@@ -22,6 +23,8 @@ const create = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");
     } catch (error) {
+        console.log(error);
+
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

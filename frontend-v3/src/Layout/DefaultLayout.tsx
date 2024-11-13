@@ -12,11 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Header from "@/components/header";
 // import { ModeToggle } from '@/components/mode-toggle.tsx'
-const test = [
-    "https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg",
-    "https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg",
-    "https://images2.thanhnien.vn/528068263637045248/2024/1/25/60f4471b059d7a855e2e34ca0f705292-65a11ad2dafe9880-17061562930471102159734.jpg"
-]
+
 import { useState, useEffect } from 'react';
 import ClubApiRequest from "@/apiRequest/club";
 
@@ -52,7 +48,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
     }, []);
     const handleSelectClub = (club_id: string, club_name: string) => {
         localStorage.setItem('club_id', club_id)
-        navigate(`/club/${club_name}`)
+        navigate(`/club/${club_id}`)
     }
 
     const navigate = useNavigate()

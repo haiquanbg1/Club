@@ -45,12 +45,15 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { useNavigate, useParams } from "react-router-dom";
+import ClubApiRequest from "@/apiRequest/club";
 
 const eventSchema = EventBody
 function ClubLayout({ children }: { children: React.ReactNode }) {
     const [eventOpen, setEventOpen] = useState(false)
     // const [date, setDate] = useState<Date>()
-
+    const navigate = useNavigate()
+    const { id } = useParams()
     const eventForm = useForm<EventBodyType>({
         resolver: zodResolver(eventSchema),
         defaultValues: {
@@ -60,8 +63,19 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
         },
     })
-    const createEvent = (values: EventBodyType) => {
-        console.log(values)
+    const createEvent = async (values: EventBodyType) => {
+        try {
+            const body = {
+                club_id: id || "",
+                name: values.name,
+                description: values.description,
+                start_time: format(values.start_time, "MM/dd/yyyy"),
+            }
+            const res = await ClubApiRequest.createEvent(body)
+            setEventOpen(false)
+        } catch (error) {
+            console.log(error)
+        }
         console.log(format(values.start_time, "MM/dd/yyyy"))
     }
 
@@ -100,6 +114,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuCheckboxItem
                                     className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
+                                    onClick={() => navigate(`/club/changeProfile/${id}`)}
                                 >
                                     Đổi thông tin
                                 </DropdownMenuCheckboxItem>
