@@ -22,10 +22,15 @@ module.exports = (sequelize, DataTypes) => {
 
   DirectMessage.init(
     {
+      id: {
+        type: DataTypes.UUID, // UUID làm khóa chính
+        defaultValue: DataTypes.UUIDV4, // Tự động tạo UUID
+        allowNull: false,
+        primaryKey: true, // Khóa chính là id
+      },
       sender_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',
@@ -34,7 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       receiver_id: {
         type: DataTypes.UUID,
         allowNull: false,
-        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',

@@ -4,10 +4,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('direct_messages', {
+      id: {
+        type: Sequelize.UUID, // UUID làm khóa chính
+        defaultValue: Sequelize.UUIDV4, // Tự động tạo UUID
+        allowNull: false,
+        primaryKey: true, // Đặt làm khóa chính
+      },
       sender_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',
@@ -18,7 +23,6 @@ module.exports = {
       receiver_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        primaryKey: true,
         references: {
           model: 'Users',
           key: 'id',

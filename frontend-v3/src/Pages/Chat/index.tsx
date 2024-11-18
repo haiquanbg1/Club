@@ -1,9 +1,9 @@
 import Header from "./Header";
 import MessageList from "./MessageList";
 import Footer from "./Footer";
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 import socketIOClient from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from "react-router-dom";
 
 const host = 'http://localhost:8080';
 
@@ -13,6 +13,8 @@ type Props = {
 }
 
 export default function ChatPage() {
+
+    const id = useParams<{ id: string }>();
 
     const socketRef = useRef<any>(null);
 
@@ -24,7 +26,13 @@ export default function ChatPage() {
 
 
     const connectSocket = () => {
-        socketRef.current = socketIOClient(host);
+
+        const userId = 'currentUserId';
+        const channelId = [userId, id].sort().join('-');
+
+        socketRef.current = socketIOClient(host, {
+            query: { channelId }
+        });
 
         // Xử lý sự kiện kết nối
         socketRef.current.on('connect', () => {
@@ -40,6 +48,7 @@ export default function ChatPage() {
         socketRef.current.on('on-chat', (message: string) => {
             messagesRef.current = [...messagesRef.current, message];
             setMessagesList([...messagesRef.current]);
+            // lưu db
         });
 
         // Cleanup khi component unmount
@@ -59,7 +68,7 @@ export default function ChatPage() {
     useEffect(() => {
         getListMessages();
         connectSocket();
-    }, []);
+    }, [id]);
 
     return (
         <div className="h-screen flex flex-col bg-gray-700 relative">

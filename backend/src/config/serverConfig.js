@@ -53,23 +53,26 @@ module.exports = (app) => {
     });
 
     io.on('connection', (socket) => {
-        // console.log('New client connected');  
+        const { channelId } = socket.handshake.query;
+        socket.join(channelId);
+
+        console.log(`User connected to channel: ${channelId}`);
+
         // Lắng nghe sự kiện 'message' từ máy khách
         socket.on('message', (msg) => {
             console.log('Message from client:', msg); 
 
             // Gửi lại sự kiện 'message' đến tất cả các máy khách
-            io.emit('message', `'Hello from server', 'message client' + ${msg}`);
+            // io.to(channelId).emit('message', `'Hello from server', 'message client' + ${msg}`);
         });
 
         socket.on('disconnect', () => {
-            console.log('Client disconnected');
+            console.log(`User disconnected from channel: ${channelId}`);
         });
 
-        socket.on('on-chat', (msg) => {
-            // console.log({ msg })
-            io.emit('on-chat', msg)
-        })
+        socket.on('on-chat', (message) => {
+            io.to(channelId).emit('on-chat', message);
+          });
 
     });
     

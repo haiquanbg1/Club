@@ -5,7 +5,7 @@ const routes = {
     userProfile: '/me',
     club: '/club/:id',
     conversation: '/club/:id/conversation/:id',
-    chat: '/chat',
+    chat: 'friend/:id/chat',
     clubProfile: '/clubProfile/:id',
     event: "/event/:id",
     createClub: "/createClub",
