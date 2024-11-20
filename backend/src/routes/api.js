@@ -10,6 +10,7 @@ const event = require("./api/eventApi");
 const notification = require("./api/notificationApi");
 const report = require("./api/reportApi");
 const message = require("./api/messageApi");
+const schedule = require("./api/scheduleApi");
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use("/event", event);
 router.use("/notification", notification);
 router.use("/report", report);
 router.use("/message", message);
+router.use("/schedule", schedule);
 
 module.exports = router;

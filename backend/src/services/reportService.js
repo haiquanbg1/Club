@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const { Report } = require('../models/index');
 
 const create = async (insertClause) => {
@@ -32,10 +33,15 @@ const findOne = async (whereClause) => {
 }
 
 // find all report of club 
-const findAllOfClub = async (club_id) => {
+const findAllOfClub = async (club_id, report_id) => {
     const reports = await Report.findAll({
         where: {
-            club_id: club_id
+            club_id: club_id,
+            ...(report_id && {
+                where: {
+                    id: report_id
+                }
+            })
         }
     });
     return reports;
