@@ -52,9 +52,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'EventParticipant',
     tableName: 'event_participant',
-    underscored: true, // Sử dụng tên trường kiểu snake_case
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+
   });
 
   return EventParticipant;

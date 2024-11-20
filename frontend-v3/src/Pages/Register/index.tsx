@@ -1,5 +1,10 @@
 import { RegisterForm } from './RegisterForm'
+import { isAuthenticated } from "@/Middleware/Auth/authUtils"
+import { Navigate } from 'react-router-dom';
 export default function RegisterPage() {
+    if (isAuthenticated()) {
+        return <Navigate to="/" />;
+    }
     return (
         <div className='space-y-5 w-full md:w-[50%] xl:w-[40%] 2xl:w-[30%] m-auto'>
             <h1 className='text-center font-bold text-[30px]'>Đăng ký</h1>

@@ -49,7 +49,7 @@ export default function CreateClubForm() {
                 // description: "There was a problem with your request.",
             })
         } catch (errors: any) {
-            console.log(errors.payload.message)
+            console.log(errors.payload)
         }
     }
     return (
