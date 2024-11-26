@@ -56,7 +56,7 @@ const findAllForUser = async (user_id) => {
     return conversations;
 }
 
-const findAllUser = async (conversation_id) => {
+const findAllUser = async (conversation_id, text) => {
     const participant = await ConversationParticipant.findAll({
         include: [
             {
@@ -67,9 +67,13 @@ const findAllUser = async (conversation_id) => {
         ],
         where: {
             conversation_id,
-            display_name: {
-                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-            }
+            ...(key && {
+                where: {
+                    display_name: {
+                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+                    }
+                }
+            })
         },
         order: [['display_name', 'ASC']]
     });

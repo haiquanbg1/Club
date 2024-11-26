@@ -40,6 +40,10 @@ const login = async (req, res) => {
             // sameSite: "none",
             maxAge: ms("7 days"),
         });
+        res.cookie("isLogin", true, {
+            maxAge: ms("7 days"),
+        });
+
         const avatar = await getImage('Avatar', user.avatar);
         return successResponse(res, StatusCodes.OK, "Đăng nhập thành công", {
             user: {
@@ -90,6 +94,7 @@ const logout = async (req, res) => {
     try {
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");
+        res.clearCookie("isLogin");
         return successResponse(res, StatusCodes.OK, "Đăng xuất thành công");
     } catch (error) {
         return errorResponse(

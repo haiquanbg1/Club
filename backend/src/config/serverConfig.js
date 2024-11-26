@@ -60,7 +60,7 @@ module.exports = (app) => {
 
         // Lắng nghe sự kiện 'message' từ máy khách
         socket.on('message', (msg) => {
-            console.log('Message from client:', msg); 
+            console.log('Message from client:', msg);
 
             // Gửi lại sự kiện 'message' đến tất cả các máy khách
             // io.to(channelId).emit('message', `'Hello from server', 'message client' + ${msg}`);
@@ -72,10 +72,10 @@ module.exports = (app) => {
 
         socket.on('on-chat', (message) => {
             io.to(channelId).emit('on-chat', message);
-          });
+        });
 
     });
-    
+
 
     // Bắt đầu lắng nghe trên một cổng cụ thể, ví dụ: cổng 8080
     const port = process.env.PORT || 8080;

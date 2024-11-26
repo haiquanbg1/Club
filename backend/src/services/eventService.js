@@ -43,7 +43,7 @@ const findAllForUser = async (user_id) => {
     return events;
 }
 
-const findAllUser = async (event_id) => {
+const findAllUser = async (event_id, text) => {
     const participant = await EventParticipant.findAll({
         include: [
             {
@@ -51,9 +51,13 @@ const findAllUser = async (event_id) => {
                 as: 'user',
                 attributes: ['avatar'],
                 where: {
-                    display_name: {
-                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-                    }
+                    ...(key && {
+                        where: {
+                            display_name: {
+                                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+                            }
+                        }
+                    })
                 }
             }
         ],

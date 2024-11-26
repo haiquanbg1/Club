@@ -5,7 +5,7 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", authMiddleware, friendController.getAllFriend);
+router.get("/", authMiddleware, friendController.getFriendStartWith);
 router.get("/pending", authMiddleware, friendController.getAllPending);
 router.post("/add", authMiddleware, friendController.addFriend);
 router.post("/accept", authMiddleware, friendController.acceptFriend);

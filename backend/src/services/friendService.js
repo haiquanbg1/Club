@@ -78,9 +78,13 @@ const findFriendWithKey = async (user_id, key) => {
         where: {
             user_id,
             status: 'accepted',
-            display_name: {
-                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-            }
+            ...(key && {
+                where: {
+                    display_name: {
+                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+                    }
+                }
+            })
         }
     });
 
