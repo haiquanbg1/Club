@@ -1,17 +1,16 @@
 import ChatInfo from "./ChatInfo";
+import { Profile } from "./index";
 
-type Props = {
-    author: string;
-    id: string;
-};
+type HeaderProps = {
+    friendProfile: Profile;
+  };
 
 export default function Header({
-    author,
-    id
-}: Props) {
+    friendProfile
+}: HeaderProps) {
     return (
         <div className="p-3 flex align-middle border-b border-gray-300">
-            <ChatInfo author={author} id={id} />
+            <ChatInfo friendProfile={friendProfile} />
             <div className="icons">
                 
             </div>

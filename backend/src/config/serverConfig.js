@@ -9,15 +9,18 @@ var session = require("express-session");
 const { corsOptions } = require("../config/corsOptions");
 const http = require('http');
 const socketIo = require('socket.io');
+// const helmet = require('helmet');
 
 module.exports = (app) => {
     app.use(
         session({
             secret: "club secret",
             resave: false,
-            saveUninitialized: true,
+            saveUninitialized: false,
         })
     );
+
+    app.set('etag', false);
 
     // config req.body
     app.use(logger("dev"));
@@ -28,6 +31,7 @@ module.exports = (app) => {
 
     // config routes
     app.use("/api/v1", cors(corsOptions), apiRouter);
+    // app.use(helmet.referrerPolicy({ policy: 'no-referrer' }));
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
@@ -49,7 +53,7 @@ module.exports = (app) => {
     // server for socket
     const server = http.createServer(app);
     const io = socketIo(server, {
-        cors: ["http://127.0.0.1:5500", 'http://localhost:5173']
+        cors: ["http://127.0.0.1:5500", 'http://localhost:5173/']
     });
 
     io.on('connection', (socket) => {

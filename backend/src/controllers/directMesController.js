@@ -49,37 +49,17 @@ const drop = async (req, res) => {
 const getOldMessages = async (req, res) => {
     const user_id = req.user.id; // Lấy ID người gửi từ middleware xác thực
     const { friend_id } = req.params; // Lấy ID người nhận từ URL
-    const cursor = new Date().toDateString()
+    const { offset } = req.query;
+
+    const offsetValue = isNaN(parseInt(offset)) ? 0 : parseInt(offset);
 
     try {
         const directMessages = await directMessageService.getOldMessages(
             user_id,
             friend_id,
-            cursor
+            offsetValue
         )
         return successResponse(res, StatusCodes.OK, 'Get Old Mess success', directMessages);
-
-    } catch (error) {
-        return errorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            error.message
-        );
-    }
-}
-
-const getNewMessages = async (req, res) => {
-    const user_id = req.user.id; // Lấy ID người gửi từ middleware xác thực
-    const { friend_id } = req.params; // Lấy ID người nhận từ URL
-    const cursor = new Date().toDateString()
-
-    try {
-        const directMessages = await directMessageService.getNewMessages(
-            user_id,
-            friend_id,
-            cursor
-        )
-        return successResponse(res, StatusCodes.OK, 'Get New Mess success', directMessages);
 
     } catch (error) {
         return errorResponse(
@@ -94,6 +74,5 @@ const getNewMessages = async (req, res) => {
 module.exports = {
     create,
     drop,
-    getOldMessages,
-    getNewMessages
+    getOldMessages
 }

@@ -1,22 +1,26 @@
 // import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { any } from 'zod';
 import Message from './Message';
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
+import { MessageType, Profile } from './index'; // Đường dẫn tới file định nghĩa kiểu dữ liệu
+import Loading from './Loading';
 
 type MessageListProps = {
   socketRef: React.RefObject<any>;
-  messageList: string[];
-  setMessagesList: (messages: string[]) => void;
+  messageList: MessageType[];
+  setMessagesList: (messages: MessageType[]) => void;
+  userProfile: Profile;
+  friendProfile: Profile;
+  stateScroll: [];
+  setStateScroll: (state: []) => void;
+  isFetching: boolean;
 };
 
-function MessageList({ socketRef, messageList, setMessagesList }: MessageListProps) {
+function MessageList({ socketRef, messageList, setMessagesList, userProfile, friendProfile, isFetching }: MessageListProps) {
 
   useEffect(() => {
-
-    // fetch Message List from DB
-
-    const handleNewMessage = (message: string) => {
-      setMessagesList((prevMessages: string[]) => [...prevMessages, message]);
+    // handle New Message socket
+    const handleNewMessage = (message: MessageType) => {
+      setMessagesList((prevMessages: MessageType[]) => [...prevMessages, message]);
     };
 
     if (socketRef.current) {
@@ -33,16 +37,20 @@ function MessageList({ socketRef, messageList, setMessagesList }: MessageListPro
 
   return (
     <>
-      <Message orientation="right" author={{ name: "Thắng", imgSrc: "/images/thang.png" }} content="Helloádasd" createdAt={new Date()} />
-      <Message orientation="left" author={{ name: "Thảo", imgSrc: "/images/thao.png" }} content="Hi" createdAt={new Date()} />
       <div>
-        {messageList.map((message, index) => (
+        {isFetching && <Loading />}
+        {messageList.map((message) => (
           <Message
-            key={index}
-            orientation="right"
-            author={{ name: "Thắng", imgSrc: "/images/thang.png" }}
-            content={message}
-            createdAt={new Date()}
+            orientation={(message.sender_id == userProfile.id) ? "right": 'left'}
+            author={
+              (message.sender_id == userProfile.id) ? 
+              { display_name: message.sender_id, avatar: '/images/thang.png' } : 
+              { display_name: message.sender_id, avatar: "/images/thao.png" }}
+            content={{
+              message: message.message,
+              sender_id: message.sender_id,
+              created_at: message.createdAt,
+              id: message.id,}}
           />
         ))}
       </div>

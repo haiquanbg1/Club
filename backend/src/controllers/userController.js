@@ -30,8 +30,12 @@ const changeAvatar = async (req, res) => {
 }
 
 const findUser = async (req, res) => {
-    const { user_id } = req.query?.user_id;
+    let { user_id } = req.query;  
     let user = req.user;
+
+    if (user_id === "@me") {
+        user_id = user.id;
+    }
 
     if (user_id) {
         user = await userService.findOne({
