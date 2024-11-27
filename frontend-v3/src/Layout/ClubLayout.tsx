@@ -2,6 +2,7 @@ import MemberBox from "@/components/MemberBox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BellRing, Ellipsis } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -86,9 +87,9 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     }, [eventOpen]);
     return (
         <div className="flex ">
-            <div className=" bg-[#252525] min-w-[280px] h-screen flex flex-col">
-                <div className="w-full  bg-[#434242] p-2 flex justify-between items-center">
-                    <Input className="text-[#888888] bg-[#3B3B3B] focus-visible:ring-0 focus:outline-none focus:border-none focus:ring-none border-transparent ring-offset-0" placeholder="Tìm kiếm cuộc trò chuyện"></Input>
+            <div className=" bg-[#2b2d31] min-w-[280px] h-screen flex flex-col">
+                <div className="w-full p-2 flex justify-between items-center">
+                    <Input className="text-[#888888] bg-[#1e1f22] focus-visible:ring-0 focus:outline-none focus:border-none focus:ring-none border-transparent ring-offset-0" placeholder="Tìm kiếm cuộc trò chuyện"></Input>
                 </div>
                 <div className="overflow-auto flex-1 scrollbar-hide">
                     <div className="flex items-center justify-between p-2">
@@ -220,7 +221,11 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                     <div className="space-y-2 pt-1 mt-2 pb-1">
                         <FeatureBox group="Các ban trực thuộc" />
-                        <FeatureBox group="Sự kiện chưa đăng ký" />
+                        {/* <FeatureBox group="Sự kiện chưa đăng ký" /> */}
+                        <div className="flex items-center hover:bg-slate-400 cursor-pointer select-none" onClick={() => navigate(`/club/listEvent/${id}`)}>
+                            <ChevronRight />
+                            <h1 className="text-[20px]">Sự kiện chưa đăng ký</h1>
+                        </div>
                         <FeatureBox group="Sự kiện đã đăng ký" />
                         <FeatureBox group="Các nhóm chat" />
                     </div>
@@ -228,7 +233,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
 
             </div>
-            <div className="w-full flex flex-col h-screen">{children}</div>
+            <div className="w-full flex flex-col h-screen bg-[#313338]">{children}</div>
             <MemberBox />
         </div>
     );

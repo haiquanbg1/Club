@@ -42,24 +42,24 @@ function App() {
                     key={index}
                     path={route.path}
                     element={
-                      // <AuthGuard isAuthenticated={isAuthenticated()} redirectTo="/login">
-                      <Layout>
-                        {
-                          route.layout === 'clubLayout' &&
-                          (
-                            <ClubLayout>
+                      <AuthGuard isAuthenticated={isAuthenticated()} redirectTo="/login">
+                        <Layout>
+                          {
+                            route.layout === 'clubLayout' &&
+                            (
+                              <ClubLayout>
+                                <Page />
+                              </ClubLayout>
+                            )
+                          }
+                          {
+                            route.layout !== 'clubLayout' &&
+                            (
                               <Page />
-                            </ClubLayout>
-                          )
-                        }
-                        {
-                          route.layout !== 'clubLayout' &&
-                          (
-                            <Page />
-                          )
-                        }
-                      </Layout>
-                      // </AuthGuard>
+                            )
+                          }
+                        </Layout>
+                      </AuthGuard>
                     }
                   />
                 );

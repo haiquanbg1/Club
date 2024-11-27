@@ -69,10 +69,10 @@ export default function MemberBox() {
         }
     }
     return (
-        <div className=" bg-[#252525] min-w-[280px] h-screen xl:block hidden">
+        <div className=" bg-[#2b2d31] min-w-[280px] h-screen xl:block hidden">
             <h1 className="text-center font-bold text-[26px]">Danh sách thành viên</h1>
             <div className="flex items-center mt-1 mb-2 pl-2 pr-2">
-                <Input className="" placeholder="Tìm kiếm thành viên"></Input>
+                <Input className="bg-[#313338]" placeholder="Tìm kiếm thành viên"></Input>
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger>
                         <CirclePlus size={30} className=" ml-2 cursor-pointer" />

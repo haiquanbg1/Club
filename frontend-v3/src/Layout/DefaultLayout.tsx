@@ -53,7 +53,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
     const navigate = useNavigate()
     return (
-        <div className='flex h-screen overflow-hidden'>
+        <div className='flex h-screen overflow-hidden bg-[#1e1f22]' >
             <div className=" p-2 justify-between h-full flex flex-col w-[60px] overflow-y-auto scrollbar-hide">
                 <div>
                     <div className="mb-4" onClick={() => navigate("/")}>
