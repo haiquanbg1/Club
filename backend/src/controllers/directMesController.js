@@ -51,6 +51,7 @@ const getOldMessages = async (req, res) => {
     const { friend_id } = req.params; // Lấy ID người nhận từ URL
     const { offset } = req.query;
 
+    console.log(offset);
     const offsetValue = isNaN(parseInt(offset)) ? 0 : parseInt(offset);
 
     try {
