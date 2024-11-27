@@ -96,11 +96,16 @@ export default function ChatPage() {
                 params: {
                     offset
                 },
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
             })
             const messages: MessageType[] = response.data.data.map((message: any) => ({
                 ...message,
-                created_at: new Date(message.created_at) 
+                created_at: new Date(message.created_at)
             })).reverse();
             messagesRef.current = [...messages, ...messagesRef.current];
             setMessagesList(() => [...messagesRef.current]);
@@ -130,6 +135,11 @@ export default function ChatPage() {
         // Xử lý sự kiện ngắt kết nối
         socketRef.current.on('disconnect', () => {
             console.log('Disconnected from server');
+        });
+
+        // Xử lý sự kiện kết nối lại thất bại
+        socketRef.current.on('reconnect_failed', () => {
+            console.log('Failed to reconnect to server');
         });
 
         // Lắng nghe sự kiện 'on-chat'
@@ -163,7 +173,8 @@ export default function ChatPage() {
     const setFistScroll = () => {
         if (scrollContainerRef.current && messagesList.length > 0) {
             scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight - 500;
-          }    };
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -175,10 +186,11 @@ export default function ChatPage() {
             // setFistScroll();
             if (userProfile?.id) {
                 connectSocket();
+                console.log('Connected to socket');
             }
         };
         fetchData();
-    }, [friendId, location.search]);
+    }, [friendId, userProfile?.id, location.search]);
 
     useEffect(() => {
         setFistScroll();
@@ -186,18 +198,18 @@ export default function ChatPage() {
 
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
-    
+
         if (scrollContainer) {
-          scrollContainer.addEventListener('scroll', handleScroll);
+            scrollContainer.addEventListener('scroll', handleScroll);
         }
-    
+
         // Cleanup khi component bị hủy
         return () => {
-          if (scrollContainer) {
-            scrollContainer.removeEventListener('scroll', handleScroll);
-          }
+            if (scrollContainer) {
+                scrollContainer.removeEventListener('scroll', handleScroll);
+            }
         };
-      }, [lastScrollTop]); 
+    }, [lastScrollTop]);
 
     return (
         <div className="h-screen flex flex-col bg-gray-700 relative">

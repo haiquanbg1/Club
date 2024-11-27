@@ -38,7 +38,7 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
   return (
     <>
       <div>
-        {isFetching && <Loading />}
+        {/* {isFetching && <Loading />} */}
         {messageList.map((message) => (
           <Message
             orientation={(message.sender_id == userProfile.id) ? "right": 'left'}

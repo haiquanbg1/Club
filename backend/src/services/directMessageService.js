@@ -17,7 +17,7 @@ const drop = async (message_id) => {
 }
 
 // tìm tin nhắn của user và bạn user
-const getOldMessages = async (user_id, friend_id, offset, limit = 12) => {
+const getOldMessages = async (user_id, friend_id, offset, limit = 10) => {
     const whereClause = {
         [Op.or]: [
             { sender_id: user_id, receiver_id: friend_id },

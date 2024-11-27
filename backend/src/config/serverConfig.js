@@ -20,8 +20,6 @@ module.exports = (app) => {
         })
     );
 
-    app.set('etag', false);
-
     // config req.body
     app.use(logger("dev"));
     app.use(express.json());
