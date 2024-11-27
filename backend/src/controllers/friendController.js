@@ -124,13 +124,13 @@ const deleteFriend = async (req, res) => {
 }
 
 const getFriendStartWith = async (req, res) => {
-    const { text } = req.query;
+    const text = req.query?.text || "";
     const user = req.user;
 
     try {
         const friends = await friendService.findFriendWithKey(user.id, text);
 
-        let data = []
+        let data = [];
 
         for (let i = 0; i < friends.length; i++) {
             const image = await cloudinary.getImage("Avatar", friends[i].friend.avatar);

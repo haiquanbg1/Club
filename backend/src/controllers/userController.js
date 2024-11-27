@@ -93,7 +93,7 @@ const deleteUser = async (req, res) => {
 
         await user.destroy();
 
-        return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
+        return successResponse(res, StatusCodes.OK, "Xoá thành công.");
     } catch (error) {
         return errorResponse(
             res,
@@ -111,7 +111,7 @@ const deleteAccount = async (req, res) => {
 
         await user.destroy();
 
-        return successResponse(res, StatusCodes.GONE, "Xoá thành công.");
+        return successResponse(res, StatusCodes.OK, "Xoá thành công.");
     } catch (error) {
         return errorResponse(
             res,
