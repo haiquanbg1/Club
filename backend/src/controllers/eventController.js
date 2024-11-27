@@ -101,6 +101,7 @@ const findAllInClub = async (req, res) => {
 
 const findEventUserJoined = async (req, res) => {
     const { club_id, status } = req.params;
+    console.log(status)
     const user = req.user;
 
     try {

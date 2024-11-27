@@ -48,13 +48,16 @@ import {
 } from "@/components/ui/form"
 import { useNavigate, useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
+import { useSelector } from 'react-redux';
+import { RootState } from "@/redux/store";
 
 const eventSchema = EventBody
 function ClubLayout({ children }: { children: React.ReactNode }) {
+    const clubId = useSelector((state: RootState) => state.club.clubId);
     const [eventOpen, setEventOpen] = useState(false)
     // const [date, setDate] = useState<Date>()
     const navigate = useNavigate()
-    const { id } = useParams()
+    // const { id } = useParams()
     const eventForm = useForm<EventBodyType>({
         resolver: zodResolver(eventSchema),
         defaultValues: {
@@ -67,7 +70,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     const createEvent = async (values: EventBodyType) => {
         try {
             const body = {
-                club_id: id || "",
+                club_id: clubId || "",
                 name: values.name,
                 description: values.description,
                 start_time: format(values.start_time, "MM/dd/yyyy"),
@@ -94,7 +97,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                 <div className="overflow-auto flex-1 scrollbar-hide">
                     <div className="flex items-center justify-between p-2">
                         <div></div>
-                        <h1 className="text-center text-[24px] font-bold">Nemui</h1>
+                        <h1 className="text-center text-[24px] font-bold" onClick={() => navigate(`/club/${clubId}`)}>Nemui</h1>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -115,7 +118,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuCheckboxItem
                                     className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
-                                    onClick={() => navigate(`/club/changeProfile/${id}`)}
+                                    onClick={() => navigate(`/club/changeProfile/${clubId}`)}
                                 >
                                     Đổi thông tin
                                 </DropdownMenuCheckboxItem>
@@ -222,7 +225,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                     <div className="space-y-2 pt-1 mt-2 pb-1">
                         <FeatureBox group="Các ban trực thuộc" />
                         {/* <FeatureBox group="Sự kiện chưa đăng ký" /> */}
-                        <div className="flex items-center hover:bg-slate-400 cursor-pointer select-none" onClick={() => navigate(`/club/listEvent/${id}`)}>
+                        <div className="flex items-center hover:bg-slate-400 cursor-pointer select-none" onClick={() => navigate(`/club/listEvent/${clubId}`)}>
                             <ChevronRight />
                             <h1 className="text-[20px]">Sự kiện chưa đăng ký</h1>
                         </div>

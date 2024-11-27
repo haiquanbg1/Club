@@ -16,7 +16,9 @@ import { useToast } from "@/hooks/use-toast"
 import MemberApiRequest from "@/apiRequest/member";
 import MemberAdd from "./MemberAdd";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { RootState } from "@/redux/store";
+import { setClubId } from "@/redux/clubSlice";
+import { useSelector } from 'react-redux';
 
 
 interface Member {
@@ -27,10 +29,11 @@ interface Member {
 
 export default function MemberBox() {
     // const location = useLocation();
+    const clubId = useSelector((state: RootState) => state.club.clubId);
     const navigate = useNavigate()
     const { toast } = useToast()
     const [members, setMembers] = useState<Member[]>([])
-    const { id } = useParams()
+    // const { id } = useParams()
 
     // console.log(id)
     // console.log(location)
@@ -40,7 +43,7 @@ export default function MemberBox() {
         //     navigate("/")
         // }
         try {
-            const response = await MemberApiRequest.get(id || "")
+            const response = await MemberApiRequest.get(clubId || "")
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
