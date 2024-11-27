@@ -28,12 +28,15 @@ const findOne = async (whereClause) => {
 }
 
 // find all event user sanka 
-const findAllForUser = async (user_id) => {
+const findEventUserJoined = async (user_id, club_id) => {
     const events = await EventParticipant.findAll({
         include: [
             {
                 model: Event,
-                as: 'event'
+                as: 'event',
+                where: {
+                    club_id
+                }
             }
         ],
         where: {
@@ -43,7 +46,40 @@ const findAllForUser = async (user_id) => {
     return events;
 }
 
-const findAllUser = async (event_id, text) => {
+const findEventUserUnJoined = async (user_id, club_id) => {
+    // Lấy danh sách tất cả các sự kiện mà người dùng đã tham gia
+    const eventsUserJoined = await EventParticipant.findAll({
+        include: [
+            {
+                model: Event,
+                as: 'event',
+                where: {
+                    club_id
+                }
+            }
+        ],
+        where: {
+            user_id: user_id
+        },
+        attributes: ['event_id']  // Lấy chỉ ID sự kiện
+    });
+
+    // Lấy mảng các event_id mà user đã tham gia
+    const eventIdsUserJoined = eventsUserJoined.map(event => event.event_id);
+
+    // Tìm các sự kiện mà người dùng không tham gia
+    const eventsNotJoined = await Event.findAll({
+        where: {
+            id: {
+                [Op.notIn]: eventIdsUserJoined  // Lọc những sự kiện không có trong danh sách
+            }
+        }
+    });
+
+    return eventsNotJoined;
+}
+
+const findAllUser = async (event_id, key, status) => {
     const participant = await EventParticipant.findAll({
         include: [
             {
@@ -62,7 +98,8 @@ const findAllUser = async (event_id, text) => {
             }
         ],
         where: {
-            event_id
+            event_id,
+            status
         },
         order: [[{ model: User, as: 'user' }, 'display_name', 'ASC']]
     });
@@ -71,10 +108,15 @@ const findAllUser = async (event_id, text) => {
 }
 
 // find all event which club has
-const findAllForClub = async (club_id) => {
+const findAllForClub = async (club_id, event_id) => {
     const events = await Event.findAll({
         where: {
-            club_id: club_id
+            club_id: club_id,
+            ...(event_id && {
+                where: {
+                    id: event_id
+                }
+            })
         }
     });
     return events;
@@ -93,10 +135,31 @@ const outEvent = async (event_id, user_id) => {
     });
 }
 
+const askToJoin = async (user_id, event_id) => {
+    return await EventParticipant.create({
+        user_id,
+        event_id,
+        status: 'pending'
+    });
+}
+
+const acceptPending = async (user_id, event_id) => {
+    return await EventParticipant.update({
+        status: "accepted"
+    }, {
+        where: {
+            user_id,
+            event_id
+        }
+    })
+}
 
 module.exports = {
-    create, update, drop, findOne, findAllForClub, findAllForUser,
+    create, update, drop, findOne, findAllForClub, findEventUserJoined,
+    findEventUserUnJoined,
     addParticipant,
     outEvent,
-    findAllUser
+    findAllUser,
+    askToJoin,
+    acceptPending
 };

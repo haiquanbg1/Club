@@ -56,7 +56,7 @@ const findAllForUser = async (user_id) => {
     return conversations;
 }
 
-const findAllUser = async (conversation_id, text) => {
+const findAllUser = async (conversation_id, key) => {
     const participant = await ConversationParticipant.findAll({
         include: [
             {

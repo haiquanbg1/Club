@@ -5,7 +5,6 @@ const cloudinary = require("../utils/cloudinary");
 
 const create = async (req, res) => {
     const { club_id, name, description, start_time } = req.body;
-    console.log(req.body)
     const user = req.user;
 
     try {
@@ -18,7 +17,8 @@ const create = async (req, res) => {
 
         await eventService.addParticipant({
             event_id: event.id,
-            user_id: user.id
+            user_id: user.id,
+            status: 'accepted'
         });
 
         return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");
@@ -75,9 +75,41 @@ const drop = async (req, res) => {
 
 const findAllInClub = async (req, res) => {
     const { club_id } = req.params;
+    const event_id = req.query?.event_id;
 
     try {
-        const events = await eventService.findAllForClub(club_id);
+        const events = await eventService.findAllForClub(club_id, event_id);
+
+        const data = [];
+
+        for (let i = 0; i < events.length; i++) {
+            data.push({
+                event_id: events[i].id,
+                name: events[i].name
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
+const findEventUserJoined = async (req, res) => {
+    const { club_id, status } = req.params;
+    const user = req.user;
+
+    try {
+        let events;
+        if (status == "joined") {
+            events = await eventService.findEventUserJoined(user.id, club_id);
+        } else if (status == "unjoined") {
+            events = await eventService.findEventUserUnJoined(user.id, club_id);
+        }
 
         const data = [];
 
@@ -99,11 +131,11 @@ const findAllInClub = async (req, res) => {
 }
 
 const findAllUserWithKey = async (req, res) => {
-    const { event_id } = req.params;
+    const { event_id, status } = req.params;
     const { text } = req.query;
 
     try {
-        const participants = await eventService.findAllUser(event_id, text);
+        const participants = await eventService.findAllUser(event_id, text, status);
 
         const data = [];
 
@@ -130,7 +162,7 @@ const addParticipant = async (req, res) => {
         await eventService.addParticipant({
             event_id,
             user_id,
-            display_name: user.display_name
+            status: 'accepted'
         });
 
         return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
@@ -156,11 +188,45 @@ const kick = async (req, res) => {
     const { event_id, user_id } = req.body;
 
     try {
-        await eventService.outevent(event_id, user_id);
+        await eventService.outEvent(event_id, user_id);
 
         return successResponse(res, StatusCodes.OK, "Đã xoá người dùng khỏi hoạt động.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
+const askToJoin = async (req, res) => {
+    const user = req.user;
+    const { event_id } = req.body;
+
+    try {
+        await eventService.askToJoin(user.id, event_id);
+
+        return successResponse(res, StatusCodes.CREATED, "Đã đăng ký tham gia thành công.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        )
+    }
+}
+
+const acceptPending = async (req, res) => {
+    const user = req.user;
+    const { event_id } = req.body;
+
+    try {
+        await eventService.acceptPending(user.id, event_id);
+
+        return successResponse(res, StatusCodes.CREATED, "Đã đồng ý tham gia.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        )
     }
 }
 
@@ -172,5 +238,8 @@ module.exports = {
     findAllInClub,
     findAllUserWithKey,
     addParticipant,
-    drop
+    drop,
+    findEventUserJoined,
+    askToJoin,
+    acceptPending
 }
