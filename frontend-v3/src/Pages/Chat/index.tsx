@@ -54,9 +54,10 @@ export default function ChatPage() {
 
     const [lastScrollTop, setLastScrollTop] = useState(0); // Lưu vị trí scroll trước đó
 
-    const [isFetching, setIsFetching] = useState(false); // Cờ để kiểm soát việc fetch dữ liệu
-
     const [loading, setLoading] = useState(true); // Cờ để kiểm soát trạng thái loading
+
+    // Trạng thái để kiểm tra lần đầu
+    const [isFirstRender, setIsFirstRender] = useState(true);
 
     const fetchFriendProfile = async () => {
         try {
@@ -107,12 +108,22 @@ export default function ChatPage() {
                 ...message,
                 created_at: new Date(message.created_at)
             })).reverse();
-            messagesRef.current = [...messages, ...messagesRef.current];
+            console.log('messages:', messages[0].id)
+            if (messagesList[0]) {
+                console.log('messRef', messagesList[0].id)
+            }
+            if ( (messagesRef.current[0] && messages[0].id != messagesRef.current[0].id)
+                    || (messagesRef.current.length == 0)) {
+                
+                messagesRef.current = [...messages, ...messagesRef.current];
+                console.log('fetch 1 lan')
+            }
+            
+            
             setMessagesList(() => [...messagesRef.current]);
         } catch (error) {
             console.error('Error fetching messages:', error);
         } finally {
-            setIsFetching(false); // Đặt lại cờ sau khi fetch xong
             setLoading(false); // Tắt trạng thái loading sau khi fetch xong
         }
     };
@@ -155,29 +166,40 @@ export default function ChatPage() {
     };
 
     const handleScroll = async (event: any) => {
-        const scrollTop = event.target.scrollTop;
-
-        // Kiểm tra nếu người dùng cuộn lên (scrollTop giảm)
-        if (scrollTop < lastScrollTop && !isFetching) {
-            console.log('Người dùng cuộn lên');
+        const scrollTop = event.target.scrollTop; // Vị trí cuộn hiện tại
+    
+        // Điều kiện để fetch dữ liệu: người dùng cuộn lên trên cùng và chưa có yêu cầu fetch nào
+        if (scrollTop <= 80 && !loading) {
+            console.log('Người dùng cuộn lên trên cùng');
             console.log('lastScrollTop:', lastScrollTop);
-            // fetch API
-            setIsFetching(true); // Đặt cờ để ngăn fetch dữ liệu nhiều lần
-            await fetchMessages(messagesRef.current.length);
+    
+            setLoading(true); 
+    
+            // Fetch dữ liệu
+            await fetchMessages(messagesRef.current.length); // Dữ liệu mới (có thể truyền thêm tham số nếu cần)
         }
-
-        // Cập nhật vị trí scroll trước đó
+    
+        // Cập nhật vị trí cuộn trước đó
         setLastScrollTop(scrollTop);
     };
 
-    const setFistScroll = () => {
-        if (scrollContainerRef.current && messagesList.length > 0) {
-            scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight - 500;
+    const setScrollToBottom = () => {
+        if (scrollContainerRef.current) {
+            // Kiểm tra xem đây có phải là lần đầu render không
+            if (isFirstRender) {
+                // Cuộn đến cuối khi lần đầu tiên render
+                scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+                setIsFirstRender(false);  // Sau khi cuộn lần đầu, đánh dấu đã render lần đầu
+            } else {
+                // Cuộn một chút so với cuối khi có tin nhắn mới
+                scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight - 200; // 100px trước cuối
+            }
         }
     };
 
     useEffect(() => {
         const fetchData = async () => {
+            
             setLoading(true);
             await fetchFriendProfile();
             await fetchUserProfile();
@@ -186,15 +208,14 @@ export default function ChatPage() {
             // setFistScroll();
             if (userProfile?.id) {
                 connectSocket();
-                console.log('Connected to socket');
+                // console.log('Connected to socket');
             }
         };
         fetchData();
+        
     }, [friendId, userProfile?.id, location.search]);
 
-    useEffect(() => {
-        setFistScroll();
-    }, [messagesRef.current.length]);
+    useEffect(setScrollToBottom , [messagesRef.current.length]);
 
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
@@ -231,7 +252,7 @@ export default function ChatPage() {
                         friendProfile={friendProfile}
                         stateScroll={stateScroll}
                         setStateScroll={setStateScroll}
-                        isFeatching={isFetching}
+                        isFeatching={loading}
                     />
                 )}
             </div>}
