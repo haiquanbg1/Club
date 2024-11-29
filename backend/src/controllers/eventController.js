@@ -143,6 +143,8 @@ const findEventByStatus = async (req, res) => {
                     status: "pending"
                 });
             }
+        } else {
+            return errorResponse(res, StatusCodes.BAD_GATEWAY, "Không tìm thấy.");
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);

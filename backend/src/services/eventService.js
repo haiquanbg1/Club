@@ -1,4 +1,4 @@
-const { Event, EventParticipant } = require('../models/index');
+const { Event, EventParticipant, User } = require('../models/index');
 const { Op } = require("sequelize");
 
 const create = async (insertClause) => {
@@ -72,8 +72,8 @@ const findEventUserUnJoined = async (user_id, club_id) => {
     const eventsNotJoined = await Event.findAll({
         where: {
             club_id,
-            [Op.notIn]: {
-                id: eventIdsUserJoined
+            id: {
+                [Op.notIn]: eventIdsUserJoined  // Sử dụng eventIdsUserJoined ở đây
             }
         }
     });
