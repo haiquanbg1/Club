@@ -46,8 +46,8 @@ const findEventUserJoined = async (user_id, club_id) => {
     return events;
 }
 
+// Lấy danh sách tất cả các sự kiện mà người dùng chưa tham gia
 const findEventUserUnJoined = async (user_id, club_id) => {
-    // Lấy danh sách tất cả các sự kiện mà người dùng đã tham gia
     const eventsUserJoined = await EventParticipant.findAll({
         include: [
             {
@@ -59,7 +59,8 @@ const findEventUserUnJoined = async (user_id, club_id) => {
             }
         ],
         where: {
-            user_id: user_id
+            user_id: user_id,
+            status: "accepted"
         },
         attributes: ['event_id']  // Lấy chỉ ID sự kiện
     });
@@ -68,10 +69,19 @@ const findEventUserUnJoined = async (user_id, club_id) => {
     const eventIdsUserJoined = eventsUserJoined.map(event => event.event_id);
 
     // Tìm các sự kiện mà người dùng không tham gia
-    const eventsNotJoined = await Event.findAll({
+    const eventsNotJoined = await EventParticipant.findAll({
+        include: [
+            {
+                model: Event,
+                as: 'event',
+                where: {
+                    club_id
+                }
+            }
+        ],
         where: {
-            id: {
-                [Op.notIn]: eventIdsUserJoined  // Lọc những sự kiện không có trong danh sách
+            event_id: {
+                [Op.notIn]: eventIdsUserJoined
             }
         }
     });
@@ -79,13 +89,14 @@ const findEventUserUnJoined = async (user_id, club_id) => {
     return eventsNotJoined;
 }
 
+// Tìm user pending hoặc accepted qua status
 const findAllUser = async (event_id, key, status) => {
     const participant = await EventParticipant.findAll({
         include: [
             {
                 model: User,
                 as: 'user',
-                attributes: ['avatar'],
+                attributes: ['avatar', 'display_name'],
                 where: {
                     ...(key && {
                         where: {

@@ -85,7 +85,9 @@ const findAllInClub = async (req, res) => {
         for (let i = 0; i < events.length; i++) {
             data.push({
                 event_id: events[i].id,
-                name: events[i].name
+                name: events[i].name,
+                description: events[i].description,
+                start_time: events[i].start_time,
             });
         }
 
@@ -99,13 +101,13 @@ const findAllInClub = async (req, res) => {
     }
 }
 
-const findEventUserJoined = async (req, res) => {
+const findEventByStatus = async (req, res) => {
     const { club_id, status } = req.params;
-    console.log(status)
+    console.log(status);
     const user = req.user;
 
     try {
-        let events;
+        var events;
         if (status == "joined") {
             events = await eventService.findEventUserJoined(user.id, club_id);
         } else if (status == "unjoined") {
@@ -117,7 +119,9 @@ const findEventUserJoined = async (req, res) => {
         for (let i = 0; i < events.length; i++) {
             data.push({
                 event_id: events[i].id,
-                name: events[i].name
+                name: events[i].name,
+                description: events[i].description,
+                start_time: events[i].start_time,
             });
         }
 
@@ -240,7 +244,7 @@ module.exports = {
     findAllUserWithKey,
     addParticipant,
     drop,
-    findEventUserJoined,
+    findEventByStatus,
     askToJoin,
     acceptPending
 }
