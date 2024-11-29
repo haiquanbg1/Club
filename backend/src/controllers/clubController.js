@@ -63,7 +63,7 @@ const changeAvatar = async (req, res) => {
 const findAllClubByUser = async (req, res) => {
     const user = req.user;
     const club_id = req.query?.club_id;
-    console.log(club_id)
+
     try {
         const clubs = await clubService.findAll(user.id, club_id);
 
@@ -94,7 +94,7 @@ const update = async (req, res) => {
             description
         });
 
-        return successResponse(res, StatusCodes.OK, "Cập nhật thành công.", club);
+        return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }

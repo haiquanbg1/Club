@@ -42,17 +42,17 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      },
+        defaultValue: Sequelize.NOW,
+      }
     });
 
     await queryInterface.addConstraint('member_role', {
-      fields: ['user_id', 'role_id', 'club_id', 'createdAt'],
+      fields: ['user_id', 'role_id', 'club_id', 'createdAt', 'updatedAt'],
       type: 'primary key',
       name: 'pk_member_role'
     });

@@ -42,15 +42,15 @@ module.exports = {
         defaultValue: 'pending', // Trạng thái mặc định của báo cáo
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
-      },
+      }
     });
   },
 

@@ -1,4 +1,6 @@
 'use strict';
+const moment = require("moment-timezone");
+
 /** @type {import('sequelize-cli').Migration} */
 const path = require("path");
 module.exports = {
@@ -37,14 +39,17 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       }
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Users');
   }

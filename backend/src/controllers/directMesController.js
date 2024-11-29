@@ -8,8 +8,6 @@ const create = async (req, res) => {
     const sender_id = req.user.id; // Lấy ID người gửi từ middleware xác thực
     const { friend_id } = req.params; // Lấy ID người nhận từ URL
 
-    console.log(req.body)
-
     try {
         const directMessage = await directMessageService.create({
             sender_id,
@@ -51,7 +49,6 @@ const getOldMessages = async (req, res) => {
     const { friend_id } = req.params; // Lấy ID người nhận từ URL
     const { offset } = req.query;
 
-    console.log(offset);
     const offsetValue = isNaN(parseInt(offset)) ? 0 : parseInt(offset);
 
     try {

@@ -4,6 +4,7 @@ const { successResponse, errorResponse } = require("../utils/response");
 const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
+const formatDate = require("../utils/formatDate");
 
 const changeAvatar = async (req, res) => {
     const user = req.user;
@@ -30,7 +31,7 @@ const changeAvatar = async (req, res) => {
 }
 
 const findUser = async (req, res) => {
-    let { user_id } = req.query;  
+    let { user_id } = req.query;
     let user = req.user;
 
     if (user_id === "@me") {
@@ -50,7 +51,7 @@ const findUser = async (req, res) => {
             display_name: user.display_name,
             email: user.username,
             avatar: avatar,
-            birthday: user.birthday,
+            birthday: formatDate(user.birthday),
             gender: user.gender
         });
     } catch (error) {

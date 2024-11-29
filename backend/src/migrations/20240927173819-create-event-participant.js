@@ -27,19 +27,19 @@ module.exports = {
         primaryKey: true
       },
       status: {
-        type: DataTypes.ENUM("pending", "accepted"),
+        type: Sequelize.ENUM("pending", "accepted"),
         allowNull: false,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
-      },
+        defaultValue: Sequelize.NOW,
+      }
     });
   },
 

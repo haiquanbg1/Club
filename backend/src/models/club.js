@@ -40,10 +40,6 @@ module.exports = (sequelize, DataTypes) => {
   Club.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
     avatar: {
       type: DataTypes.STRING,
       defaultValue: 'default'

@@ -66,6 +66,12 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     const { username, password, birthday, gender, display_name } = req.body;
+
+    const user = await userService.findOne({ username });
+    if (user) {
+        return errorResponse(res, StatusCodes.NOT_FOUND, "Email đã tồn tại.");
+    }
+
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashPassword = bcrypt.hashSync(password, salt);

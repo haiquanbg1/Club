@@ -42,16 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("pending", "accepted"),
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   }, {
     sequelize,
     modelName: 'EventParticipant',

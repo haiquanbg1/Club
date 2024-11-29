@@ -8,7 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true, 
+        autoIncrement: true,
       },
       club_id: {
         type: Sequelize.INTEGER,
@@ -22,17 +22,17 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING(255),
-        allowNull: false, 
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), 
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), 
+        defaultValue: Sequelize.NOW,
       }
     });
   },
