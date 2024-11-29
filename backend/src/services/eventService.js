@@ -69,7 +69,20 @@ const findEventUserUnJoined = async (user_id, club_id) => {
     const eventIdsUserJoined = eventsUserJoined.map(event => event.event_id);
 
     // Tìm các sự kiện mà người dùng không tham gia
-    const eventsNotJoined = await EventParticipant.findAll({
+    const eventsNotJoined = await Event.findAll({
+        where: {
+            club_id,
+            [Op.notIn]: {
+                id: eventIdsUserJoined
+            }
+        }
+    });
+
+    return eventsNotJoined;
+}
+
+const findEventUserPending = async (user_id, club_id) => {
+    const eventsUserPending = await EventParticipant.findAll({
         include: [
             {
                 model: Event,
@@ -80,13 +93,12 @@ const findEventUserUnJoined = async (user_id, club_id) => {
             }
         ],
         where: {
-            event_id: {
-                [Op.notIn]: eventIdsUserJoined
-            }
+            user_id: user_id,
+            status: "pending"
         }
     });
 
-    return eventsNotJoined;
+    return eventsUserPending;
 }
 
 // Tìm user pending hoặc accepted qua status
@@ -166,11 +178,17 @@ const acceptPending = async (user_id, event_id) => {
 }
 
 module.exports = {
-    create, update, drop, findOne, findAllForClub, findEventUserJoined,
+    create,
+    update,
+    drop,
+    findOne,
+    findAllForClub,
+    findEventUserJoined,
     findEventUserUnJoined,
     addParticipant,
     outEvent,
     findAllUser,
     askToJoin,
-    acceptPending
+    acceptPending,
+    findEventUserPending
 };

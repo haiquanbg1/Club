@@ -56,7 +56,13 @@ const getOldMessages = async (req, res) => {
             user_id,
             friend_id,
             offsetValue
-        )
+        );
+
+        // xử lý thời gian
+        const data = {
+
+        }
+
         return successResponse(res, StatusCodes.OK, 'Get Old Mess success', directMessages);
 
     } catch (error) {

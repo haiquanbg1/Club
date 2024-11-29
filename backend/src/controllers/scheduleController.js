@@ -71,6 +71,14 @@ const find = async (req, res) => {
     try {
         const schedule = await scheduleService.findAll(event_id, schedule_id);
 
+        const data = [];
+
+        for (let i = 0; i < schedule.length; i++) {
+            data.push({
+
+            })
+        }
+
         return successResponse(res, StatusCodes.OK, "Thành công.", schedule);
     } catch (error) {
         return errorResponse(

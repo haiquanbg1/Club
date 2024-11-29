@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const eventService = require("../services/eventService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
+const formatDate = require("../utils/formatDate");
 
 const create = async (req, res) => {
     const { club_id, name, description, start_time } = req.body;
@@ -87,7 +88,7 @@ const findAllInClub = async (req, res) => {
                 event_id: events[i].id,
                 name: events[i].name,
                 description: events[i].description,
-                start_time: events[i].start_time,
+                start_time: formatDate(events[i].start_time),
             });
         }
 
@@ -103,26 +104,45 @@ const findAllInClub = async (req, res) => {
 
 const findEventByStatus = async (req, res) => {
     const { club_id, status } = req.params;
-    console.log(status);
     const user = req.user;
 
     try {
-        var events;
-        if (status == "joined") {
-            events = await eventService.findEventUserJoined(user.id, club_id);
-        } else if (status == "unjoined") {
-            events = await eventService.findEventUserUnJoined(user.id, club_id);
-        }
-
         const data = [];
 
-        for (let i = 0; i < events.length; i++) {
-            data.push({
-                event_id: events[i].id,
-                name: events[i].name,
-                description: events[i].description,
-                start_time: events[i].start_time,
-            });
+        if (status == "joined") {
+            const events = await eventService.findEventUserJoined(user.id, club_id);
+
+            for (let i = 0; i < events.length; i++) {
+                data.push({
+                    event_id: events[i].event.id,
+                    name: events[i].event.name,
+                    description: events[i].event.description,
+                    start_time: formatDate(events[i].event.start_time),
+                });
+            }
+        } else if (status == "unjoined") {
+            const eventsUnJoined = await eventService.findEventUserUnJoined(user.id, club_id);
+            const eventsPending = await eventService.findEventUserPending(user.id, club_id);
+
+            for (let i = 0; i < eventsUnJoined.length; i++) {
+                data.push({
+                    event_id: eventsUnJoined[i].event.id,
+                    name: eventsUnJoined[i].event.name,
+                    description: eventsUnJoined[i].event.description,
+                    start_time: formatDate(eventsUnJoined[i].event.start_time),
+                    status: "unjoined"
+                });
+            }
+
+            for (let i = 0; i < eventsPending.length; i++) {
+                data.push({
+                    event_id: eventsPending[i].id,
+                    name: eventsPending[i].name,
+                    description: eventsPending[i].description,
+                    start_time: formatDate(eventsPending[i].start_time),
+                    status: "pending"
+                });
+            }
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);

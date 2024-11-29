@@ -4,7 +4,8 @@ const roles = require("../utils/role");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
 const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
-const fs = require("fs")
+const fs = require("fs");
+const formatDate = require("../utils/formatDate");
 
 const create = async (req, res) => {
     const user = req.user;
@@ -120,7 +121,18 @@ const findOne = async (req, res) => {
             id: club_id
         });
 
-        return successResponse(res, StatusCodes.OK, "Thành công.", club);
+        const image = await getImage("Avatar", club.avatar);
+
+        const data = {
+            club_id: club.id,
+            name: club.name,
+            description: club.description,
+            avatar: image,
+            createdAt: formatDate(club.createdAt),
+            updatedAt: formatDate(club.updatedAt)
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
