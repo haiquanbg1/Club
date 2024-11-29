@@ -14,6 +14,7 @@ const addMember = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }

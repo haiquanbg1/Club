@@ -5,7 +5,7 @@ export const GetEventRes = z.object({
     data: z.array(z.object({
         name: z.string(),
         description: z.string(),
-        id: z.string(),
+        event_id: z.string(),
         date: z.string()
     }))
 })

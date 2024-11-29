@@ -126,20 +126,20 @@ const findEventByStatus = async (req, res) => {
 
             for (let i = 0; i < eventsUnJoined.length; i++) {
                 data.push({
-                    event_id: eventsUnJoined[i].event.id,
-                    name: eventsUnJoined[i].event.name,
-                    description: eventsUnJoined[i].event.description,
-                    start_time: formatDate(eventsUnJoined[i].event.start_time),
+                    event_id: eventsUnJoined[i].id,
+                    name: eventsUnJoined[i].name,
+                    description: eventsUnJoined[i].description,
+                    start_time: formatDate(eventsUnJoined[i].start_time),
                     status: "unjoined"
                 });
             }
 
             for (let i = 0; i < eventsPending.length; i++) {
                 data.push({
-                    event_id: eventsPending[i].id,
-                    name: eventsPending[i].name,
-                    description: eventsPending[i].description,
-                    start_time: formatDate(eventsPending[i].start_time),
+                    event_id: eventsPending[i].event.id,
+                    name: eventsPending[i].event.name,
+                    description: eventsPending[i].event.description,
+                    start_time: formatDate(eventsPending[i].event.start_time),
                     status: "pending"
                 });
             }
@@ -149,6 +149,7 @@ const findEventByStatus = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -159,7 +160,11 @@ const findEventByStatus = async (req, res) => {
 
 const findAllUserWithKey = async (req, res) => {
     const { event_id, status } = req.params;
-    const { text } = req.query;
+    const text = req.query?.text || "";
+
+    if (status != 'accepted' && status != 'pending') {
+        return errorResponse(res, StatusCodes.BAD_REQUEST, "Không có api nì.");
+    }
 
     try {
         const participants = await eventService.findAllUser(event_id, text, status);
@@ -178,6 +183,7 @@ const findAllUserWithKey = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error.message)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }
@@ -226,12 +232,14 @@ const kick = async (req, res) => {
 const askToJoin = async (req, res) => {
     const user = req.user;
     const { event_id } = req.body;
-
+    console.log(event_id)
+    console.log(user.id)
     try {
         await eventService.askToJoin(user.id, event_id);
 
         return successResponse(res, StatusCodes.CREATED, "Đã đăng ký tham gia thành công.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

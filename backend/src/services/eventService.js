@@ -110,13 +110,9 @@ const findAllUser = async (event_id, key, status) => {
                 as: 'user',
                 attributes: ['avatar', 'display_name'],
                 where: {
-                    ...(key && {
-                        where: {
-                            display_name: {
-                                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-                            }
-                        }
-                    })
+                    display_name: {
+                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+                    }
                 }
             }
         ],
@@ -124,7 +120,7 @@ const findAllUser = async (event_id, key, status) => {
             event_id,
             status
         },
-        order: [[{ model: User, as: 'user' }, 'display_name', 'ASC']]
+        // order: [[{ model: User, as: 'user' }, 'display_name', 'ASC']]
     });
 
     return participant;
@@ -160,8 +156,8 @@ const outEvent = async (event_id, user_id) => {
 
 const askToJoin = async (user_id, event_id) => {
     return await EventParticipant.create({
-        user_id,
         event_id,
+        user_id,
         status: 'pending'
     });
 }

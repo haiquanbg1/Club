@@ -51,8 +51,8 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         fetchData();  // Gọi hàm fetch khi component render lần đầu
     }, []);
     const handleSelectClub = (club_id: string, club_name: string) => {
-        // localStorage.setItem('club_id', club_id)
         dispatch(setClubId(club_id));
+        localStorage.setItem('club_id', club_id)
         navigate(`/club/${club_id}`)
     }
 
