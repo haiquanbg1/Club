@@ -134,12 +134,12 @@ const findAllForClub = async (club_id, event_id) => {
     const events = await Event.findAll({
         where: {
             club_id: club_id,
-            ...(event_id && {
-                where: {
-                    id: event_id
-                }
-            })
-        }
+        },
+        ...(event_id && {
+            where: {
+                id: event_id
+            }
+        })
     });
     return events;
 }

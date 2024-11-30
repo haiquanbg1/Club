@@ -20,46 +20,46 @@ const apiClient: AxiosInstance = axios.create({
     withCredentials: true, // Để gửi cookie trong mọi request
 });
 
-// Hàm gọi API refresh token
-const refreshAccessToken = async (): Promise<boolean> => {
-    try {
-        const response = await apiClient.put('/auth/refresh-token');
-        if (response.status !== 200) {
-            throw new Error('Failed to refresh token');
-        }
-        return true;
-    } catch (error) {
-        console.error('Error refreshing access token:', error);
-        return false;
-    }
-};
+// // Hàm gọi API refresh token
+// const refreshAccessToken = async (): Promise<boolean> => {
+//     try {
+//         const response = await apiClient.put('/auth/refresh-token');
+//         if (response.status !== 200) {
+//             throw new Error('Failed to refresh token');
+//         }
+//         return true;
+//     } catch (error) {
+//         console.error('Error refreshing access token:', error);
+//         return false;
+//     }
+// };
 
-// Cấu hình interceptor để xử lý tự động refresh token
-apiClient.interceptors.response.use(
-    response => response,
-    async (error) => {
-        const originalRequest = error.config;
+// // Cấu hình interceptor để xử lý tự động refresh token
+// apiClient.interceptors.response.use(
+//     response => response,
+//     async (error) => {
+//         const originalRequest = error.config;
 
-        // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
-        if (error.response?.status === 410 && !originalRequest._retry) {
-            console.log(error);
-            originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
-            const refreshed = await refreshAccessToken();
-            console.log("đã thành công")
-            console.log(refreshed)
-            if (refreshed) {
-                console.log("gọi lại")
-                return apiClient(originalRequest); // Retry request với token mới
-            }
-        }
+//         // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
+//         if (error.response?.status === 410 && !originalRequest._retry) {
+//             console.log(error);
+//             originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
+//             const refreshed = await refreshAccessToken();
+//             console.log("đã thành công")
+//             console.log(refreshed)
+//             if (refreshed) {
+//                 console.log("gọi lại")
+//                 return apiClient(originalRequest); // Retry request với token mới
+//             }
+//         }
 
-        // Nếu lỗi khác hoặc không refresh thành công
-        return Promise.reject(new HttpError({
-            status: error.response?.status,
-            payload: error.response?.data,
-        }));
-    }
-);
+//         // Nếu lỗi khác hoặc không refresh thành công
+//         return Promise.reject(new HttpError({
+//             status: error.response?.status,
+//             payload: error.response?.data,
+//         }));
+//     }
+// );
 
 // Hàm request chung
 const request = async <Response>(

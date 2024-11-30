@@ -32,7 +32,7 @@ const login = async (req, res) => {
             httpOnly: true,
             // secure: false,
             // sameSite: "none",
-            maxAge: ms("1 hour"),
+            maxAge: ms("7 days"),
         });
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -229,7 +229,7 @@ const refreshToken = async (req, res) => {
 
         res.cookie("accessToken", newAccessToken, {
             httpOnly: true,
-            maxAge: ms("1 hour"),
+            maxAge: ms("7 days"),
         });
 
         return successResponse(res, StatusCodes.OK, "Refresh token thành công", {
