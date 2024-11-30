@@ -22,3 +22,14 @@ export const ScheduleBody = z.object({
 })
 
 export type ScheduleBodyType = z.TypeOf<typeof ScheduleBody>
+
+export const GetParticipantRes = z.object({
+    message: z.string(),
+    data: z.array(z.object({
+        display_name: z.string(),
+        avatar: z.string(),
+    }))
+
+})
+
+export type GetParticipantResType = z.TypeOf<typeof GetParticipantRes>

@@ -46,7 +46,7 @@ export default function Details({ type, time, quantity }: details) {
                         Số lượng thành viên tham gia
                     </div>
                     <p>
-                        {quantity}
+                        {`: ${quantity}`}
                     </p>
 
                 </li>

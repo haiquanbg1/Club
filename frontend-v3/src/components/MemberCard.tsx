@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import MemberApiRequest from "@/apiRequest/member"
 import { Button } from "./ui/button"
-
+import ClubApiRequest from "@/apiRequest/club"
 interface Member {
     name: string,
     avatar?: string,

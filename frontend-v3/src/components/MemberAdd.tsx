@@ -5,7 +5,7 @@ import MemberCard from "@/components/MemberCard";
 import { Button } from "./ui/button";
 
 import MemberApiRequest from "@/apiRequest/member";
-
+import { useParams } from "react-router-dom";
 interface Adding {
     user_id: string;
     display_name: string;
@@ -15,9 +15,11 @@ export default function MemberAdd({ setOpen, resetMember }: { setOpen: React.Dis
     const { toast } = useToast()
     const [listAdding, setListAdding] = useState<Adding[]>([])
     const [selected, setSelected] = useState("")
+    const { clubId } = useParams()
+
     const getAdding = async () => {
         try {
-            const response = await MemberApiRequest.getAdding(localStorage.getItem("club_id"))
+            const response = await MemberApiRequest.getAdding(clubId)
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setListAdding(response.payload.data);

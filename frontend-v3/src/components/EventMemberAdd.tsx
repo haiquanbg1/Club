@@ -5,6 +5,8 @@ import MemberCard from "@/components/MemberCard";
 import { Button } from "./ui/button";
 
 import MemberApiRequest from "@/apiRequest/member";
+import { useParams } from "react-router-dom";
+import ClubApiRequest from "@/apiRequest/club";
 
 interface Adding {
     user_id: string;
@@ -15,9 +17,10 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
     const { toast } = useToast()
     const [listAdding, setListAdding] = useState<Adding[]>([])
     const [selected, setSelected] = useState("")
+    const { clubId, eventId } = useParams()
     const getAdding = async () => {
         try {
-            const response = await MemberApiRequest.getAdding(localStorage.getItem("club_id"))
+            const response = await MemberApiRequest.getAdding(clubId)
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setListAdding(response.payload.data);
@@ -44,7 +47,7 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
     const handleAdd = async () => {
         const body = {
             user_id: selected,
-            club_id: localStorage.getItem('club_id') || ""
+            event_id: eventId ? eventId : ""
         }
 
         if (selected == "") {
@@ -55,7 +58,7 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
             return
         }
 
-        if (body.club_id == "") {
+        if (body.event_id == "") {
             toast({
                 variant: "destructive",
                 description: "No club selected",
@@ -64,7 +67,7 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
         }
 
         try {
-            const res = await MemberApiRequest.add(body)
+            const res = await ClubApiRequest.addParticipant(body)
             setSelected("")
             // resetMember()
             console.log(res)

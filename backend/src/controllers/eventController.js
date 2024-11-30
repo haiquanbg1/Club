@@ -190,7 +190,8 @@ const findAllUserWithKey = async (req, res) => {
 
 const addParticipant = async (req, res) => {
     const { event_id, user_id } = req.body;
-
+    console.log(event_id)
+    console.log(user_id)
     try {
         await eventService.addParticipant({
             event_id,
@@ -200,6 +201,7 @@ const addParticipant = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
     } catch (error) {
+        console.log(`error ${error.message}`)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }
