@@ -8,14 +8,6 @@ const authMiddleware = async (req, res, next) => {
     const accessToken = req.cookies?.accessToken;
     const refreshToken = req.cookies?.refreshToken;
 
-    if (!accessToken) {
-        return errorResponse(
-            res,
-            StatusCodes.UNAUTHORIZED,
-            "Unauthorized! (Token not found)"
-        );
-    }
-
     try {
         const decodedAccessToken = decodeAccessToken(accessToken);
 
@@ -25,7 +17,7 @@ const authMiddleware = async (req, res, next) => {
         next();
     } catch (error) {
         // Trường hợp access token hết hạn
-        if (error?.message?.includes("jwt expired")) {
+        if (error?.message?.includes("jwt expired") || error?.message?.includes("jwt malformed")) {
             // Kiểm tra xem refresh token có tồn tại không
             if (!refreshToken) {
                 return errorResponse(
@@ -73,6 +65,7 @@ const authMiddleware = async (req, res, next) => {
             }
         } else {
             // Trường hợp lỗi khác, không phải là lỗi hết hạn token
+            console.log(error);
             return errorResponse(
                 res,
                 StatusCodes.UNAUTHORIZED,
