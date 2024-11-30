@@ -52,9 +52,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from "@/redux/store";
 
 const eventSchema = EventBody
+
+interface event {
+    name: string;
+    event_id: string
+}
 function ClubLayout({ children }: { children: React.ReactNode }) {
-    const clubId = useSelector((state: RootState) => state.club.clubId);
+    // const clubId = useSelector((state: RootState) => state.club.clubId);
+    const { clubId } = useParams()
     const [eventOpen, setEventOpen] = useState(false)
+    const [joinedEvent, setJoinedEvent] = useState<event[]>([])
     // const [date, setDate] = useState<Date>()
     const navigate = useNavigate()
     // const { id } = useParams()
@@ -88,6 +95,21 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             eventForm.reset()
         }
     }, [eventOpen]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
+                console.log(response)
+                // Giả sử API trả về mảng các object có cấu trúc tương tự Item
+                setJoinedEvent(response.payload.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [])
     return (
         <div className="flex ">
             <div className=" bg-[#2b2d31] min-w-[280px] h-screen flex flex-col">
@@ -229,7 +251,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                             <ChevronRight />
                             <h1 className="text-[20px]">Sự kiện chưa đăng ký</h1>
                         </div>
-                        <FeatureBox group="Sự kiện đã đăng ký" />
+                        <FeatureBox group="Sự kiện đã đăng ký" names={joinedEvent} />
                         <FeatureBox group="Các nhóm chat" />
                     </div>
                 </div>

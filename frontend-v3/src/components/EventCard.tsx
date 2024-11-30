@@ -7,10 +7,10 @@ interface data {
     time?: string;
     description?: string;
     id?: string
+    status?: string
 }
 
-export default function EventCard({ name = "Sự kiện vui", time = "26-11-2004", description = "Vui ơi là vui", id = "" }: data) {
-    const [joined, setJoined] = useState(false)
+export default function EventCard({ name = "Sự kiện vui", time = "26-11-2004", description = "Vui ơi là vui", id = "", status }: data) {
     console.log(id)
     const joinHandle = async () => {
         try {
@@ -32,14 +32,17 @@ export default function EventCard({ name = "Sự kiện vui", time = "26-11-2004
             </div>
             <div className="flex pr-2">
                 {
-                    !joined &&
+                    status == "unjoined" &&
                     <Button className="ml-auto" variant={"accept"} onClick={joinHandle}>Tham gia</Button>
 
                 }
                 {
-                    joined &&
-                    <Button className="ml-auto" variant={"denied"} >Hủy đăng kí</Button>
-
+                    !status &&
+                    <Button className="ml-auto" variant={"disable"} >Đã tham gia</Button>
+                }
+                {
+                    status == "pending" &&
+                    <Button className="ml-auto" variant={"disable"} >Đã đăng kí</Button>
                 }
             </div>
         </div>

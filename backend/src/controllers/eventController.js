@@ -77,7 +77,7 @@ const drop = async (req, res) => {
 const findAllInClub = async (req, res) => {
     const { club_id } = req.params;
     const event_id = req.query?.event_id;
-
+    console.log(event_id)
     try {
         const events = await eventService.findAllForClub(club_id, event_id);
 

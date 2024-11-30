@@ -22,7 +22,8 @@ const buttonVariants = cva(
         blue: "bg-[#4F75FF] hover:bg-[#6439FF]",
         reset: "",
         accept: "bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700",
-        denied: "bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+        denied: "bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700",
+        disable: "bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 px-4 py-2 rounded"
       },
       size: {
         default: "h-10 px-4 py-2",

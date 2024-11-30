@@ -29,11 +29,11 @@ interface Member {
 
 export default function MemberBox() {
     // const location = useLocation();
-    const clubId = useSelector((state: RootState) => state.club.clubId);
+    // const clubId = useSelector((state: RootState) => state.club.clubId);
     const navigate = useNavigate()
     const { toast } = useToast()
     const [members, setMembers] = useState<Member[]>([])
-    // const { id } = useParams()
+    const { clubId } = useParams()
 
     // console.log(id)
     // console.log(location)

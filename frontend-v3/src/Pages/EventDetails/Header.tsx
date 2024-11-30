@@ -10,12 +10,16 @@ import {
 } from "@/components/ui/dialog"
 import EventMemberAdd from "@/components/EventMemberAdd"
 import { useState } from "react"
-export default function Header() {
+
+interface header {
+    name: string
+}
+export default function Header({ name }: header) {
     const [open, setOpen] = useState<boolean>(false)
 
     return (
         <div className="justify-between items-center w-full p-2 bg-[#393E46]">
-            <p className="text-[30px] font-bold">Sự kiện 1</p>
+            <p className="text-[30px] font-bold">{name}</p>
             {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Ellipsis size={30} className="cursor-pointer" />

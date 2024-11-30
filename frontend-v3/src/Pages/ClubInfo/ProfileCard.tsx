@@ -31,12 +31,12 @@ export default function ProfileCard() {
     const [open, setOpen] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
 
-    const { id } = useParams()
+    const { clubId } = useParams()
     useEffect(() => {
         // Hàm fetch dữ liệu từ API
         const fetchData = async () => {
             try {
-                const response = await ClubApiRequest.getClub(id || "")
+                const response = await ClubApiRequest.getClub(clubId || "")
                 console.log(response)
                 setClub(response.payload.data[0]);
             } catch (error) {
@@ -56,7 +56,7 @@ export default function ProfileCard() {
     const handleUpload = async () => {
         const formData = new FormData();
         formData.append('avatar', selectedFile ? selectedFile : "");
-        formData.append('club_id', id ? id : "");
+        formData.append('club_id', clubId ? clubId : "");
 
         formData.forEach((value, key) => {
             console.log(key, value);  // In ra từng key và value trong FormData

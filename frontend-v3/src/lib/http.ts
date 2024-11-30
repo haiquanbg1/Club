@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
-
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 // Tạo lớp HttpError để xử lý lỗi HTTP
 export class HttpError extends Error {
     status: number;
@@ -35,31 +36,36 @@ const apiClient: AxiosInstance = axios.create({
 // };
 
 // // Cấu hình interceptor để xử lý tự động refresh token
-// apiClient.interceptors.response.use(
-//     response => response,
-//     async (error) => {
-//         const originalRequest = error.config;
+apiClient.interceptors.response.use(
+    response => response,
+    async (error) => {
+        // const originalRequest = error.config;
 
-//         // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
-//         if (error.response?.status === 410 && !originalRequest._retry) {
-//             console.log(error);
-//             originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
-//             const refreshed = await refreshAccessToken();
-//             console.log("đã thành công")
-//             console.log(refreshed)
-//             if (refreshed) {
-//                 console.log("gọi lại")
-//                 return apiClient(originalRequest); // Retry request với token mới
-//             }
-//         }
+        // Xử lý token hết hạn (410) và gọi lại request nếu refresh thành công
+        // if (error.response?.status === 410 && !originalRequest._retry) {
+        //     console.log(error);
+        //     originalRequest._retry = true; // Đánh dấu rằng đã thử refresh token
+        //     const refreshed = await refreshAccessToken();
+        //     console.log("đã thành công")
+        //     console.log(refreshed)
+        //     if (refreshed) {
+        //         console.log("gọi lại")
+        //         return apiClient(originalRequest); // Retry request với token mới
+        //     }
+        // }
 
-//         // Nếu lỗi khác hoặc không refresh thành công
-//         return Promise.reject(new HttpError({
-//             status: error.response?.status,
-//             payload: error.response?.data,
-//         }));
-//     }
-// );
+        // Nếu lỗi khác hoặc không refresh thành công
+        // return Promise.reject(new HttpError({
+        //     status: error.response?.status,
+        //     payload: error.response?.data,
+        // }));
+        if (error.response && error.response.status === 401) {
+            Cookies.remove('isLogin')
+            return Promise.reject(error);
+        }
+        return Promise.reject(error); // Các lỗi khác sẽ được xử lý ở đây
+    }
+);
 
 // Hàm request chung
 const request = async <Response>(

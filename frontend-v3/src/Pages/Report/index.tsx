@@ -4,12 +4,12 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 export default function ReportPage() {
     const navigate = useNavigate()
-    const { club_id } = useParams()
+    const { clubId } = useParams()
     return (
         <div className="bg-[#A0A0A0] h-screen flex flex-col">
             <div className="w-full  bg-[#434242] p-2 flex justify-between items-center">
                 <h1 className="font-bold text-2xl">Báo cáo</h1>
-                <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate(`/club/${club_id}`)}></ArrowLeft>
+                <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate(`/club/${clubId}`)}></ArrowLeft>
             </div>
             <div className=" lg:pl-[200px] flex-1  lg:pr-[200px] xl:pl-[300px] xl:pr-[300px] 2xl:pl-[400px] 2xl:pr-[400px] ">
                 <div className="bg-[#040404] h-full flex flex-col overflow-auto p-4 space-y-4">

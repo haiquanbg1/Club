@@ -11,7 +11,9 @@ const ClubApiRequest = {
     getClub: (id: string) => http.get<GetClubResType>(`club/${id}`),
     createEvent: (body: SendEventBodyType) => http.post<any>('/event/create', body),
     changeAvatar: (body: FormData) => http.patch<any>('/club/changeAvatar', body),
-    getEvent: (id: string) => http.get<GetEventResType>(`event/${id}`),
+    getJoinedEvent: (id: string) => http.get<GetEventResType>(`event/joined/${id}`),
+    getUnjoinedEvent: (id: string) => http.get<GetEventResType>(`event/unjoined/${id}`),
+    getEvent: (info: { event_id: string; id: string }) => http.get<GetEventResType>(`event/${info.id}?event_id=${info.event_id}`),
     joinEvent: (body: { event_id: string }) => http.post<any>(`event/participant/join`, body)
 }
 

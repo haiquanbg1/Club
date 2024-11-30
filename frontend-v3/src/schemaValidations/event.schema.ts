@@ -6,7 +6,8 @@ export const GetEventRes = z.object({
         name: z.string(),
         description: z.string(),
         event_id: z.string(),
-        date: z.string()
+        start_time: z.string(),
+        status: z.string()
     }))
 })
     .strict()

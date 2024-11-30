@@ -3,17 +3,17 @@ const routes = {
     login: 'login',
     register: 'register',
     userProfile: '/me',
-    club: '/club/:id',
+    club: '/club/:clubId',
     conversation: '/club/:id/conversation/:id',
     chat: 'friend/:id/chat',
     clubProfile: '/clubProfile/:userId',
-    event: "/event/:id",
+    // event: "/event/:id",
     createClub: "/createClub",
     friend: "/friend",
-    report: "/report/:id",
-    notification: "/club/:id/notification",
-    clubInfo: "/club/changeProfile/:id",
-    listEvent: "/club/listEvent/:eventId",
+    report: "/report/:clubId",
+    notification: "/club/:clubId/notification",
+    clubInfo: "/club/changeProfile/:clubId",
+    listEvent: "/club/listEvent/:clubId",
     detailsEvent: "/club/:clubId/:eventId"
 };
 
