@@ -255,7 +255,7 @@ const acceptPending = async (req, res) => {
     try {
         await eventService.acceptPending(user.id, event_id);
 
-        return successResponse(res, StatusCodes.CREATED, "Đã đồng ý tham gia.");
+        return successResponse(res, StatusCodes.OK, "Đã đồng ý cho tham gia.");
     } catch (error) {
         return errorResponse(
             res,

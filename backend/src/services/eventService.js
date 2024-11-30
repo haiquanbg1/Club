@@ -40,7 +40,8 @@ const findEventUserJoined = async (user_id, club_id) => {
             }
         ],
         where: {
-            user_id: user_id
+            user_id: user_id,
+            status: "accepted"
         }
     });
     return events;
@@ -60,7 +61,9 @@ const findEventUserUnJoined = async (user_id, club_id) => {
         ],
         where: {
             user_id: user_id,
-            status: "accepted"
+            status: {
+                [Op.or]: ['accepted', 'pending']  // Kiểm tra cả "accepted" và "pending"
+            }
         },
         attributes: ['event_id']  // Lấy chỉ ID sự kiện
     });
