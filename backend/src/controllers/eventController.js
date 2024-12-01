@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const eventService = require("../services/eventService");
+const memberService = require("../services/memberService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 const formatDate = require("../utils/formatDate");
@@ -189,10 +190,14 @@ const findAllUserWithKey = async (req, res) => {
 }
 
 const addParticipant = async (req, res) => {
-    const { event_id, user_id } = req.body;
-    console.log(event_id)
-    console.log(user_id)
+    const { event_id, user_id, club_id } = req.body;
     try {
+        const isInClub = await memberService.findOne(club_id, user_id);
+
+        if (isInClub) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
+        }
+
         await eventService.addParticipant({
             event_id,
             user_id,

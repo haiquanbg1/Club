@@ -1,4 +1,4 @@
-const { Club, member_role } = require("../models/index");
+const { Club, member_role, Role } = require("../models/index");
 
 const findOne = async (whereClause) => {
     const club = await Club.findOne(whereClause);
@@ -17,6 +17,9 @@ const findAll = async (user_id, club_id) => {
                         id: club_id
                     }
                 })
+            }, {
+                model: Role,
+                as: 'roles'
             }
         ],
         where: {

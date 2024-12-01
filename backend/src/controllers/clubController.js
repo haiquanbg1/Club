@@ -76,7 +76,8 @@ const findAllClubByUser = async (req, res) => {
             data.push({
                 id: clubs[i].clubs.id,
                 name: clubs[i].clubs.name,
-                avatar: image
+                avatar: image,
+                role: clubs[i].roles.name
             });
         }
 
