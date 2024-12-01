@@ -175,7 +175,7 @@ const findAllUserWithKey = async (req, res) => {
             const image = await cloudinary.getImage("Avatar", participants[i].user.avatar);
 
             data.push({
-                user_id: participants[i].user.id,
+                user_id: participants[i].user_id,
                 display_name: participants[i].user.display_name,
                 avatar: image
             });
@@ -251,11 +251,10 @@ const askToJoin = async (req, res) => {
 }
 
 const acceptPending = async (req, res) => {
-    const user = req.user;
-    const { event_id } = req.body;
+    const { event_id, user_id } = req.body;
 
     try {
-        await eventService.acceptPending(user.id, event_id);
+        await eventService.acceptPending(user_id, event_id);
 
         return successResponse(res, StatusCodes.OK, "Đã đồng ý cho tham gia.");
     } catch (error) {

@@ -77,7 +77,7 @@ const update = async (req, res) => {
     try {
         await userService.update(user.id, updateClause);
 
-        return successResponse(res, StatusCodes.OK, "Cập nhật thông tin thành công.", options);
+        return successResponse(res, StatusCodes.OK, "Cập nhật thông tin thành công.");
     } catch (error) {
         return errorResponse(
             res,
