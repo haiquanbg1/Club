@@ -11,16 +11,16 @@ import ClubApiRequest from "@/apiRequest/club";
 interface Adding {
     user_id: string;
     display_name: string;
-    avatar: string
+    avatar: string;
 }
-export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetMember: () => Promise<void>; }) {
     const { toast } = useToast()
     const [listAdding, setListAdding] = useState<Adding[]>([])
     const [selected, setSelected] = useState("")
     const { clubId, eventId } = useParams()
     const getAdding = async () => {
         try {
-            const response = await MemberApiRequest.getAdding(clubId)
+            const response = await MemberApiRequest.get(clubId || "")
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setListAdding(response.payload.data);
@@ -47,7 +47,8 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
     const handleAdd = async () => {
         const body = {
             user_id: selected,
-            event_id: eventId ? eventId : ""
+            event_id: eventId ? eventId : "",
+            club_id: clubId ? clubId : ""
         }
 
         if (selected == "") {
@@ -70,7 +71,7 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
             const res = await ClubApiRequest.addParticipant(body)
             setSelected("")
             // resetMember()
-            console.log(res)
+            resetMember()
             toast({
                 description: "Success",
             })
@@ -89,7 +90,7 @@ export default function EventMemberAdd({ setOpen }: { setOpen: React.Dispatch<Re
                         <div key={index} onClick={() => handleSelect(friend.user_id)}
                             className={`p-1 rounded-sm cursor-pointer ${selected == friend.user_id ? 'bg-slate-300' : ''}`}
                         >
-                            <MemberCard name={friend.display_name} noMore={true} id={friend.user_id} avatar={friend.avatar}></MemberCard>
+                            <MemberCard resetMember={resetMember} name={friend.display_name} noMore={true} id={friend.user_id} avatar={friend.avatar}></MemberCard>
                         </div>
                     ))
 

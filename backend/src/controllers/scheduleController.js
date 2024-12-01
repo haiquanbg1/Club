@@ -3,7 +3,7 @@ const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
 
 const create = async (req, res) => {
-    const { event_id, description, start_time, end_time, location } = req.body;
+    const { event_id, title, description, start_time, end_time, location } = req.body;
 
     try {
         const schedule = await scheduleService.create({

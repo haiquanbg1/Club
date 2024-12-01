@@ -196,9 +196,9 @@ const addParticipant = async (req, res) => {
             user_id
         });
 
-        if (isInClub) {
-            return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
-        }
+        // if (isInClub) {
+        //     return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
+        // }
 
         await eventService.addParticipant({
             event_id,
@@ -227,8 +227,8 @@ const outEvent = async (req, res) => {
 }
 
 const kick = async (req, res) => {
-    const { event_id, user_id } = req.body;
-
+    const { event_id, user_id, club_id } = req.body;
+    console.log(user_id, event_id, club_id)
     try {
         await eventService.outEvent(event_id, user_id);
 

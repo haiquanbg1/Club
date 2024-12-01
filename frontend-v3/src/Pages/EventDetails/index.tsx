@@ -1,4 +1,4 @@
-import AddWork from "./AddSchedule";
+import AddSchedule from "./AddSchedule";
 import Details from "./Details";
 import Header from "./Header";
 import MemberList from "./MemberList";
@@ -18,6 +18,7 @@ interface event {
 interface user {
     display_name: string;
     avatar: string;
+    user_id: string;
 }
 export default function EventDetailsPage() {
     const { eventId, clubId } = useParams();
@@ -43,31 +44,31 @@ export default function EventDetailsPage() {
     }, [eventId, clubId])
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await ClubApiRequest.getParticipantAccepted(eventId ? eventId : "")
-                // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-                setAccepted(response.payload.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
+        getParticipantAccept();
     }, [eventId, clubId])
 
+    const getParticipantAccept = async () => {
+        console.log("gọi lại")
+        try {
+            const response = await ClubApiRequest.getParticipantAccepted(eventId ? eventId : "")
+            // Giả sử API trả về mảng các object có cấu trúc tương tự Item
+            setAccepted(response.payload.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    const getParticipantPending = async () => {
+        console.log("gọi lại")
+        try {
+            const response = await ClubApiRequest.getParticipantPending(eventId ? eventId : "")
+            // Giả sử API trả về mảng các object có cấu trúc tương tự Item
+            setPending(response.payload.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await ClubApiRequest.getParticipantPending(eventId ? eventId : "")
-                // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-                setPending(response.payload.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
+        getParticipantPending()
     }, [eventId, clubId])
 
 
@@ -76,18 +77,18 @@ export default function EventDetailsPage() {
     return (
         <div className="flex flex-col h-screen">
             <div className="flex-1 overflow-auto scrollbar-hide">
-                <Header name={event?.name ? event.name : ""} />
+                <Header resetMember={getParticipantAccept} name={event?.name ? event.name : ""} />
                 <div className="pl-[40px] pr-[40px] flex space-x-2">
                     <div className="flex-[2]">
                         <Details time={event?.start_time} type={event?.description} quantity={accepted.length} />
-                        <AddWork />
+                        <AddSchedule />
                         <div className="mt-[20px] mb-[20px] text-[#ccc] text-[20px] font-semibold">Lịch trình sự kiện</div>
 
                         <Schedule />
                     </div>
                     <div className="flex-1">
-                        <Request members={pending} />
-                        <MemberList members={accepted} />
+                        <Request members={pending} resetMember2={getParticipantPending} resetMember={getParticipantAccept} />
+                        <MemberList members={accepted} resetMember={getParticipantAccept} />
                     </div>
                 </div>
             </div>

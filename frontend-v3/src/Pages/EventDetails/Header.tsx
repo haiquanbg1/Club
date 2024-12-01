@@ -1,4 +1,4 @@
-import { Mail, Pencil, CirclePlus } from "lucide-react"
+import { Mail, Pencil, CirclePlus, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -10,13 +10,28 @@ import {
 } from "@/components/ui/dialog"
 import EventMemberAdd from "@/components/EventMemberAdd"
 import { useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import ClubApiRequest from "@/apiRequest/club"
 
 interface header {
-    name: string
+    name: string;
+    resetMember: () => Promise<void>;
 }
-export default function Header({ name }: header) {
+export default function Header({ name, resetMember }: header) {
     const [open, setOpen] = useState<boolean>(false)
+    const [openSetting, setOpenSetting] = useState<boolean>(false)
+    const navigate = useNavigate()
+    const { eventId, clubId } = useParams()
 
+    const handleOut = async () => {
+        try {
+            const res = await ClubApiRequest.outEvent({ event_id: eventId || "" })
+            navigate(`/club/${clubId}`)
+            console.log(res)
+        } catch (error) {
+
+        }
+    }
     return (
         <div className="justify-between items-center w-full p-2 bg-[#393E46]">
             <p className="text-[30px] font-bold">{name}</p>
@@ -43,7 +58,7 @@ export default function Header({ name }: header) {
                                 <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
                             </DialogTitle>
                         </DialogHeader>
-                        <EventMemberAdd setOpen={setOpen} />
+                        <EventMemberAdd resetMember={resetMember} setOpen={setOpen} />
                     </DialogContent>
                 </Dialog>
 
@@ -51,10 +66,28 @@ export default function Header({ name }: header) {
                     <Pencil />
                     <Button className="flex-1 text-white bg-transparent hover:bg-transparent p-0  text-[18px]">Chỉnh sửa</Button>
                 </div>
-                <div className="flex items-center pl-4 pr-4 rounded-lg text-white bg-[#444a53] hover:bg-[#4e555f] text-[18px] justify-center cursor-pointer space-x-2">
-                    <CirclePlus />
-                    <Button className="flex-1 text-white bg-transparent hover:bg-transparent p-0  text-[18px]">Thêm lịch trình</Button>
-                </div>
+
+                <Dialog open={openSetting} onOpenChange={setOpenSetting}>
+                    <DialogTrigger className="ml-auto flex items-center  rounded-lg text-white bg-[#444a53] hover:bg-[#4e555f] text-[18px] justify-center cursor-pointer space-x-2">
+                        <div className="flex items-center pl-4 pr-4 rounded-lg text-white bg-[#444a53] hover:bg-[#4e555f] text-[18px] justify-center cursor-pointer space-x-2">
+                            <Settings />
+                            <Button className="flex-1 text-white bg-transparent hover:bg-transparent p-0  text-[18px]">Tùy chỉnh</Button>
+                        </div>
+                    </DialogTrigger>
+                    <DialogContent className="bg-[#393E46] p-0 overflow-hidden">
+                        <DialogHeader>
+                            <DialogTitle>
+                                <div className="text-center bg-[#313338] pt-4 pb-4 text-[24px] mb-0">Tùy chỉnh</div>
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className=" text-[20px] space-y-2">
+                            <div className="p-2 hover:bg-[#444a53]">Xóa sự kiện</div>
+                            <div className="p-2 hover:bg-[#444a53]" onClick={handleOut}>Rời khỏi sự kiện</div>
+                        </div>
+
+                    </DialogContent>
+                </Dialog>
+
             </div>
         </div>
     )

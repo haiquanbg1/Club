@@ -25,14 +25,10 @@ export default function MemberAdd({ setOpen, resetMember }: { setOpen: React.Dis
             setListAdding(response.payload.data);
 
         } catch (error) {
-
         }
     }
     useEffect(() => {
-
         getAdding();
-
-
     }, [])
     const handleSelect = (id: string) => {
         if (id == selected) {

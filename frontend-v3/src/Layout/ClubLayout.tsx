@@ -96,19 +96,18 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
         }
     }, [eventOpen]);
 
+    const getJoinedEvent = async () => {
+        try {
+            const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
+            console.log(response)
+            // Giả sử API trả về mảng các object có cấu trúc tương tự Item
+            setJoinedEvent(response.payload.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
-                console.log(response)
-                // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-                setJoinedEvent(response.payload.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
+        getJoinedEvent()
     }, [])
     return (
         <div className="flex ">

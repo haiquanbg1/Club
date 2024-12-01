@@ -10,6 +10,7 @@ interface Feature {
         event_id: string;
     }[];
     // show?: boolean
+    // resetName?: () => Promise<void>;
 }
 export default function FeatureBox({ group = "Test", names = [] }: Feature) {
     const navigate = useNavigate()

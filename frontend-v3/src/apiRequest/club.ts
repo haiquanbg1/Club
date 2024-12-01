@@ -1,6 +1,6 @@
 import { GetClubResType, RegisterClubBodyType, RegisterClubResType, SendEventBodyType } from "@/schemaValidations/club.schema";
 import http from "../lib/http";
-import { GetEventResType, GetParticipantResType } from "@/schemaValidations/event.schema";
+import { GetEventResType, GetParticipantResType, ScheduleSendBodyType } from "@/schemaValidations/event.schema";
 
 
 
@@ -10,6 +10,7 @@ const ClubApiRequest = {
     get: () => http.get<GetClubResType>("/club/?club_id="),
     getClub: (id: string) => http.get<GetClubResType>(`club/${id}`),
     createEvent: (body: SendEventBodyType) => http.post<any>('/event/create', body),
+    deleteEvent: (body: { event_id: string, club_id: string }) => http.delete<any>('/event/delete', body),
     changeAvatar: (body: FormData) => http.patch<any>('/club/changeAvatar', body),
     getJoinedEvent: (id: string) => http.get<GetEventResType>(`event/joined/${id}`),
     getUnjoinedEvent: (id: string) => http.get<GetEventResType>(`event/unjoined/${id}`),
@@ -17,8 +18,12 @@ const ClubApiRequest = {
     joinEvent: (body: { event_id: string }) => http.post<any>(`event/participant/join`, body),
     getParticipantPending: (eventId: string) => http.get<GetParticipantResType>(`event/participant/pending/${eventId}`),
     getParticipantAccepted: (eventId: string) => http.get<GetParticipantResType>(`event/participant/accepted/${eventId}`),
-    acceptRequest: (body: { userId: string }) => http.patch<any>('event/participant/accept', body),
-    addParticipant: (body: { event_id: string; user_id: string }) => http.post<any>("event/participant/add", body)
+    acceptRequest: (body: { event_id: string; user_id: string; club_id: string }) => http.patch<any>('event/participant/accept', body),
+    denyRequest: (body: { event_id: string; user_id: string; club_id: string }) => http.delete<any>('event/participant/deny', body),
+    addParticipant: (body: { event_id: string; user_id: string; club_id: string }) => http.post<any>("event/participant/add", body),
+    kickParticipant: (body: { event_id: string; user_id: string; club_id: string }) => http.delete<any>("event/participant/kick", body),
+    outEvent: (body: { event_id: string }) => http.delete<any>('event/out', body),
+    createSchedule: (body: ScheduleSendBodyType) => http.post<any>('schedule/create', body),
 }
 
 export default ClubApiRequest
