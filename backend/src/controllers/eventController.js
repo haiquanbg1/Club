@@ -266,6 +266,22 @@ const acceptPending = async (req, res) => {
     }
 }
 
+const denyPending = async (req, res) => {
+    const { event_id, user_id } = req.body;
+
+    try {
+        await eventService.outEvent(user_id, event_id);
+
+        return successResponse(res, StatusCodes.OK, "Đã từ chối cho tham gia.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        )
+    }
+}
+
 module.exports = {
     create,
     update,
@@ -277,5 +293,6 @@ module.exports = {
     drop,
     findEventByStatus,
     askToJoin,
-    acceptPending
+    acceptPending,
+    denyPending
 }

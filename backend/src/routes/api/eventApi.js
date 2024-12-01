@@ -16,5 +16,6 @@ router.delete("/out", authMiddleware, eventController.outEvent);
 router.get("/:status/:club_id", authMiddleware, eventController.findEventByStatus); // tìm event người dùng đã join hoặc chưa join qua status: "joined" || "unjoined"
 router.post("/participant/join", authMiddleware, eventController.askToJoin); // request to join event
 router.patch("/participant/accept", authMiddleware, managerMiddleware, eventController.acceptPending); // accept request
+router.delete("/participant/deny", authMiddleware, managerMiddleware, eventController.denyPending);
 
 module.exports = router;
