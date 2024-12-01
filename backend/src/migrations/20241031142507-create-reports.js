@@ -37,7 +37,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM("pending", "processed"),
         allowNull: false,
         defaultValue: 'pending', // Trạng thái mặc định của báo cáo
       },

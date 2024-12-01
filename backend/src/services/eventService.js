@@ -23,7 +23,7 @@ const drop = async (id) => {
 }
 
 const findOne = async (whereClause) => {
-    const event = await Event.findOne(whereClause);
+    const event = await EventParticipant.findOne(whereClause);
     return event;
 }
 
