@@ -7,6 +7,7 @@ import Schedule from "./Schedule";
 import ClubApiRequest from "@/apiRequest/club";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ScheduleList from "./ScheduleList";
 
 interface event {
     start_time: string;
@@ -84,7 +85,7 @@ export default function EventDetailsPage() {
                         <AddSchedule />
                         <div className="mt-[20px] mb-[20px] text-[#ccc] text-[20px] font-semibold">Lịch trình sự kiện</div>
 
-                        <Schedule />
+                        <ScheduleList />
                     </div>
                     <div className="flex-1">
                         <Request members={pending} resetMember2={getParticipantPending} resetMember={getParticipantAccept} />
