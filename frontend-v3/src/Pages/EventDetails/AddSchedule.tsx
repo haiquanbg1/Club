@@ -39,7 +39,7 @@ import { ScheduleBody, ScheduleBodyType } from "@/schemaValidations/club.schema"
 
 const scheduleSchema = ScheduleBody;
 
-export default function AddSchedule() {
+export default function AddSchedule({ resetSchedules }: { resetSchedules: () => Promise<void> }) {
     const [eventOpen, setEventOpen] = useState(false)
     const { eventId } = useParams()
     const scheduleForm = useForm<ScheduleBodyType>({
@@ -67,6 +67,7 @@ export default function AddSchedule() {
             }
             // const res = await ClubApiRequest.createEvent(body)
             const res = await ClubApiRequest.createSchedule(body)
+            resetSchedules()
             console.log(res)
             setEventOpen(false)
         } catch (error) {

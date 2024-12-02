@@ -41,7 +41,7 @@ function convertDateFormat(dateString: string) {
     return `${year}/${month}/${day}`;
 }
 
-export default function ChangeWindow({ display_name, birthDay }: { display_name: string, birthDay: string }) {
+export default function ChangeWindow({ display_name, birthDay, resetInfo }: { display_name: string, birthDay: string, resetInfo?: () => Promise<void> }) {
     const [open, setOpen] = useState(false)
     const [name, setName] = useState("")
     const [birth, setBirth] = useState("")
@@ -54,6 +54,9 @@ export default function ChangeWindow({ display_name, birthDay }: { display_name:
             )
             console.log(result?.payload)
             setName("")
+            if (resetInfo) {
+                resetInfo()
+            }
         } catch (error: any) {
             console.log(error.payload)
         }

@@ -26,12 +26,13 @@ const create = async (req, res) => {
 
 const drop = async (req, res) => {
     const { schedule_id } = req.body;
-
+    console.log(schedule_id)
     try {
         await scheduleService.drop(schedule_id);
 
         return successResponse(res, StatusCodes.OK, "Xoá lịch trình thành công.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

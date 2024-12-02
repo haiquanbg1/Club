@@ -25,7 +25,7 @@ const ClubApiRequest = {
     outEvent: (body: { event_id: string }) => http.delete<any>('event/out', body),
     createSchedule: (body: ScheduleSendBodyType) => http.post<any>('schedule/create', body),
     getSchedule: (event_id: string) => http.get<GetScheduleResType>(`schedule/${event_id}`),
-
+    deleteSchedule: (body: { club_id: string, schedule_id: string }) => http.delete<any>(`schedule/delete`, body)
 }
 
 export default ClubApiRequest
