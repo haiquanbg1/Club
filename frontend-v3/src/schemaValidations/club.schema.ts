@@ -44,3 +44,13 @@ export const SendEventBody = z.object({
 })
 
 export type SendEventBodyType = z.TypeOf<typeof SendEventBody>
+
+export const ScheduleBody = z.object({
+    event_id: z.string(),
+    title: z.string(),
+    description: z.string(),
+    start_time: z.date(),
+    end_time: z.date()
+})
+
+export type ScheduleBodyType = z.TypeOf<typeof ScheduleBody>

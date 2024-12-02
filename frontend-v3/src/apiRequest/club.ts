@@ -1,6 +1,6 @@
 import { GetClubResType, RegisterClubBodyType, RegisterClubResType, SendEventBodyType } from "@/schemaValidations/club.schema";
 import http from "../lib/http";
-import { GetEventResType, GetParticipantResType, ScheduleSendBodyType } from "@/schemaValidations/event.schema";
+import { GetEventResType, GetParticipantResType, GetScheduleResType, ScheduleSendBodyType } from "@/schemaValidations/event.schema";
 
 
 
@@ -24,6 +24,8 @@ const ClubApiRequest = {
     kickParticipant: (body: { event_id: string; user_id: string; club_id: string }) => http.delete<any>("event/participant/kick", body),
     outEvent: (body: { event_id: string }) => http.delete<any>('event/out', body),
     createSchedule: (body: ScheduleSendBodyType) => http.post<any>('schedule/create', body),
+    getSchedule: (event_id: string) => http.get<GetScheduleResType>(`schedule/${event_id}`),
+
 }
 
 export default ClubApiRequest

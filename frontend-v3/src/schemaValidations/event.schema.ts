@@ -13,16 +13,6 @@ export const GetEventRes = z.object({
     .strict()
 export type GetEventResType = z.TypeOf<typeof GetEventRes>
 
-export const ScheduleBody = z.object({
-    event_id: z.string(),
-    title: z.string(),
-    description: z.string(),
-    start_time: z.date(),
-    end_time: z.date(),
-    location: z.string()
-})
-
-export type ScheduleBodyType = z.TypeOf<typeof ScheduleBody>
 
 export const ScheduleSendBody = z.object({
     event_id: z.string(),
@@ -34,6 +24,19 @@ export const ScheduleSendBody = z.object({
 })
 
 export type ScheduleSendBodyType = z.TypeOf<typeof ScheduleSendBody>
+
+export const GetScheduleRes = z.object({
+    message: z.string(),
+    data: z.array(z.object({
+        id: z.string(),
+        event_id: z.string(),
+        description: z.string(),
+        start_time: z.string(),
+        end_time: z.string()
+    }))
+})
+    .strict()
+export type GetScheduleResType = z.TypeOf<typeof GetScheduleRes>
 
 export const GetParticipantRes = z.object({
     message: z.string(),

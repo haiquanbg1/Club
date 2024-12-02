@@ -6,7 +6,6 @@ import {
 import {
     Form,
     FormControl,
-
     FormField,
     FormItem,
     FormLabel,
@@ -15,11 +14,9 @@ import {
 import {
     Dialog,
     DialogContent,
-
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-
 } from "@/components/ui/dialog"
 import {
     Popover,
@@ -31,19 +28,16 @@ import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
-import { ScheduleBodyType, ScheduleBody } from "@/schemaValidations/event.schema";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
 
+import { ScheduleBody, ScheduleBodyType } from "@/schemaValidations/club.schema";
 
 const scheduleSchema = ScheduleBody;
-
-
 
 export default function AddSchedule() {
     const [eventOpen, setEventOpen] = useState(false)
@@ -55,20 +49,20 @@ export default function AddSchedule() {
             description: "",
         },
     })
-
     useEffect(() => {
         scheduleForm.reset()
     }, [eventOpen])
 
-    const createSchedule = async (values: ScheduleBodyType) => {
+    const createSchedule = async () => {
         console.log(1)
         try {
             const body = {
                 event_id: eventId || "",
-                title: values.title,
-                description: values.description,
-                start_time: format(values.start_time, "MM/dd/yyyy"),
-                end_time: format(values.end_time, "MM/dd/yyyy"),
+                title: scheduleForm.getValues("title"),
+                description: scheduleForm.getValues("description"),
+                start_time: format(scheduleForm.getValues("start_time"), "MM/dd/yyyy"),
+                end_time: format(scheduleForm.getValues("end_time"), "MM/dd/yyyy"),
+                // end_time: "",
                 location: ""
             }
             // const res = await ClubApiRequest.createEvent(body)
@@ -78,7 +72,7 @@ export default function AddSchedule() {
         } catch (error) {
             console.log(error)
         }
-        console.log(format(values.start_time, "MM/dd/yyyy"))
+        // console.log(format(values.start_time, "MM/dd/yyyy"))
     }
 
     return (
@@ -91,7 +85,6 @@ export default function AddSchedule() {
             <Dialog open={eventOpen} onOpenChange={setEventOpen}>
                 <DialogTrigger asChild>
                     <Button className="flex-1 text-white bg-[#444a53] hover:bg-[#4e555f] font-bold text-[18px]">Thêm bài viết</Button>
-
                 </DialogTrigger>
                 <DialogContent className="p-4">
                     <DialogHeader>
@@ -106,6 +99,7 @@ export default function AddSchedule() {
                         <form onSubmit={scheduleForm.handleSubmit(createSchedule)} className="space-y-8">
                             <FormField
                                 control={scheduleForm.control}
+                                // name="title"
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem>
@@ -212,7 +206,7 @@ export default function AddSchedule() {
                                 )}
                             />
                             <div className="flex">
-                                <Button className="ml-auto" type="submit">Confirm</Button>
+                                <Button className="ml-auto" onClick={createSchedule}>Confirm</Button>
                             </div>
                         </form>
                     </Form>
