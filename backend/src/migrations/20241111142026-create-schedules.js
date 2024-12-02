@@ -20,6 +20,10 @@ module.exports = {
         onDelete: 'CASCADE',
         primaryKey: true
       },
+      title: {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
       description: {
         type: Sequelize.TEXT,
         allowNull: true,
