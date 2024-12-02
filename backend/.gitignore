@@ -2,3 +2,4 @@
 node_modules
 sequelizeMigrate.json
 sequelizeSeed.json
+data.json

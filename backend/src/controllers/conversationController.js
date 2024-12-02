@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const conversationService = require("../services/conversationService");
+const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 
@@ -122,6 +123,10 @@ const addParticipant = async (req, res) => {
     const { conversation_id, user_id } = req.body;
 
     try {
+        const user = await userService.findOne({
+            id: user_id
+        });
+
         await conversationService.addParticipant({
             conversation_id,
             user_id,

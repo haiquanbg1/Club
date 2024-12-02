@@ -31,12 +31,12 @@ const findAll = async (event_id, schedule_id) => {
     const schedules = await Schedule.findAll({
         where: {
             event_id: event_id,
-            ...(schedule_id && {
-                where: {
-                    id: schedule_id
-                }
-            })
-        }
+        },
+        ...(schedule_id && {
+            where: {
+                id: schedule_id
+            }
+        })
     });
     return schedules;
 }

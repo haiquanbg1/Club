@@ -26,7 +26,6 @@ const create = async (req, res) => {
 
 const drop = async (req, res) => {
     const { schedule_id } = req.body;
-    console.log(schedule_id)
     try {
         await scheduleService.drop(schedule_id);
 
