@@ -63,7 +63,7 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
                 start_time: format(scheduleForm.getValues("start_time"), "MM/dd/yyyy"),
                 end_time: format(scheduleForm.getValues("end_time"), "MM/dd/yyyy"),
                 // end_time: "",
-                location: ""
+                location: scheduleForm.getValues("location")
             }
             // const res = await ClubApiRequest.createEvent(body)
             const res = await ClubApiRequest.createSchedule(body)
@@ -196,6 +196,18 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
                             />
                             <FormField
                                 control={scheduleForm.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Địa điểm</FormLabel>
+                                        <FormControl>
+                                            <Input className="outline-none" type="text" placeholder="Chủ đề sự kiện của bạn là gì?"{...field} />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={scheduleForm.control}
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
@@ -206,8 +218,9 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
                                     </FormItem>
                                 )}
                             />
+
                             <div className="flex">
-                                <Button className="ml-auto" onClick={createSchedule}>Confirm</Button>
+                                <Button className="ml-auto" >Confirm</Button>
                             </div>
                         </form>
                     </Form>

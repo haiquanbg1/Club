@@ -10,6 +10,7 @@ const ClubApiRequest = {
     get: () => http.get<GetClubResType>("/club/?club_id="),
     getClub: (id: string) => http.get<GetClubResType>(`club/${id}`),
     createEvent: (body: SendEventBodyType) => http.post<any>('/event/create', body),
+    updateEvent: (body: any) => http.patch<any>('/event/update', body),
     deleteEvent: (body: { event_id: string, club_id: string }) => http.delete<any>('/event/delete', body),
     changeAvatar: (body: FormData) => http.patch<any>('/club/changeAvatar', body),
     getJoinedEvent: (id: string) => http.get<GetEventResType>(`event/joined/${id}`),
@@ -25,6 +26,7 @@ const ClubApiRequest = {
     outEvent: (body: { event_id: string }) => http.delete<any>('event/out', body),
     createSchedule: (body: ScheduleSendBodyType) => http.post<any>('schedule/create', body),
     getSchedule: (event_id: string) => http.get<GetScheduleResType>(`schedule/${event_id}`),
+    updateSchedule: (body: any) => http.patch<any>('schedule/update', body),
     deleteSchedule: (body: { club_id: string, schedule_id: string }) => http.delete<any>(`schedule/delete`, body)
 }
 

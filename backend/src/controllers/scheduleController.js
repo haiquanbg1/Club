@@ -44,7 +44,7 @@ const drop = async (req, res) => {
 
 const update = async (req, res) => {
     const { schedule_id, title, description, start_time, end_time, location } = req.body;
-
+    console.log(schedule_id)
     const updateClause = Object.assign(
         {},
         title && { title },
@@ -59,6 +59,7 @@ const update = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -82,6 +83,7 @@ const find = async (req, res) => {
             data.push({
                 title: schedule[i].title,
                 description: schedule[i].description,
+                id: schedule[i].id,
                 start_time,
                 end_time,
                 location: schedule[i].location
