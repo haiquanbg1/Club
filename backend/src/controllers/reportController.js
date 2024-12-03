@@ -21,12 +21,11 @@ const create = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const { title, message, report_id, status } = req.body;
+    // const { title, message, report_id, status } = req.body;
+    const { report_id, status } = req.body;
 
     try {
         await reportService.update(report_id, {
-            title,
-            message,
             status
         });
 
@@ -49,7 +48,8 @@ const findAll = async (req, res) => {
             data.push({
                 title: report[i].title,
                 message: report[i].message,
-                status: report[i].status
+                status: report[i].status,
+                id: report[i].id
             });
         }
 
