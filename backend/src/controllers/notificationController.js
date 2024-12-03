@@ -28,7 +28,16 @@ const findAllByClub = async (req, res) => {
     try {
         const notifications = await notificationService.findAll(club_id);
 
-        return successResponse(res, StatusCodes.OK, "Thành công.", notifications);
+        const data = [];
+
+        for (let i = 0; i < notifications.length; i++) {
+            data.push({
+                title: notifications[i].title,
+                description: notifications[i].description
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(
             res,

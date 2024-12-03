@@ -43,7 +43,17 @@ const findAll = async (req, res) => {
     try {
         const report = await reportService.findAllOfClub(club_id, report_id);
 
-        return successResponse(res, StatusCodes.OK, "Thành công.", report);
+        const data = [];
+
+        for (let i = 0; i < report.length; i++) {
+            data.push({
+                title: report[i].title,
+                message: report[i].message,
+                status: report[i].status
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
