@@ -21,12 +21,10 @@ module.exports = {
     dialect: "mysql"
   },
   production: {
-    username: "fall2024c8g7",
-    password: 'Phamquan2004@',
-    database: "fall2024c8g7_club",
-    host: "10.96.210.203",
+    username: process.env.production_user,
+    password: process.env.production_password,
+    database: process.env.production_database,
+    host: process.env.production_host,
     dialect: "mysql",
-    port: 3306
-
   }
 };
