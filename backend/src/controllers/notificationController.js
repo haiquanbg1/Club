@@ -14,6 +14,7 @@ const create = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Đã tạo thông báo.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

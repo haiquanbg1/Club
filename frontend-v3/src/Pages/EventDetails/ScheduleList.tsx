@@ -25,7 +25,7 @@ export default function ScheduleList({ scheduleList, resetSchedules }: Schedules
         <div>
             {
                 scheduleList.map((schedule, idx) => (
-                    <Schedule id={schedule.id} location={schedule.location} end_time={schedule.end_time} start_time={schedule.start_time} resetSchedules={resetSchedules} description={schedule.description} title={schedule.title} />
+                    <Schedule key={idx} id={schedule.id} location={schedule.location} end_time={schedule.end_time} start_time={schedule.start_time} resetSchedules={resetSchedules} description={schedule.description} title={schedule.title} />
                 ))
             }
 

@@ -13,8 +13,9 @@ import { Plus } from "lucide-react";
 import Header from "@/components/header";
 // import { ModeToggle } from '@/components/mode-toggle.tsx'
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from "@/redux/store";
-import { setClubId } from "@/redux/clubSlice";
+// import { RootState } from "@/redux/store";
+// import { setClubId } from "@/redux/clubSlice";
+import { setRoles } from "@/redux/clubReducer";
 import { useState, useEffect } from 'react';
 import ClubApiRequest from "@/apiRequest/club";
 
@@ -22,12 +23,13 @@ interface Club {
     name: string;
     id: string;
     avatar: string;
+    role: string;
 }
 
 
 function DefaultLayout({ children }: { children: React.ReactNode }) {
     const dispatch = useDispatch();
-    const clubId = useSelector((state: RootState) => state.club.clubId);
+    // const clubId = useSelector((state: RootState) => state.club.clubId);
     const [clubs, setClubs] = useState<Club[]>([
     ]);
     useEffect(() => {
@@ -35,12 +37,18 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.get()
-                console.log(response)
+                console.log('lấy club')
                 const clubsData = response.payload.data.map((item) => ({
                     name: item.name || "",
                     id: item.id,
                     avatar: item.avatar,
+                    role: item.role
                 }));
+                const adminClubsIds = clubsData
+                    .filter(club => club.role === 'Người quản lý') // Lọc câu lạc bộ bạn là admin
+                    .map(club => club.id); // Lấy id của các câu lạc bộ đó
+                // Lưu vào localStorage
+                localStorage.setItem('adminClubs', JSON.stringify(adminClubsIds));
                 // Giả sử API trả về mảng các object có cấu trúc tương tự Item
                 setClubs(clubsData);
             } catch (error) {
@@ -50,8 +58,9 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
     }, []);
-    const handleSelectClub = (club_id: string, club_name: string) => {
-        dispatch(setClubId(club_id));
+    const handleSelectClub = (club_id: string, club_name: string, club_role: string) => {
+        // dispatch(setClubId(club_id));
+        dispatch(setRoles(club_id, club_role))
         localStorage.setItem('club_id', club_id)
         navigate(`/club/${club_id}`)
     }
@@ -79,7 +88,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     {
                         clubs.map((club, index) => (
-                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.name)}>
+                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.name, club.role)}>
                                 <TooltipProvider key={index}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>

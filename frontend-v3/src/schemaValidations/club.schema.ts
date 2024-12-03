@@ -21,7 +21,8 @@ export const GetClubRes = z.object({
     data: z.array(z.object({
         name: z.string(),
         avatar: z.string(),
-        id: z.string()
+        id: z.string(),
+        role: z.string()
     }))
 })
     .strict()

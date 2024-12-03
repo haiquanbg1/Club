@@ -16,9 +16,7 @@ import { useToast } from "@/hooks/use-toast"
 import MemberApiRequest from "@/apiRequest/member";
 import MemberAdd from "./MemberAdd";
 import { useNavigate, useParams } from "react-router-dom";
-import { RootState } from "@/redux/store";
-import { setClubId } from "@/redux/clubSlice";
-import { useSelector } from 'react-redux';
+
 
 
 interface Member {
@@ -34,7 +32,13 @@ export default function MemberBox() {
     const { toast } = useToast()
     const [members, setMembers] = useState<Member[]>([])
     const { clubId } = useParams()
-
+    const adminList = localStorage.getItem("adminClubs")
+    const [checkRole, setCheckRole] = useState(false)
+    useEffect(() => {
+        if (clubId && adminList?.includes(clubId)) {
+            setCheckRole(true)
+        }
+    }, [])
     // console.log(id)
     // console.log(location)
     const getMember = async () => {
@@ -76,19 +80,23 @@ export default function MemberBox() {
             <h1 className="text-center font-bold text-[26px]">Danh sách thành viên</h1>
             <div className="flex items-center mt-1 mb-2 pl-2 pr-2">
                 <Input className="bg-[#313338]" placeholder="Tìm kiếm thành viên"></Input>
-                <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger>
-                        <CirclePlus size={30} className=" ml-2 cursor-pointer" />
-                    </DialogTrigger>
-                    <DialogContent className="bg-[#4F4F4F] p-0 overflow-hidden">
-                        <DialogHeader>
-                            <DialogTitle>
-                                <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
-                            </DialogTitle>
-                        </DialogHeader>
-                        <MemberAdd setOpen={setOpen} resetMember={getMember} />
-                    </DialogContent>
-                </Dialog>
+                {
+                    checkRole &&
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogTrigger>
+                            <CirclePlus size={30} className=" ml-2 cursor-pointer" />
+                        </DialogTrigger>
+                        <DialogContent className="bg-[#4F4F4F] p-0 overflow-hidden">
+                            <DialogHeader>
+                                <DialogTitle>
+                                    <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
+                                </DialogTitle>
+                            </DialogHeader>
+                            <MemberAdd setOpen={setOpen} resetMember={getMember} />
+                        </DialogContent>
+                    </Dialog>
+                }
+
 
             </div>
             <div className="pl-2 pr-2 space-y-2">
@@ -96,9 +104,18 @@ export default function MemberBox() {
                     <MemberCard resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
                 ))}
             </div>
-            <div className="text-center absolute bottom-2 right-20">
-                <Button variant={"denied"} onClick={handleOut}>Rời câu lạc bộ</Button>
-            </div>
+            {
+                checkRole &&
+                <div className="text-center absolute bottom-2 right-20">
+                    <Button variant={"denied"} onClick={handleOut}>Xóa câu lạc bộ</Button>
+                </div>
+            }
+            {
+                !checkRole &&
+                <div className="text-center absolute bottom-2 right-20">
+                    <Button variant={"denied"} onClick={handleOut}>Rời câu lạc bộ</Button>
+                </div>
+            }
         </div >
     )
 }

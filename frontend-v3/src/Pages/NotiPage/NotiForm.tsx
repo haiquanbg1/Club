@@ -12,13 +12,13 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { NotificationBody, NotificationBodyType } from "@/schemaValidations/notification"
+import { NotificationBody, NotificationBodyType } from "@/schemaValidations/notification.schema"
 import { useParams } from "react-router-dom"
 import NotificationApiRequest from "@/apiRequest/notification"
 import { useState } from "react"
 
 const NotiFormSchema = NotificationBody
-export default function NotiForm({ setOpen }: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function NotiForm({ setOpen, resetNoti }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetNoti?: () => Promise<void> }) {
     const { clubId } = useParams()
     const form = useForm<NotificationBodyType>({
         resolver: zodResolver(NotiFormSchema),
@@ -40,6 +40,9 @@ export default function NotiForm({ setOpen }: { setOpen: React.Dispatch<React.Se
 
             const res = await NotificationApiRequest.create(body)
             setOpen(false)
+            if (resetNoti) {
+                resetNoti()
+            }
             form.reset()
             console.log(res)
         } catch (error) {
