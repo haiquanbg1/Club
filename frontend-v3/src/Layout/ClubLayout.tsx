@@ -46,7 +46,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
 import { useSelector } from 'react-redux';
 import { RootState } from "@/redux/store";
@@ -57,8 +57,11 @@ interface event {
     name: string;
     event_id: string
 }
+
 function ClubLayout({ children }: { children: React.ReactNode }) {
     // const clubId = useSelector((state: RootState) => state.club.clubId);
+    const location = useLocation()
+    console.log(location.pathname)
     const { clubId } = useParams()
     const [eventOpen, setEventOpen] = useState(false)
     const [joinedEvent, setJoinedEvent] = useState<event[]>([])
@@ -116,9 +119,9 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                     <Input className="text-[#888888] bg-[#1e1f22] focus-visible:ring-0 focus:outline-none focus:border-none focus:ring-none border-transparent ring-offset-0" placeholder="Tìm kiếm cuộc trò chuyện"></Input>
                 </div>
                 <div className="overflow-auto flex-1 scrollbar-hide">
-                    <div className="flex items-center justify-between p-2">
+                    <div className="flex items-center justify-between p-2 cursor-pointer" onClick={() => navigate(`/club/${clubId}`)}>
                         <div></div>
-                        <h1 className="text-center text-[24px] font-bold" onClick={() => navigate(`/club/${clubId}`)}>Nemui</h1>
+                        <h1 className="text-center text-[24px] font-bold" >Nemui</h1>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -238,7 +241,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                         </Dialog>
                     </div>
 
-                    <div className="p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#999999] hover:bg-slate-400">
+                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className="cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#999999] hover:bg-slate-400">
                         <BellRing size={24} />
                         <p className="text-[20px]">Thông báo tổng</p>
                     </div>
@@ -258,7 +261,10 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
             </div>
             <div className="w-full flex flex-col h-screen bg-[#313338]">{children}</div>
-            <MemberBox />
+            {
+                location.pathname != "/club/3/notification" &&
+                <MemberBox />
+            }
         </div>
     );
 }

@@ -11,6 +11,7 @@ const routes = {
     createClub: "/createClub",
     friend: "/friend",
     report: "/report/:clubId",
+    reportList: "/reportList/:clubId",
     notification: "/club/:clubId/notification",
     clubInfo: "/club/changeProfile/:clubId",
     listEvent: "/club/listEvent/:clubId",

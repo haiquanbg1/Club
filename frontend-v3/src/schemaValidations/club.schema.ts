@@ -45,6 +45,18 @@ export const SendEventBody = z.object({
 
 export type SendEventBodyType = z.TypeOf<typeof SendEventBody>
 
+export const GetReportRes = z.object({
+    message: z.string(),
+    data: z.array(z.object({
+        title: z.string(),
+        message: z.string(),
+        status: z.string(),
+        id: z.string()
+    }))
+})
+
+export type GetReportResType = z.TypeOf<typeof GetReportRes>
+
 export const ScheduleBody = z.object({
     location: z.string(),
     title: z.string(),
