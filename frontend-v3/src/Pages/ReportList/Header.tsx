@@ -11,7 +11,7 @@ export default function Header() {
     return (
         <div className="w-full  bg-[#393e46] p-2 flex justify-between items-center">
             <div className="font-bold text-[20px]">Danh sách báo cáo</div>
-            <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate(/club/${clubId})}></ArrowLeft>
+            <ArrowLeft className="rounded-full hover:bg-[#434343] cursor-pointer" size={30} onClick={() => navigate(`/club/${clubId}`)}></ArrowLeft>
 
         </div>
     )

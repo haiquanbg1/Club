@@ -37,7 +37,13 @@ export default function EventDetailsPage() {
     const [event, setEvent] = useState<event>()
     const [accepted, setAccepted] = useState<user[]>([])
     const [pending, setPending] = useState<user[]>([])
-
+    const adminList = localStorage.getItem("adminClubs")
+    const [checkRole, setCheckRole] = useState(false)
+    useEffect(() => {
+        if (clubId && adminList?.includes(clubId)) {
+            setCheckRole(true)
+        }
+    }, [])
     useEffect(() => {
         getEvent();
     }, [eventId, clubId])
@@ -104,17 +110,24 @@ export default function EventDetailsPage() {
     return (
         <div className="flex flex-col h-screen">
             <div className="flex-1 overflow-auto scrollbar-hide">
-                <Header resetInfo={getEvent} resetMember={getParticipantAccept} start_time={event?.start_time || ""} description={event?.description || ""} title={event?.name ? event.name : ""} />
+                <Header isAdmin={checkRole} resetInfo={getEvent} resetMember={getParticipantAccept} start_time={event?.start_time || ""} description={event?.description || ""} title={event?.name ? event.name : ""} />
                 <div className="pl-[40px] pr-[40px] flex space-x-2">
                     <div className="flex-[2]">
                         <Details time={event?.start_time} type={event?.description} quantity={accepted.length} />
-                        <AddSchedule resetSchedules={getSchedules} />
+                        {
+                            checkRole &&
+                            <AddSchedule resetSchedules={getSchedules} />
+                        }
                         <div className="mt-[20px] mb-[20px] text-[#ccc] text-[20px] font-semibold">Lịch trình sự kiện</div>
 
                         <ScheduleList scheduleList={schedules} resetSchedules={getSchedules} />
                     </div>
                     <div className="flex-1">
-                        <Request members={pending} resetMember2={getParticipantPending} resetMember={getParticipantAccept} />
+                        {
+                            checkRole &&
+                            <Request members={pending} resetMember2={getParticipantPending} resetMember={getParticipantAccept} />
+
+                        }
                         <MemberList members={accepted} resetMember={getParticipantAccept} />
                     </div>
                 </div>

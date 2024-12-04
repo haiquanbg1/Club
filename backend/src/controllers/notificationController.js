@@ -14,6 +14,7 @@ const create = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Đã tạo thông báo.");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -32,8 +33,10 @@ const findAllByClub = async (req, res) => {
 
         for (let i = 0; i < notifications.length; i++) {
             data.push({
+                id: notifications[i].id,
                 title: notifications[i].title,
-                description: notifications[i].description
+                description: notifications[i].description,
+                status: notifications[i].status
             });
         }
 
@@ -63,8 +66,27 @@ const drop = async (req, res) => {
     }
 }
 
+const updateStatus = async (req, res) => {
+    const { notification_id } = req.body;
+
+    try {
+        await notificationService.update(notification_id, {
+            status: 1
+        });
+
+        return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     create,
     findAllByClub,
-    drop
+    drop,
+    updateStatus
 }

@@ -1,15 +1,27 @@
 // src/redux/store.ts
+import { createStore } from 'redux';
+import { combineReducers } from 'redux';
+import { clubReducer } from './clubReducer';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // localStorage là mặc định
 
-import { configureStore } from '@reduxjs/toolkit';
-import clubReducer from './clubSlice';
+// Cấu hình persist
+const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: ['clubRoles'], // Chỉ persist clubRoles
+};
 
-const store = configureStore({
-    reducer: {
-        club: clubReducer,  // Kết nối clubReducer vào store
-    },
+// Kết hợp reducers nếu có nhiều reducers
+const rootReducer = combineReducers({
+    club: clubReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;  // Định nghĩa kiểu RootState
-export type AppDispatch = typeof store.dispatch;  // Định nghĩa kiểu AppDispatch
+// Tạo persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export default store;
+// Tạo store
+export const store = createStore(persistedReducer);
+
+// Tạo persistor để sử dụng trong PersistGate
+export const persistor = persistStore(store);
