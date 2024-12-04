@@ -36,7 +36,7 @@ import EventMemberAdd from "@/components/EventMemberAdd"
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import ClubApiRequest from "@/apiRequest/club"
-
+import { useToast } from "@/hooks/use-toast";
 const eventSchema = EventBody
 
 
@@ -49,6 +49,7 @@ interface header {
     isAdmin: boolean
 }
 export default function Header({ title, start_time, isAdmin, description, resetInfo, resetMember }: header) {
+    const { toast } = useToast()
     const [open, setOpen] = useState<boolean>(false)
     const [openSetting, setOpenSetting] = useState<boolean>(false)
     const [eventOpen, setEventOpen] = useState(false)
@@ -75,7 +76,19 @@ export default function Header({ title, start_time, isAdmin, description, resetI
 
         }
     }
+    const handleDelete = async () => {
+        const body = {
+            event_id: eventId || "",
+            club_id: clubId || ""
+        }
+        try {
+            const res = await ClubApiRequest.deleteEvent(body)
+            navigate(`/club/${clubId}`)
 
+        } catch (error) {
+
+        }
+    }
     const updateEvent = async (values: EventBodyType) => {
         try {
             const body = {
@@ -240,7 +253,7 @@ export default function Header({ title, start_time, isAdmin, description, resetI
                         <div className=" text-[20px] space-y-2">
                             {
                                 isAdmin &&
-                                <div className="p-2 hover:bg-[#444a53]" >Xóa sự kiện</div>
+                                <div className="p-2 hover:bg-[#444a53]" onClick={handleDelete}>Xóa sự kiện</div>
                             }
                             {
                                 !isAdmin &&

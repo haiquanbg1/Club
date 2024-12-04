@@ -36,10 +36,12 @@ import { useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
 
 import { ScheduleBody, ScheduleBodyType } from "@/schemaValidations/club.schema";
+import { useToast } from "@/hooks/use-toast";
 
 const scheduleSchema = ScheduleBody;
 
 export default function AddSchedule({ resetSchedules }: { resetSchedules: () => Promise<void> }) {
+    const { toast } = useToast()
     const [eventOpen, setEventOpen] = useState(false)
     const { eventId } = useParams()
     const scheduleForm = useForm<ScheduleBodyType>({
@@ -54,7 +56,6 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
     }, [eventOpen])
 
     const createSchedule = async () => {
-        console.log(1)
         try {
             const body = {
                 event_id: eventId || "",
@@ -68,10 +69,16 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
             // const res = await ClubApiRequest.createEvent(body)
             const res = await ClubApiRequest.createSchedule(body)
             resetSchedules()
-            console.log(res)
+            toast({
+                description: "Tạo lịch trình thành công"
+            })
             setEventOpen(false)
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            console.log(error.payload)
+            toast({
+                description: "Có lỗi xảy ra.",
+                variant: "destructive", // Để lỗi hiển thị nổi bật
+            });
         }
         // console.log(format(values.start_time, "MM/dd/yyyy"))
     }
