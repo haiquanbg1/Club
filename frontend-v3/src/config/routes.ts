@@ -15,7 +15,7 @@ const routes = {
     notification: "/club/:clubId/notification",
     clubInfo: "/club/changeProfile/:clubId",
     listEvent: "/club/listEvent/:clubId",
-    detailsEvent: "/club/:clubId/:eventId"
+    detailsEvent: "/club/eventDetails/:clubId/:eventId"
 };
 
 export default routes;

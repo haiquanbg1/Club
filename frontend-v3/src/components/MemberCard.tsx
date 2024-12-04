@@ -21,12 +21,13 @@ interface Member {
     noMore?: boolean,
     pending?: boolean,
     event?: boolean,
+    admin?: boolean
     resetMember?: () => Promise<void>
     resetMember2?: () => Promise<void>
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
+export default function MemberCard({ name = "Lê Trọng Khánh", admin, avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
     const { clubId, eventId } = useParams()
     const handleDelete = async () => {
         const body = {
@@ -112,7 +113,7 @@ export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, ev
                 </Avatar>
                 <div>{name}</div>
             </div>
-            {!noMore &&
+            {!noMore && admin &&
                 (<div className="ml-auto cursor-pointer">
                     <DropdownMenu>
                         <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>

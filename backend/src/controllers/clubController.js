@@ -110,6 +110,7 @@ const drop = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Xoá clb thành công .");
     } catch (error) {
+        console.log(error.message)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }

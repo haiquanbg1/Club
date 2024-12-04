@@ -14,7 +14,7 @@ import {
 import {
     Dialog,
     DialogContent,
-    // DialogDescription,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     // DialogTrigger,
@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/form"
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
-
+import CreateChatForm from "@/components/createChatForm";
 
 
 const eventSchema = EventBody
@@ -64,7 +64,9 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     console.log(location.pathname)
     const { clubId } = useParams()
     const [eventOpen, setEventOpen] = useState(false)
+    const [chatOpen, setChatOpen] = useState(false)
     const [joinedEvent, setJoinedEvent] = useState<event[]>([])
+    const [focusNoti, setFocusNoti] = useState(false)
     const adminList = localStorage.getItem("adminClubs")
     const [checkRole, setCheckRole] = useState(false)
     useEffect(() => {
@@ -84,6 +86,16 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
         },
     })
+    useEffect(() => {
+        const regex = /^\/club\/([^\/]+)\/notification$/;
+        const match = location.pathname.match(regex);
+        if (match) {
+            setFocusNoti(true)
+        }
+        else {
+            setFocusNoti(false)
+        }
+    }, [location])
     const createEvent = async (values: EventBodyType) => {
         try {
             const body = {
@@ -151,6 +163,12 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         </DropdownMenuCheckboxItem>
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
+                                            onClick={() => setChatOpen(true)}
+                                        >
+                                            Thêm nhóm chat
+                                        </DropdownMenuCheckboxItem>
+                                        <DropdownMenuCheckboxItem
+                                            className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                             onClick={() => navigate(`/club/changeProfile/${clubId}`)}
                                         >
                                             Đổi thông tin
@@ -162,6 +180,18 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         </DropdownMenuCheckboxItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
+
+                                <Dialog open={chatOpen} onOpenChange={setChatOpen}>
+                                    <DialogContent className="p-4">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-[24px]">Tạo nhóm chat mới</DialogTitle>
+                                            <DialogDescription>
+
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <CreateChatForm></CreateChatForm>
+                                    </DialogContent>
+                                </Dialog>
 
                                 <Dialog open={eventOpen} onOpenChange={setEventOpen}>
                                     <DialogContent className="p-4">
@@ -257,7 +287,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                     </div>
 
-                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className="cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#999999] hover:bg-slate-400">
+                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className={!focusNoti ? "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] hover:bg-[#393e46]" : "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] bg-[#393e46]"}>
                         <BellRing size={24} />
                         <p className="text-[20px]">Thông báo tổng</p>
                     </div>
