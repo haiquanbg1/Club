@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/form"
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
-import CreateChatForm from "@/components/createChatForm";
+import CreateChatForm from "@/components/CreateChatForm";
 import ChatApiRequest from "@/apiRequest/chat";
 import ChatMemberBox from "@/components/ChatMemberBox";
 
@@ -91,6 +91,9 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
         if (regex.test(location.pathname)) {
             setIsChatPage(true)
         }
+        else {
+            setIsChatPage(false)
+        }
     }, [location])
     const eventForm = useForm<EventBodyType>({
         resolver: zodResolver(eventSchema),
@@ -121,6 +124,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             }
             const res = await ClubApiRequest.createEvent(body)
             setEventOpen(false)
+            getJoinedEvent()
         } catch (error) {
             console.log(error)
         }
@@ -134,6 +138,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     }, [eventOpen]);
 
     const getJoinedEvent = async () => {
+        localStorage.setItem("callEvent", "true")
         try {
             const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
             console.log(response)
@@ -145,7 +150,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     }
     useEffect(() => {
         getJoinedEvent()
-    }, [])
+    }, [localStorage.getItem("callEvent")])
 
     const getChat = async () => {
         try {
@@ -350,7 +355,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="w-full flex flex-col h-screen bg-[#313338]">{children}</div>
             {
-                !focusNoti || !isChatPage &&
+                ((!focusNoti || !isChatPage) && !isChatPage) &&
                 <MemberBox />
             }
             {

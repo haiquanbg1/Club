@@ -70,6 +70,7 @@ export default function Header({ title, start_time, isAdmin, description, resetI
     const handleOut = async () => {
         try {
             const res = await ClubApiRequest.outEvent({ event_id: eventId || "" })
+            localStorage.setItem("callEvent", "false")
             navigate(`/club/${clubId}`)
             console.log(res)
         } catch (error) {
@@ -83,6 +84,7 @@ export default function Header({ title, start_time, isAdmin, description, resetI
         }
         try {
             const res = await ClubApiRequest.deleteEvent(body)
+            localStorage.setItem("callEvent", "false")
             navigate(`/club/${clubId}`)
 
         } catch (error) {
