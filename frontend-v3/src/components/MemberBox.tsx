@@ -49,17 +49,18 @@ export default function MemberBox() {
         // }
         try {
             const response = await MemberApiRequest.get(clubId || "")
+            console.log(1)
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
 
         } catch (error) {
-
+            console.log(error)
         }
     }
     useEffect(() => {
         getMember();
-    }, [])
+    }, [location])
     const [open, setOpen] = useState<boolean>(false)
     const handleOut = async () => {
         try {
@@ -68,10 +69,11 @@ export default function MemberBox() {
             }
             const res = await MemberApiRequest.out(body)
             console.log(res)
+            localStorage.setItem("call", "false")
+            navigate("/")
             toast({
                 description: "Success",
             })
-            navigate("/")
         } catch (error) {
             console.log(error)
         }
@@ -83,6 +85,7 @@ export default function MemberBox() {
                 "club_id": clubId || ""
             }
             const res = await ClubApiRequest.delete(body)
+            localStorage.setItem("call", "false")
             navigate("/")
             console.log(res)
         } catch (error) {
