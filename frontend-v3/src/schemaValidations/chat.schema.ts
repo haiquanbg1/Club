@@ -34,3 +34,14 @@ export const NothingRes = z.object({
     message: z.string(),
 })
 export type NothingResType = z.TypeOf<typeof NothingRes>
+
+export const ChatParticipantGetRes = z.object({
+    status: z.string(),
+    message: z.string(),
+    data: z.array(z.object({
+        user_id: z.string(),
+        display_name: z.string(),
+        avatar: z.string(),
+    }))
+})
+export type ChatParticipantGetResType = z.TypeOf<typeof ChatParticipantGetRes>

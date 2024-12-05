@@ -96,7 +96,7 @@ const findAllInClub = async (req, res) => {
 
 const findAllUserWithKey = async (req, res) => {
     const { conversation_id } = req.params;
-    const { text } = req.query;
+    const text = req.query?.text || "";
 
     try {
         const participants = await conversationService.findAllUser(conversation_id, text);

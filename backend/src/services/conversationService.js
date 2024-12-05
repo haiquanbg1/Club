@@ -62,7 +62,7 @@ const findAllUser = async (conversation_id, key) => {
             {
                 model: User,
                 as: 'user',
-                attributes: ['avatar']
+                attributes: ['avatar', 'id']
             }
         ],
         where: {
