@@ -14,7 +14,7 @@ import {
 import {
     Dialog,
     DialogContent,
-    // DialogDescription,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     // DialogTrigger,
@@ -48,7 +48,9 @@ import {
 } from "@/components/ui/form"
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
-
+import CreateChatForm from "@/components/createChatForm";
+import ChatApiRequest from "@/apiRequest/chat";
+import ChatMemberBox from "@/components/ChatMemberBox";
 
 
 const eventSchema = EventBody
@@ -58,13 +60,21 @@ interface event {
     event_id: string
 }
 
+interface chat {
+    conversation_id: string;
+    name: string
+}
+
 function ClubLayout({ children }: { children: React.ReactNode }) {
     // const clubId = useSelector((state: RootState) => state.club.clubId);
     const location = useLocation()
     console.log(location.pathname)
     const { clubId } = useParams()
     const [eventOpen, setEventOpen] = useState(false)
+    const [chatOpen, setChatOpen] = useState(false)
+    const [chats, setChats] = useState<chat[]>([])
     const [joinedEvent, setJoinedEvent] = useState<event[]>([])
+    const [focusNoti, setFocusNoti] = useState(false)
     const adminList = localStorage.getItem("adminClubs")
     const [checkRole, setCheckRole] = useState(false)
     useEffect(() => {
@@ -75,6 +85,13 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     // const [date, setDate] = useState<Date>()
     const navigate = useNavigate()
     // const { id } = useParams()
+    const [isChatPage, setIsChatPage] = useState(false)
+    useEffect(() => {
+        const regex = /^\/club\/\d+\/conversation\/\d+$/;
+        if (regex.test(location.pathname)) {
+            setIsChatPage(true)
+        }
+    }, [location])
     const eventForm = useForm<EventBodyType>({
         resolver: zodResolver(eventSchema),
         defaultValues: {
@@ -84,6 +101,16 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
         },
     })
+    useEffect(() => {
+        const regex = /^\/club\/([^\/]+)\/notification$/;
+        const match = location.pathname.match(regex);
+        if (match) {
+            setFocusNoti(true)
+        }
+        else {
+            setFocusNoti(false)
+        }
+    }, [location])
     const createEvent = async (values: EventBodyType) => {
         try {
             const body = {
@@ -119,6 +146,32 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         getJoinedEvent()
     }, [])
+
+    const getChat = async () => {
+        try {
+            const res = await ChatApiRequest.get(clubId || "")
+            setChats(res.payload.data)
+        } catch (error) {
+
+        }
+    }
+    useEffect(() => {
+        getChat()
+    }, [])
+
+    const handleDeleteClub = async () => {
+        try {
+            const body = {
+                "club_id": clubId || ""
+            }
+            const res = await ClubApiRequest.delete(body)
+            navigate("/")
+            localStorage.setItem("call", "false")
+            console.log(res)
+        } catch (error) {
+
+        }
+    }
     return (
         <div className="flex ">
             <div className=" bg-[#2b2d31] min-w-[280px] h-screen flex flex-col">
@@ -151,17 +204,36 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         </DropdownMenuCheckboxItem>
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
+                                            onClick={() => setChatOpen(true)}
+                                        >
+                                            Thêm nhóm chat
+                                        </DropdownMenuCheckboxItem>
+                                        <DropdownMenuCheckboxItem
+                                            className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                             onClick={() => navigate(`/club/changeProfile/${clubId}`)}
                                         >
                                             Đổi thông tin
                                         </DropdownMenuCheckboxItem>
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
+                                            onClick={handleDeleteClub}
                                         >
                                             <p className="text-red-700">Xóa câu lạc bộ</p>
                                         </DropdownMenuCheckboxItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
+
+                                <Dialog open={chatOpen} onOpenChange={setChatOpen}>
+                                    <DialogContent className="p-4 bg-[#313338]">
+                                        <DialogHeader>
+                                            <DialogTitle className="text-[24px]">Tạo nhóm chat mới</DialogTitle>
+                                            <DialogDescription>
+
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <CreateChatForm setChatOpen={setChatOpen}></CreateChatForm>
+                                    </DialogContent>
+                                </Dialog>
 
                                 <Dialog open={eventOpen} onOpenChange={setEventOpen}>
                                     <DialogContent className="p-4">
@@ -257,7 +329,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                     </div>
 
-                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className="cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#999999] hover:bg-slate-400">
+                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className={!focusNoti ? "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] hover:bg-[#393e46]" : "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] bg-[#393e46]"}>
                         <BellRing size={24} />
                         <p className="text-[20px]">Thông báo tổng</p>
                     </div>
@@ -270,7 +342,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                             <h1 className="text-[20px]">Sự kiện chưa đăng ký</h1>
                         </div>
                         <FeatureBox group="Sự kiện đã đăng ký" names={joinedEvent} />
-                        <FeatureBox group="Các nhóm chat" />
+                        <FeatureBox group="Các nhóm chat" chats={chats} />
                     </div>
                 </div>
 
@@ -278,8 +350,12 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             </div>
             <div className="w-full flex flex-col h-screen bg-[#313338]">{children}</div>
             {
-                location.pathname != "/club/3/notification" &&
+                !focusNoti || !isChatPage &&
                 <MemberBox />
+            }
+            {
+                isChatPage &&
+                <ChatMemberBox />
             }
         </div>
     );

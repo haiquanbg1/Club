@@ -45,7 +45,7 @@ export default function ProfileCard() {
         };
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
-    }, []);
+    }, [clubId]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {

@@ -34,6 +34,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
     ]);
     useEffect(() => {
         // Hàm fetch dữ liệu từ API
+        localStorage.setItem("call", "true")
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.get()
@@ -57,7 +58,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         };
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
-    }, []);
+    }, [localStorage.getItem("call")]);
     const handleSelectClub = (club_id: string, club_name: string, club_role: string) => {
         // dispatch(setClubId(club_id));
         dispatch(setRoles(club_id, club_role))

@@ -16,12 +16,14 @@ import ClubApiRequest from "@/apiRequest/club"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { useNavigate } from "react-router-dom"
 
 
 
 const formSchema = RegisterClubBody
 export default function CreateClubForm() {
     const { toast } = useToast()
+    const navigate = useNavigate()
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -36,20 +38,32 @@ export default function CreateClubForm() {
         },
     })
     const onSubmit = async (values: RegisterClubBodyType) => {
+        if (!selectedFile) {
+            // Nếu không có file, hiển thị lỗi và không gửi form
+            toast({
+                description: "Vui lòng chọn ảnh đại diện.",
+                variant: "destructive", // Để lỗi hiển thị nổi bật
+            });
+            return; // Dừng việc gửi form
+        }
         const formData: FormData = new FormData();
         formData.append("userData", JSON.stringify(values));
         formData.append('avatar', selectedFile ? selectedFile : "");
         try {
             const res = await ClubApiRequest.create(formData)
-            console.log(res)
+
             setSelectedFile(null)
             form.reset()
+            localStorage.setItem("call", "false")
+            navigate("/")
             toast({
                 description: "Tạo câu lạc bộ thành công"
-                // description: "There was a problem with your request.",
             })
         } catch (errors: any) {
-            console.log(errors.payload)
+            toast({
+                description: "Lỗi hãy thử lại.",
+                variant: "destructive", // Để lỗi hiển thị nổi bật
+            });
         }
     }
     return (
