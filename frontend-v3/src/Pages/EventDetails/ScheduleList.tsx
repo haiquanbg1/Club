@@ -5,32 +5,27 @@ import Schedule from "./Schedule"
 
 interface Schedule {
     id: string,
-    event_id: string,
+    title: string,
     description: string,
     start_time: string,
-    end_time: string
+    end_time: string,
+    location: string
 }
 
-export default function ScheduleList() {
-    const [schedules, setSchedules] = useState<Schedule[]>([])
-    const { eventId } = useParams()
-    const getSchedules = async () => {
-        try {
-            const res = await ClubApiRequest.getSchedule(eventId || "")
-            console.log(`schedule ${res}`)
-            setSchedules(res.payload.data)
-        } catch (error) {
 
-        }
-    }
-    useEffect(() => {
-        getSchedules()
-    }, [])
+interface Schedules {
+    scheduleList: Schedule[],
+    resetSchedules?: () => Promise<void>
+}
+
+export default function ScheduleList({ scheduleList, resetSchedules }: Schedules) {
+    const { eventId } = useParams()
+
     return (
         <div>
             {
-                schedules.map((schedule, idx) => (
-                    <Schedule start_time={schedule.start_time} description={schedule.description} />
+                scheduleList.map((schedule, idx) => (
+                    <Schedule key={idx} id={schedule.id} location={schedule.location} end_time={schedule.end_time} start_time={schedule.start_time} resetSchedules={resetSchedules} description={schedule.description} title={schedule.title} />
                 ))
             }
 

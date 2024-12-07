@@ -14,6 +14,7 @@ import MemberApiRequest from "@/apiRequest/member"
 import { Button } from "./ui/button"
 import ClubApiRequest from "@/apiRequest/club"
 import { useParams } from "react-router-dom"
+import ChatApiRequest from "@/apiRequest/chat"
 interface Member {
     name: string,
     avatar?: string,
@@ -21,13 +22,15 @@ interface Member {
     noMore?: boolean,
     pending?: boolean,
     event?: boolean,
+    admin?: boolean,
+    chatPage?: boolean
     resetMember?: () => Promise<void>
     resetMember2?: () => Promise<void>
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
-    const { clubId, eventId } = useParams()
+export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admin, avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
+    const { clubId, eventId, conversationId } = useParams()
     const handleDelete = async () => {
         const body = {
             "user_id": id || "",
@@ -35,6 +38,22 @@ export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, ev
         }
         try {
             const res = await MemberApiRequest.delete(body)
+            console.log(res)
+            if (resetMember) {
+                resetMember()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleDeleteChatMember = async () => {
+        const body = {
+            "user_id": id || "",
+            "club_id": clubId || "",
+            "conversation_id": conversationId || ""
+        }
+        try {
+            const res = await ChatApiRequest.deleteParticipant(body)
             console.log(res)
             if (resetMember) {
                 resetMember()
@@ -112,13 +131,20 @@ export default function MemberCard({ name = "Lê Trọng Khánh", avatar, id, ev
                 </Avatar>
                 <div>{name}</div>
             </div>
-            {!noMore &&
+            {(!noMore && admin) &&
                 (<div className="ml-auto cursor-pointer">
                     <DropdownMenu>
                         <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuItem>
-                                <div className="text-red-600" onClick={handleDelete}>Xóa khỏi câu lạc bộ</div>
+                                {
+                                    !chatPage &&
+                                    <div className="text-red-600" onClick={handleDelete}>Xóa khỏi câu lạc bộ</div>
+                                }
+                                {
+                                    chatPage &&
+                                    <div className="text-red-600" onClick={handleDeleteChatMember}>Xóa khỏi đoạn chat</div>
+                                }
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

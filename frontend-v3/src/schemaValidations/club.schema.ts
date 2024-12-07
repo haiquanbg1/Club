@@ -21,7 +21,8 @@ export const GetClubRes = z.object({
     data: z.array(z.object({
         name: z.string(),
         avatar: z.string(),
-        id: z.string()
+        id: z.string(),
+        role: z.string()
     }))
 })
     .strict()
@@ -45,8 +46,20 @@ export const SendEventBody = z.object({
 
 export type SendEventBodyType = z.TypeOf<typeof SendEventBody>
 
+export const GetReportRes = z.object({
+    message: z.string(),
+    data: z.array(z.object({
+        title: z.string(),
+        message: z.string(),
+        status: z.string(),
+        id: z.string()
+    }))
+})
+
+export type GetReportResType = z.TypeOf<typeof GetReportRes>
+
 export const ScheduleBody = z.object({
-    event_id: z.string(),
+    location: z.string(),
     title: z.string(),
     description: z.string(),
     start_time: z.date(),

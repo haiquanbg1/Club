@@ -19,6 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useLocation } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
+import ChatApiRequest from "@/apiRequest/chat";
 
 interface Member {
     display_name: string;
@@ -26,13 +27,13 @@ interface Member {
     user_id: string
 }
 
-export default function MemberBox() {
+export default function ChatMemberBox() {
     const location = useLocation();
     // const clubId = useSelector((state: RootState) => state.club.clubId);
     const navigate = useNavigate()
     const { toast } = useToast()
     const [members, setMembers] = useState<Member[]>([])
-    const { clubId } = useParams()
+    const { clubId, conversationId } = useParams()
     const adminList = localStorage.getItem("adminClubs")
     const [checkRole, setCheckRole] = useState(false)
     useEffect(() => {
@@ -48,12 +49,12 @@ export default function MemberBox() {
         //     navigate("/")
         // }
         try {
-            const response = await MemberApiRequest.get(clubId || "")
-            console.log(1)
+            const response = await ChatApiRequest.getParticipant(conversationId || "")
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
-
+            console.log(chat)
+            console.log(response)
         } catch (error) {
             console.log(error)
         }
@@ -69,11 +70,10 @@ export default function MemberBox() {
             }
             const res = await MemberApiRequest.out(body)
             console.log(res)
-            localStorage.setItem("call", "false")
-            navigate("/")
             toast({
                 description: "Success",
             })
+            navigate("/")
         } catch (error) {
             console.log(error)
         }
@@ -85,7 +85,6 @@ export default function MemberBox() {
                 "club_id": clubId || ""
             }
             const res = await ClubApiRequest.delete(body)
-            localStorage.setItem("call", "false")
             navigate("/")
             console.log(res)
         } catch (error) {
@@ -94,7 +93,7 @@ export default function MemberBox() {
     }
     return (
         <div className=" bg-[#2b2d31] min-w-[280px] h-screen xl:block hidden">
-            <h1 className="text-center font-bold text-[26px]">Danh sách thành viên</h1>
+            <h1 className="text-center font-bold text-[26px]">Thành viên đoạn chat</h1>
             <div className="flex items-center mt-1 mb-2 pl-2 pr-2">
                 <Input className="bg-[#313338]" placeholder="Tìm kiếm thành viên"></Input>
                 {
@@ -109,7 +108,7 @@ export default function MemberBox() {
                                     <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
                                 </DialogTitle>
                             </DialogHeader>
-                            <MemberAdd setOpen={setOpen} resetMember={getMember} />
+                            <MemberAdd isChat={true} setOpen={setOpen} resetMember={getMember} />
                         </DialogContent>
                     </Dialog>
                 }
@@ -118,10 +117,10 @@ export default function MemberBox() {
             </div>
             <div className="pl-2 pr-2 space-y-2">
                 {members.map((member, index) => (
-                    <MemberCard admin={checkRole} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
+                    <MemberCard admin={checkRole} chatPage={true} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
                 ))}
             </div>
-            {
+            {/* {
                 checkRole &&
                 <div className="text-center absolute bottom-2 right-20">
                     <Button variant={"denied"} onClick={handleDelete}>Xóa câu lạc bộ</Button>
@@ -132,7 +131,7 @@ export default function MemberBox() {
                 <div className="text-center absolute bottom-2 right-20">
                     <Button variant={"denied"} onClick={handleOut}>Rời câu lạc bộ</Button>
                 </div>
-            }
+            } */}
         </div >
     )
 }

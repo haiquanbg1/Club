@@ -5,7 +5,7 @@ const managerMiddleware = require("../../middlewares/managerMiddleware");
 const directMessageController = require('../../controllers/directMesController');
 
 const router = express.Router();
-  
+
 
 router.get("/:conversation_id", authMiddleware, messageController.findAllByConversation);
 router.post("/create", authMiddleware, messageController.create);

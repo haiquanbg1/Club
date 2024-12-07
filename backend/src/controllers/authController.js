@@ -140,6 +140,7 @@ const sendOTP = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Gửi thành công otp.");
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

@@ -17,7 +17,6 @@ function formatDate(inputDate: string) {
     return `${day}-${month}-${year}`;
 }
 export default function Details({ type, time, quantity }: details) {
-    console.log(type)
     const timeDetail = formatDate(time ? time : "")
     return (
         <div className="p-4 rounded-xl text-[18px] mt-4 bg-[#393E46] ">

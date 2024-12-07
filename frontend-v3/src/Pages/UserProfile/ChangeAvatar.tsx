@@ -12,7 +12,7 @@ import {
 import { useState } from "react"
 
 
-export default function ChangeAvatar() {
+export default function ChangeAvatar({ resetInfo }: { resetInfo: () => Promise<void> }) {
     const [open, setOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +31,7 @@ export default function ChangeAvatar() {
             const res = await userApiRequest.changeAvatar(formData)
             localStorage.setItem("avatar", res.payload.data.avatar)
             // console.log(res)
+            resetInfo()
             setSelectedFile(null)
             setOpen(false)
         } catch (error: any) {

@@ -49,6 +49,7 @@ const update = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

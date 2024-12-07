@@ -62,18 +62,14 @@ const findAllUser = async (conversation_id, key) => {
             {
                 model: User,
                 as: 'user',
-                attributes: ['avatar']
+                attributes: ['avatar', 'id']
             }
         ],
         where: {
             conversation_id,
-            ...(key && {
-                where: {
-                    display_name: {
-                        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
-                    }
-                }
-            })
+            display_name: {
+                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+            }
         },
         order: [['display_name', 'ASC']]
     });

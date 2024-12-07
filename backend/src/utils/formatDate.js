@@ -11,7 +11,7 @@ function addHours(dateString) {
     date.setHours(date.getHours() + 7);
 
     // Định dạng lại thành chuỗi theo định dạng 'yyyy-mm-dd hh:mm:ss'
-    const result = date.toISOString().slice(0, 19).replace('T', ' ');
+    const result = date.toISOString().slice(0, 10).replace('T', ' ');
 
     return result;
 }

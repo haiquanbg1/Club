@@ -36,10 +36,12 @@ import { useParams } from "react-router-dom";
 import ClubApiRequest from "@/apiRequest/club";
 
 import { ScheduleBody, ScheduleBodyType } from "@/schemaValidations/club.schema";
+import { useToast } from "@/hooks/use-toast";
 
 const scheduleSchema = ScheduleBody;
 
-export default function AddSchedule() {
+export default function AddSchedule({ resetSchedules }: { resetSchedules: () => Promise<void> }) {
+    const { toast } = useToast()
     const [eventOpen, setEventOpen] = useState(false)
     const { eventId } = useParams()
     const scheduleForm = useForm<ScheduleBodyType>({
@@ -54,7 +56,6 @@ export default function AddSchedule() {
     }, [eventOpen])
 
     const createSchedule = async () => {
-        console.log(1)
         try {
             const body = {
                 event_id: eventId || "",
@@ -63,14 +64,21 @@ export default function AddSchedule() {
                 start_time: format(scheduleForm.getValues("start_time"), "MM/dd/yyyy"),
                 end_time: format(scheduleForm.getValues("end_time"), "MM/dd/yyyy"),
                 // end_time: "",
-                location: ""
+                location: scheduleForm.getValues("location")
             }
             // const res = await ClubApiRequest.createEvent(body)
             const res = await ClubApiRequest.createSchedule(body)
-            console.log(res)
+            resetSchedules()
+            toast({
+                description: "Tạo lịch trình thành công"
+            })
             setEventOpen(false)
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            console.log(error.payload)
+            toast({
+                description: "Có lỗi xảy ra.",
+                variant: "destructive", // Để lỗi hiển thị nổi bật
+            });
         }
         // console.log(format(values.start_time, "MM/dd/yyyy"))
     }
@@ -195,6 +203,18 @@ export default function AddSchedule() {
                             />
                             <FormField
                                 control={scheduleForm.control}
+                                name="location"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Địa điểm</FormLabel>
+                                        <FormControl>
+                                            <Input className="outline-none" type="text" placeholder="Chủ đề sự kiện của bạn là gì?"{...field} />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={scheduleForm.control}
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
@@ -205,8 +225,9 @@ export default function AddSchedule() {
                                     </FormItem>
                                 )}
                             />
+
                             <div className="flex">
-                                <Button className="ml-auto" onClick={createSchedule}>Confirm</Button>
+                                <Button className="ml-auto" >Confirm</Button>
                             </div>
                         </form>
                     </Form>
