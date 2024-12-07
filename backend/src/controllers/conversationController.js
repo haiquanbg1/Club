@@ -103,10 +103,10 @@ const findAllUserWithKey = async (req, res) => {
         const data = [];
 
         for (let i = 0; i < participants.length; i++) {
-            const image = await cloudinary.getImage("Avatar", participants[i].participant.avatar);
+            const image = await cloudinary.getImage("Avatar", participants[i].user.avatar);
 
             data.push({
-                user_id: participants[i].participant.id,
+                user_id: participants[i].user.id,
                 display_name: participants[i].display_name,
                 avatar: image
             });

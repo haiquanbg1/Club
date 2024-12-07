@@ -61,7 +61,7 @@ const findAllUser = async (conversation_id, key) => {
         include: [
             {
                 model: User,
-                as: 'participant',
+                as: 'user',
                 attributes: ['avatar']
             }
         ],

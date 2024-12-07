@@ -5,22 +5,24 @@ import { FaPaperPlane, FaSmile } from 'react-icons/fa';
 import { CgAdd } from "react-icons/cg";
 import { FiImage } from "react-icons/fi";
 import { useRef, useEffect } from 'react';
-import { MessageType, Profile } from '.';
+import { MessageStatus, MessageType, Profile } from '.';
 import axios from 'axios';
+import { v4 } from 'uuid';
 
 type Props = {
     className?: string;
     socketRef: React.RefObject<any>;
-    setMessagesList: (messages: MessageType[]) => void;
+    setMessagesList: (messages: MessageType[] | ((messages: MessageType[]) => MessageType[])) => void;
     userProfile: Profile,
     friendProfile: Profile
 }
 
-export default function Footer({ className, socketRef, setMessagesList, userProfile, friendProfile }: Props) {
+export default function Footer({ className, socketRef, userProfile, friendProfile }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const emojiPickerButtonRef = React.useRef<HTMLButtonElement>(null);
 
     // console.log('userProfile:', userProfile); 
     // console.log('friendProfile:', friendProfile);
@@ -34,24 +36,27 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
         // Gửi tin nhắn qua socket
         if (socketRef.current && userProfile && friendProfile) {
             const messageObject: MessageType = {
+                id: v4(),
                 message: message,
                 sender_id: userProfile.id,
                 receiver_id: friendProfile.id,
                 createdAt: new Date(),
+                react: '',
+                status: MessageStatus.Show,
                 sender: {
-                    avatar: '/images/thang.png',
+                    avatar: userProfile.avatar,
                     display_name: userProfile.display_name
                 }
             };
             socketRef.current.emit('on-chat', messageObject);
-            // Thêm tin nhắn mới vào danh sách và cập nhật trạng thái
-            setMessagesList((prevMessages) => [...prevMessages, messageObject]);
+            console.log('Id:', messageObject.id);
             setMessage(''); // Xóa nội dung input sau khi gửi
             setSelectedImage(null);
             // Gửi tin nhắn qua API
             try {
                 const response = await axios.post(`http://localhost:8080/api/v1/message/${friendProfile.id}/send`, {
-                    message: messageObject.message
+                    message: messageObject.message,
+                    message_id : messageObject.id
                 }, {
                     withCredentials: true
                 });
@@ -62,20 +67,11 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
         }
     };
 
-    const handleDataBase = async (mes: MessageType) => {
-        try {
-            const response = await axios.post(`http://localhost:8080/api/v1/message/${friendProfile.id}/send`, {
-                body: mes.message,
-                withCredentials: true
-            });
-            console.log('Messages:', response);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const handleClickOutside = (e: MouseEvent) => {
-        if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        if (emojiPickerRef.current 
+            && emojiPickerButtonRef.current
+            && !emojiPickerRef.current.contains(e.target as Node)
+            && !emojiPickerButtonRef.current.contains(e.target as Node)) {
             setShowEmojiPicker(false);
         }
     };
@@ -84,12 +80,12 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
         setMessage(prevMessage => prevMessage + emoji.native);
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
-        }
-    };
+    // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0];
+    //     if (file) {
+    //         setSelectedImage(file);
+    //     }
+    // };
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -105,7 +101,7 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
             </button>
             <label className='w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer'>
                 <FiImage size={20} />
-                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+                {/* <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" /> */}
             </label>
 
             <form
@@ -120,7 +116,11 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
                     onChange={handleChange}
                     className='flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none'
                 />
-                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0">
+                <button 
+                    type="button" 
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                    className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0"
+                    ref={emojiPickerButtonRef}>
                     <FaSmile size={18} />
                 </button>
 

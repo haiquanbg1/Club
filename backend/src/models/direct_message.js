@@ -48,6 +48,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      react: {
+        type: DataTypes.TEXT,
+        allowNull: false, 
+        defaultValue: ''
+      },
+      status: {
+        type: DataTypes.ENUM('show', 'hided', 'deleted'),
+        allowNull: false,
+        defaultValue: 'show',
+      },
     },
     {
       sequelize,

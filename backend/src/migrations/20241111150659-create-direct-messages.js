@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.createTable('direct_messages', {
       id: {
         type: Sequelize.UUID, // UUID làm khóa chính
-        defaultValue: Sequelize.UUIDV4, // Tự động tạo UUID
+        defaultValue: Sequelize.UUID, 
         allowNull: false,
         primaryKey: true, // Đặt làm khóa chính
       },
@@ -33,6 +33,15 @@ module.exports = {
       message: {
         type: Sequelize.TEXT,
         allowNull: false,
+      },
+      react: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.ENUM('show', 'hided', 'deleted'),
+        allowNull: false,
+        defaultValue: 'show',
       },
       createdAt: {
         allowNull: false,

@@ -2,6 +2,7 @@ import FriendApiRequest from "@/apiRequest/friend";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 interface Friend {
   user_id: string;
@@ -12,6 +13,12 @@ interface Friend {
 export default function ListFriend() {
   const [listFriend, setListFriend] = useState<Friend[]>([]);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  const handleClick = (friend_id: string) => {
+    console.log(friend_id);
+    navigate(`/friend/${friend_id}/chat`);
+  };
 
   const getFriend = async () => {
     try {
@@ -19,7 +26,7 @@ export default function ListFriend() {
       console.log(response);
       // Giả sử API trả về mảng các object có cấu trúc tương tự Item
       setListFriend(response.payload.data);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     getFriend();
@@ -47,6 +54,7 @@ export default function ListFriend() {
         <div
           className="flex items-center mb-4 cursor-pointer hover:bg-slate-400 p-1"
           key={index}
+          onClick={() => handleClick(friend.friend_id)}
         >
           <Avatar className="mr-4">
             <AvatarImage src={friend.avatar} />

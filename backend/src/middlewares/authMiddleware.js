@@ -4,7 +4,7 @@ const { decodeAccessToken, decodeRefreshToken, createAccessToken } = require("..
 const userService = require("../services/userService");
 const ms = require("ms");
 
-const logout = () => {
+const logout = (res) => {
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
     res.clearCookie("isLogin");
@@ -26,7 +26,7 @@ const authMiddleware = async (req, res, next) => {
         if (error?.message?.includes("jwt expired") || error?.message?.includes("jwt malformed")) {
             // Kiểm tra xem refresh token có tồn tại không
             if (!refreshToken) {
-                logout();
+                logout(res);
 
                 return errorResponse(
                     res,
@@ -43,7 +43,7 @@ const authMiddleware = async (req, res, next) => {
                 req.user = await userService.findOne({ id: decodedRefreshToken.userId });
 
                 if (!req.user) {
-                    logout();
+                    logout(res);
 
                     return errorResponse(
                         res,
@@ -66,7 +66,7 @@ const authMiddleware = async (req, res, next) => {
             } catch (refreshTokenError) {
                 console.log("Error from refreshToken validation: ", refreshTokenError);
 
-                logout();
+                logout(res);
                 // Trường hợp refresh token hết hạn hoặc không hợp lệ
                 return errorResponse(
                     res,
@@ -78,7 +78,7 @@ const authMiddleware = async (req, res, next) => {
             // Trường hợp lỗi khác, không phải là lỗi hết hạn token
             console.log(error);
 
-            logout();
+            logout(res);
 
             return errorResponse(
                 res,

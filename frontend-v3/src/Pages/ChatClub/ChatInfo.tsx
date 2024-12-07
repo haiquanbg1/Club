@@ -13,7 +13,8 @@ export default function ChatInfo({clubProfile} : Props) {
             <Avatar
                     size='lg'
                     name={clubProfile.id}
-                    imgSrc='/images/thang.png'
+                    imgSrc='/images/thao.png'
+                    orientation='left'
                 />
             <div className='ml-3 justify-center align-middle'>
                 <span>{clubProfile.description}</span>

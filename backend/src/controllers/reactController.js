@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const messageService = require("../services/messageService");
+const reactService = require("../services/reactService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 
@@ -42,7 +42,7 @@ const findAllByConversation = async (req, res) => {
                 content: messages[i].content,
                 react: messages[i].react,
                 status: messages[i].status,
-                sender_id: messages[i].sender_id,
+                user_id: messages[i].sender_id,
                 display_name: messages[i].sender.display_name,
                 createdAt: messages[i].createdAt,
                 avatar: image
@@ -75,8 +75,13 @@ const drop = async (req, res) => {
     }
 }
 
+const update = async () => {
+
+}
+
 module.exports = {
     create,
     findAllByConversation,
-    drop
+    drop,
+    update
 }

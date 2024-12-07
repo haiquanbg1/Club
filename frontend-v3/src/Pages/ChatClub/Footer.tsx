@@ -12,7 +12,7 @@ import axios from 'axios';
 type Props = {
     className?: string;
     socketRef: React.RefObject<any>;
-    setMessagesList: (messages: MessageConverType[]) => void;
+    setMessagesList: (messages: MessageConverType[] | ((messages: MessageConverType[]) => MessageConverType[])) => void;
     userProfile: Profile,
     conversationId: string;
 }
@@ -22,6 +22,7 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const emojiPickerButtonRef = React.useRef<HTMLButtonElement>(null);
 
     // console.log('userProfile:', userProfile); 
     // console.log('friendProfile:', friendProfile);
@@ -44,9 +45,7 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
                 }
             };
             socketRef.current.emit('on-chat', messageObject);
-            // Thêm tin nhắn mới vào danh sách và cập nhật trạng thái
-            setMessagesList((prevMessages) => [...prevMessages, messageObject]);
-            setMessage(''); // Xóa nội dung input sau khi gửi
+            setMessage(''); 
             setSelectedImage(null);
             // Gửi tin nhắn qua API
             try {
@@ -64,7 +63,10 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-        if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        if (emojiPickerRef.current 
+            && emojiPickerButtonRef.current
+            && !emojiPickerRef.current.contains(e.target as Node)
+            && !emojiPickerButtonRef.current.contains(e.target as Node)) {
             setShowEmojiPicker(false);
         }
     };
@@ -76,7 +78,7 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setSelectedImage(file);
+            // setSelectedImage(file);
         }
     };
 
@@ -109,7 +111,11 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
                     onChange={handleChange}
                     className='flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none'
                 />
-                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0">
+                <button 
+                    type="button" 
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                    className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0"
+                    ref={emojiPickerButtonRef}>
                     <FaSmile size={18} />
                 </button>
 
