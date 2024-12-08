@@ -36,11 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    }
+    description: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Notification',
