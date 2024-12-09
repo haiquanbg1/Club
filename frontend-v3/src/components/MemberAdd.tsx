@@ -150,7 +150,7 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
                         {
                             listAdding.map((friend, index) => (
                                 <div key={index} onClick={() => handleSelect(friend.user_id)}
-                                     className={`p-1 rounded-sm cursor-pointer ${selected == friend.user_id ? 'bg-slate-300' : ''}`}
+                                    className={`p-1 rounded-sm cursor-pointer ${selected == friend.user_id ? 'bg-slate-300' : ''}`}
                                 >
                                     <MemberCard name={friend.display_name} noMore={true} id={friend.user_id} avatar={friend.avatar}></MemberCard>
                                 </div>
@@ -175,7 +175,7 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
                         {
                             chatAddList.map((friend, index) => (
                                 <div key={index} onClick={() => handleChatSelect(friend.user_id)}
-                                     className={`p-1 rounded-sm cursor-pointer ${chatSelected == friend.user_id ? 'bg-slate-300' : ''}`}
+                                    className={`p-1 rounded-sm cursor-pointer ${chatSelected == friend.user_id ? 'bg-slate-300' : ''}`}
                                 >
                                     <MemberCard name={friend.display_name} chatPage={true} noMore={true} id={friend.user_id} avatar={friend.avatar}></MemberCard>
                                 </div>

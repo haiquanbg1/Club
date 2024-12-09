@@ -53,7 +53,7 @@ export default function ChatMemberBox() {
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
-            console.log(chat)
+            console.log(`chat`)
             console.log(response)
         } catch (error) {
             console.log(error)
