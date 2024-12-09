@@ -5,8 +5,9 @@ const managerMiddleware = require("../../middlewares/managerMiddleware");
 
 const router = express.Router();
 
-router.get("/:club_id", authMiddleware, notificationController.findAllByClub);
+router.get("/club:club_id", authMiddleware, notificationController.findAllByClub);
 router.delete("/delete", authMiddleware, managerMiddleware, notificationController.drop);
 router.post("/create", authMiddleware, managerMiddleware, notificationController.create);
+router.get("/:notification", authMiddleware, notificationController.findOne);
 
 module.exports = router;

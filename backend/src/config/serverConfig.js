@@ -76,6 +76,17 @@ module.exports = (app) => {
             io.to(channelId).emit('on-chat', message);
         });
 
+        socket.on('delete-my-message', (message) => {
+            io.to(channelId).emit('delete-my-message', message);
+        });
+
+        socket.on('delete-other-message', (message) => {
+            io.to(channelId).emit('delete-other-message', message);
+        });
+
+        socket.on('react', (message) => {
+            io.to(channelId).emit('react', message);
+        });
     });
 
 

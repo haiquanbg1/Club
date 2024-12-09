@@ -8,30 +8,27 @@ const create = async (insertClause) => {
 }
 
 // xóa tin nhắn
-const drop = async (message_id) => {
+const drop = async (id) => {
     return await DirectMessage.destroy({
         where: {
-            id: message_id
+            id
         }
     });
 }
 
-// tìm tin nhắn của user và bạn user
 const getOldMessages = async (user_id, friend_id, offset, limit = 11) => {
     const whereClause = {
-        [Op.or]: [
-            { sender_id: user_id, receiver_id: friend_id },
-            { sender_id: friend_id, receiver_id: user_id }
+        [Op.and]: [
+            { [Op.or]: [
+                { sender_id: user_id, receiver_id: friend_id },
+                { sender_id: friend_id, receiver_id: user_id }
+            ] },
+            { [Op.or]: [
+                { status: 'show' },
+                { status: 'hided', sender_id: user_id }
+            ] }
         ]
     };
-
-    // Nếu có cursor (tin nhắn cũ hơn thời điểm này) thì thêm vào whereClause
-    // if (cursor) {
-    //     whereClause.createdAt =
-    //     {
-    //         [Op.lt]: new Date(cursor)
-    //     };
-    // }
 
     const directMessages = await DirectMessage.findAll({
         where: whereClause,
@@ -57,6 +54,36 @@ const getOldMessages = async (user_id, friend_id, offset, limit = 11) => {
     return directMessages;
 }
 
+const reactChange = async (message_id, react) => {
+    try {
+        console.log(message_id, react);
+        return await DirectMessage.update({
+            react: react
+        }, {
+            where: {
+                id: message_id
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const changeStatus = async (message_id, status) => {
+    try {
+        return await DirectMessage.update({
+            status: status
+        }, {
+            where: {
+                id: message_id
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
-    create, drop, getOldMessages
+    create, drop, getOldMessages, reactChange, changeStatus
 }

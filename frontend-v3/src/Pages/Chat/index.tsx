@@ -5,7 +5,6 @@ import socketIOClient from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
-import Loading from "./Loading";
 
 const host = 'http://localhost:8080';
 
@@ -14,13 +13,21 @@ export type UserChat = {
     display_name: string;
 }
 
+export enum MessageStatus {
+    Show = 'show',
+    HideForMe = 'hideforme',
+    HideForOther = 'hideforother',
+}
+
 export type MessageType = {
-    id?: string;
+    id: string;
     message: string;
     sender_id: string;
     receiver_id: string;
     createdAt: Date;
     sender: UserChat;
+    react: string;
+    status: MessageStatus;
 }
 
 export type Profile = {
@@ -29,6 +36,7 @@ export type Profile = {
     email: string;
     birthday: Date;
     gender: boolean;
+    avatar: string;
 }
 
 export default function ChatPage() {
@@ -47,8 +55,6 @@ export default function ChatPage() {
     const [friendProfile, setFriendProfile] = useState<Profile | null>(null);
 
     const [userProfile, setUserProfile] = useState<Profile | null>(null);
-    // for set scroll message list
-    const [stateScroll, setStateScroll] = useState<any[]>([]);
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -108,18 +114,14 @@ export default function ChatPage() {
                 ...message,
                 created_at: new Date(message.created_at)
             })).reverse();
-            console.log('messages:', messages[0].id)
-            if (messagesList[0]) {
-                console.log('messRef', messagesList[0].id)
-            }
-            if ( (messagesRef.current[0] && messages[0].id != messagesRef.current[0].id)
-                    || (messagesRef.current.length == 0)) {
-                
+            if ((messagesRef.current.at(0) && messages[0] && messages[0].id != messagesRef.current[0].id)
+                || (messagesRef.current.length == 0)) {
+
                 messagesRef.current = [...messages, ...messagesRef.current];
                 console.log('fetch 1 lan')
             }
-            
-            
+
+
             setMessagesList(() => [...messagesRef.current]);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -127,9 +129,8 @@ export default function ChatPage() {
             setLoading(false); // Tắt trạng thái loading sau khi fetch xong
         }
     };
-
-    const connectSocket = () => {
-        // if (!userId) return;
+   
+    const connectSocket = async () => {
 
         const channelId = [userProfile?.id, friendId].sort().join('/');
         console.log('channelId:', channelId);
@@ -153,12 +154,6 @@ export default function ChatPage() {
             console.log('Failed to reconnect to server');
         });
 
-        // Lắng nghe sự kiện 'on-chat'
-        socketRef.current.on('on-chat', (message: MessageType) => {
-            messagesRef.current = [...messagesRef.current, message]; // Cập nhật messagesRef
-            setMessagesList([...messagesRef.current]);
-        });
-
         // Cleanup khi component unmount
         return () => {
             socketRef.current.disconnect();
@@ -167,18 +162,16 @@ export default function ChatPage() {
 
     const handleScroll = async (event: any) => {
         const scrollTop = event.target.scrollTop; // Vị trí cuộn hiện tại
-    
+
         // Điều kiện để fetch dữ liệu: người dùng cuộn lên trên cùng và chưa có yêu cầu fetch nào
-        if (scrollTop <= 80 && !loading) {
+        if (scrollTop <= 100 && !loading) {
             console.log('Người dùng cuộn lên trên cùng');
             console.log('lastScrollTop:', lastScrollTop);
-    
-            setLoading(true); 
-    
+
             // Fetch dữ liệu
             await fetchMessages(messagesRef.current.length); // Dữ liệu mới (có thể truyền thêm tham số nếu cần)
         }
-    
+
         // Cập nhật vị trí cuộn trước đó
         setLastScrollTop(scrollTop);
     };
@@ -199,23 +192,18 @@ export default function ChatPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            
             setLoading(true);
             await fetchFriendProfile();
             await fetchUserProfile();
-            await fetchMessages();       // Fetch tin nhắn
-            // sao không set scroll ở đây
-            // setFistScroll();
+            await fetchMessages(); // Fetch tin nhắn
             if (userProfile?.id) {
                 connectSocket();
-                // console.log('Connected to socket');
             }
         };
         fetchData();
-        
     }, [friendId, userProfile?.id, location.search]);
 
-    useEffect(setScrollToBottom , [messagesRef.current.length]);
+    useEffect(setScrollToBottom, [messagesRef.current.length]);
 
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
@@ -245,14 +233,13 @@ export default function ChatPage() {
                 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
                 {userProfile && friendProfile && (
                     <MessageList
+                        messageRef={messagesRef}
                         socketRef={socketRef}
                         messageList={messagesList}
                         setMessagesList={setMessagesList}
                         userProfile={userProfile}
                         friendProfile={friendProfile}
-                        stateScroll={stateScroll}
-                        setStateScroll={setStateScroll}
-                        isFeatching={loading}
+                    // isFeatching={loading}
                     />
                 )}
             </div>}

@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    status: {
+      type: DataTypes.ENUM('show', 'hided', 'deleted'),
+      allowNull: false,
+      defaultValue: 'show',
+    },
   }, {
     sequelize,
     modelName: 'Message',

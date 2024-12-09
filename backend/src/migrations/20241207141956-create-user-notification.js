@@ -2,42 +2,52 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Notifications', {
+    await queryInterface.createTable('user_notification', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      club_id: {
-        type: Sequelize.INTEGER,
+      user_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Clubs',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        primaryKey: true
       },
-      title: {
-        type: Sequelize.STRING
+      notification_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Notifications',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        primaryKey: true
       },
-      description: {
-        type: Sequelize.STRING
+      read_at: {
+        type: Sequelize.DATE,
+
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.NOW
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Notifications');
+    await queryInterface.dropTable('user_notification');
   }
 };

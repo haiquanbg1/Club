@@ -5,19 +5,19 @@ import { FaPaperPlane, FaSmile } from 'react-icons/fa';
 import { CgAdd } from "react-icons/cg";
 import { FiImage } from "react-icons/fi";
 import { useRef, useEffect } from 'react';
-import { MessageStatus, MessageType, Profile } from '.';
+import { Profile } from '../Chat/index';
+import { ClubProfile, MessageConverType } from './index';
 import axios from 'axios';
-import { v4 } from 'uuid';
 
 type Props = {
     className?: string;
     socketRef: React.RefObject<any>;
-    setMessagesList: (messages: MessageType[] | ((messages: MessageType[]) => MessageType[])) => void;
+    setMessagesList: (messages: MessageConverType[] | ((messages: MessageConverType[]) => MessageConverType[])) => void;
     userProfile: Profile,
-    friendProfile: Profile
+    conversationId: string;
 }
 
-export default function Footer({ className, socketRef, userProfile, friendProfile }: Props) {
+export default function Footer({ className, socketRef, setMessagesList, userProfile,  conversationId }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -34,29 +34,24 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // Gửi tin nhắn qua socket
-        if (socketRef.current && userProfile && friendProfile) {
-            const messageObject: MessageType = {
-                id: v4(),
-                message: message,
-                sender_id: userProfile.id,
-                receiver_id: friendProfile.id,
+        if (socketRef.current && conversationId && userProfile) {
+            const messageObject: MessageConverType = {
+                content: message,
+                user_id: userProfile.id,
+                display_name: userProfile.display_name,
                 createdAt: new Date(),
-                react: '',
-                status: MessageStatus.Show,
-                sender: {
-                    avatar: userProfile.avatar,
-                    display_name: userProfile.display_name
+                avatar: {
+                    avatar: '/images/thang.png',
                 }
             };
             socketRef.current.emit('on-chat', messageObject);
-            console.log('Id:', messageObject.id);
-            setMessage(''); // Xóa nội dung input sau khi gửi
+            setMessage(''); 
             setSelectedImage(null);
             // Gửi tin nhắn qua API
             try {
-                const response = await axios.post(`http://localhost:8080/api/v1/message/${friendProfile.id}/send`, {
-                    message: messageObject.message,
-                    message_id : messageObject.id
+                const response = await axios.post(`http://localhost:8080/api/v1/message/create`, {
+                    content: messageObject.content,
+                    conversation_id: conversationId
                 }, {
                     withCredentials: true
                 });
@@ -80,12 +75,12 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
         setMessage(prevMessage => prevMessage + emoji.native);
     };
 
-    // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = e.target.files?.[0];
-    //     if (file) {
-    //         setSelectedImage(file);
-    //     }
-    // };
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // setSelectedImage(file);
+        }
+    };
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -101,7 +96,7 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
             </button>
             <label className='w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer'>
                 <FiImage size={20} />
-                {/* <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" /> */}
+                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
             </label>
 
             <form

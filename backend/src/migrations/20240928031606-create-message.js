@@ -1,13 +1,16 @@
 'use strict';
+
+const { UUID } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Messages', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUID,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       conversation_id: {
         type: Sequelize.INTEGER,
@@ -32,6 +35,11 @@ module.exports = {
       content: {
         type: Sequelize.TEXT,
         allowNull: false,
+      },
+      status: {
+        type: Sequelize.ENUM('show', 'hided', 'deleted'),
+        allowNull: false,
+        defaultValue: 'show',
       },
       createdAt: {
         allowNull: false,

@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
+      Conversation.belongsToMany(models.User, {
+        through: 'user_notification',
+        foreignKey: 'notificaion_id',
+        otherKey: 'user_id',
+        as: 'notifications'
+      });
     }
   }
   Notification.init({
@@ -30,11 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
     title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    }
+    description: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Notification',
