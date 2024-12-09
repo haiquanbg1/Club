@@ -11,10 +11,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Header from "@/components/header";
-// import { ModeToggle } from '@/components/mode-toggle.tsx'
-import { useDispatch, useSelector } from 'react-redux';
-// import { RootState } from "@/redux/store";
-// import { setClubId } from "@/redux/clubSlice";
+
+import { useDispatch } from 'react-redux';
+
 import { setRoles } from "@/redux/clubReducer";
 import { useState, useEffect } from 'react';
 import ClubApiRequest from "@/apiRequest/club";
@@ -59,7 +58,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
     }, [localStorage.getItem("call")]);
-    const handleSelectClub = (club_id: string, club_name: string, club_role: string) => {
+    const handleSelectClub = (club_id: string, club_role: string) => {
         // dispatch(setClubId(club_id));
         dispatch(setRoles(club_id, club_role))
         localStorage.setItem('club_id', club_id)
@@ -89,7 +88,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     {
                         clubs.map((club, index) => (
-                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.name, club.role)}>
+                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.role)}>
                                 <TooltipProvider key={index}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>

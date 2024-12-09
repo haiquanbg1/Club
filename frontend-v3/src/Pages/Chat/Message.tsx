@@ -5,10 +5,11 @@ import { FaSmile } from 'react-icons/fa';
 import { UserChat } from ".";
 import { MdReply } from "react-icons/md";
 import EmojiPicker from "./EmojiPicker";
-import { MessageStatus, MessageType } from ".";
+import { MessageStatus } from ".";
+// import { MessageType } from ".";
 import AlertDeleteMyMes from "./AlertDeleteMyMes";
 import AlertDeleteOtherMes from "./AlertDeleteOtherMes";
-import { set } from "date-fns";
+// import { set } from "date-fns";
 import axios from "axios";
 
 type Props = {

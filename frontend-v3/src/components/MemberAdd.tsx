@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import FriendApiRequest from "@/apiRequest/friend"
 import { useToast } from "@/hooks/use-toast"
 import MemberCard from "@/components/MemberCard";
 import { Button } from "./ui/button";

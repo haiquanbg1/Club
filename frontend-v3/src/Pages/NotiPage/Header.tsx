@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { useNavigate, useParams } from "react-router-dom";
+
+// import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft, CirclePlus } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -18,8 +18,8 @@ interface header {
 }
 export default function Header({ isAdmin, resetNoti }: header) {
     const [open, setOpen] = useState(false)
-    const navigate = useNavigate()
-    const { clubId } = useParams();
+    // const navigate = useNavigate()
+    // const { clubId } = useParams();
     // const { clubName } = useParams();
     // const clubName = location.pathname.slice(6)
     // console.log(clubName)

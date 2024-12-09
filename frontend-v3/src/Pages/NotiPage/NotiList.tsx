@@ -4,7 +4,6 @@ interface notification {
     id: string,
     title: string,
     description: string,
-    status: string
 }
 
 export default function NotiList({ notifications }: { notifications: notification[] }) {
@@ -19,7 +18,7 @@ export default function NotiList({ notifications }: { notifications: notificatio
             </div>
             <div className="space-y-4">
                 {notifications.map((notification, idx) => (
-                    <NotiItem id={notification.id} status={notification.status} description={notification.description} title={notification.title}></NotiItem>
+                    <NotiItem key={idx} id={notification.id} description={notification.description} title={notification.title}></NotiItem>
                 ))}
             </div>
 

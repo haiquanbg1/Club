@@ -14,7 +14,7 @@ type MessageListProps = {
   // isFetching: boolean;
 };
 
-function MessageList({ socketRef, messageList, setMessagesList, userProfile, friendProfile, messageRef }: MessageListProps) {
+function MessageList({ socketRef, messageList, setMessagesList, userProfile, friendProfile }: MessageListProps) {
 
   useEffect(() => {
     // handle New Message socket
@@ -86,15 +86,15 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
 
     }
 
-      // Cleanup khi component unmount
-      return () => {
-        if (socketRef.current) {
-          socketRef.current.off('on-chat');
-          socketRef.current.off('delete-message');
-          socketRef.current.off('react');
-        }
-      };
-    }, [socketRef.current, messageList, socketRef]);
+    // Cleanup khi component unmount
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('on-chat');
+        socketRef.current.off('delete-message');
+        socketRef.current.off('react');
+      }
+    };
+  }, [socketRef.current, messageList, socketRef]);
 
 
 
@@ -111,7 +111,7 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               orientation={(message.sender_id == userProfile.id) ? "right" : 'left'}
               author={message.sender_id == userProfile.id ? { display_name: message.sender.display_name, avatar: userProfile.avatar }
                 : { display_name: message.sender.display_name, avatar: friendProfile.avatar }}
-  
+
               content={{
                 message: message.message,
                 sender_id: message.sender_id,
@@ -123,7 +123,7 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               }}
               socketRef={socketRef}
             />
-          )) 
+          ))
         )}
       </div>
     </>

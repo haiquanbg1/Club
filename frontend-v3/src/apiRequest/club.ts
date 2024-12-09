@@ -1,4 +1,4 @@
-import { GetClubResType, RegisterClubBodyType, RegisterClubResType, SendEventBodyType } from "@/schemaValidations/club.schema";
+import { GetClubResType, RegisterClubResType, SendEventBodyType } from "@/schemaValidations/club.schema";
 import http from "../lib/http";
 import { GetEventResType, GetParticipantResType, GetScheduleResType, ScheduleSendBodyType } from "@/schemaValidations/event.schema";
 

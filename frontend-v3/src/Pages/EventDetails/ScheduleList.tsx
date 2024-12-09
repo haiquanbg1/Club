@@ -1,6 +1,5 @@
-import ClubApiRequest from "@/apiRequest/club"
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+
+
 import Schedule from "./Schedule"
 
 interface Schedule {
@@ -19,7 +18,7 @@ interface Schedules {
 }
 
 export default function ScheduleList({ scheduleList, resetSchedules }: Schedules) {
-    const { eventId } = useParams()
+
 
     return (
         <div>

@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
-      Conversation.belongsToMany(models.User, {
+      Notification.belongsToMany(models.User, {
         through: 'user_notification',
         foreignKey: 'notificaion_id',
         otherKey: 'user_id',

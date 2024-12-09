@@ -20,7 +20,7 @@ import {
     // DialogTrigger,
     // DialogFooter
 } from "@/components/ui/dialog"
-import { format, parse } from "date-fns"
+import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useEffect } from "react";
 import { cn } from "@/lib/utils"
@@ -122,7 +122,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                 description: values.description,
                 start_time: format(values.start_time, "yyyy/MM/dd"),
             }
-            const res = await ClubApiRequest.createEvent(body)
+            await ClubApiRequest.createEvent(body)
             setEventOpen(false)
             getJoinedEvent()
         } catch (error) {

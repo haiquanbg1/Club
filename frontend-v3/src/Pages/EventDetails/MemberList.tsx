@@ -8,7 +8,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MemberDetails from "./MemberDetails";
 
 interface user {

@@ -6,7 +6,9 @@ import { CgAdd } from "react-icons/cg";
 import { FiImage } from "react-icons/fi";
 import { useRef, useEffect } from 'react';
 import { Profile } from '../Chat/index';
-import { ClubProfile, MessageConverType } from './index';
+import { MessageConverType } from './index';
+// import { ClubProfile } from './index';
+
 import axios from 'axios';
 
 type Props = {
@@ -17,7 +19,7 @@ type Props = {
     conversationId: string;
 }
 
-export default function Footer({ className, socketRef, setMessagesList, userProfile,  conversationId }: Props) {
+export default function Footer({ className, socketRef, setMessagesList, userProfile, conversationId }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -36,16 +38,23 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
         // Gửi tin nhắn qua socket
         if (socketRef.current && conversationId && userProfile) {
             const messageObject: MessageConverType = {
+                //tạm fix
+                id: "",
+                react: "",
                 content: message,
-                user_id: userProfile.id,
+                sender_id: userProfile.id,
                 display_name: userProfile.display_name,
                 createdAt: new Date(),
-                avatar: {
-                    avatar: '/images/thang.png',
-                }
+                // avatar: {
+                //     avatar: '/images/thang.png',
+                // }
+                avatar: '/images/thang.png',
+
             };
             socketRef.current.emit('on-chat', messageObject);
-            setMessage(''); 
+            setMessage('');
+            //tạm fix
+            setMessagesList([])
             setSelectedImage(null);
             // Gửi tin nhắn qua API
             try {
@@ -63,7 +72,7 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-        if (emojiPickerRef.current 
+        if (emojiPickerRef.current
             && emojiPickerButtonRef.current
             && !emojiPickerRef.current.contains(e.target as Node)
             && !emojiPickerButtonRef.current.contains(e.target as Node)) {
@@ -111,9 +120,9 @@ export default function Footer({ className, socketRef, setMessagesList, userProf
                     onChange={handleChange}
                     className='flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none'
                 />
-                <button 
-                    type="button" 
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                     className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0"
                     ref={emojiPickerButtonRef}>
                     <FaSmile size={18} />

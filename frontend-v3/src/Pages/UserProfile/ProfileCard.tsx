@@ -1,8 +1,4 @@
-import userApiRequest from '@/apiRequest/userProfile'
-import { useEffect, useState } from 'react'
-import { useToast } from '@/hooks/use-toast'
-// import { useNavigate } from 'react-router-dom'
-import { UserProfileResType } from '@/schemaValidations/profile.schema'
+
 import ChangeWindow from './ChangeWindow'
 
 const convertDay = (day: string | undefined) => {

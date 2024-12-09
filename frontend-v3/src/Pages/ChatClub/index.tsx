@@ -1,8 +1,10 @@
 import socketIOClient from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { UserChat, Profile } from '../Chat';
+import { Profile } from '../Chat';
+// import { UserChat} from '../Chat';
+
 import MessageList from './MessageList.tsx';
 import Footer from '../ChatClub/Footer';
 import Header from '../ChatClub/Header';
@@ -90,7 +92,7 @@ export default function ChatPage() {
                 },
                 withCredentials: true
             });
-            
+
             console.log('Club profile:', response.data.data);
             const clubProfile: ClubProfile = {
                 id: response.data.data.id,
@@ -107,7 +109,7 @@ export default function ChatPage() {
     const fetchMessages = async (offset = 0) => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8080/api/v1/message/${conversationId}/`,{
+            const response = await axios.get(`http://localhost:8080/api/v1/message/${conversationId}/`, {
                 params: {
                     offset
                 },
@@ -118,22 +120,22 @@ export default function ChatPage() {
                     'Expires': '0'
                 }
             });
-            const messages : MessageConverType[] = response.data.data.map((message: MessageConverType) => ({
+            const messages: MessageConverType[] = response.data.data.map((message: MessageConverType) => ({
                 ...message,
                 createdAt: new Date(message.createdAt)
             })).reverse();
-            
-            if ( (messagesRef.current.at(0) && messages[0].id != messagesRef.current[0].id)
+
+            if ((messagesRef.current.at(0) && messages[0].id != messagesRef.current[0].id)
                 || (messagesRef.current.length == 0)) {
                 messagesRef.current = [...messages, ...messagesRef.current];
                 console.log('fetch 1 lan')
                 console.log(messagesRef.current)
             }
-            
+
             setMessagesList([...messagesRef.current]);
         } catch (error) {
             console.error(error);
-            
+
         } finally {
             setLoading(false); // Tắt trạng thái loading sau khi fetch xong
         }
@@ -233,7 +235,7 @@ export default function ChatPage() {
 
     return (
         <div className="h-screen flex flex-col bg-gray-700 relative">
-            {clubProfile && <Header clubProfile={clubProfile}/>}
+            {clubProfile && <Header clubProfile={clubProfile} />}
             {<div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-2 mt-2
                 [&::-webkit-scrollbar]:w-2
                 [&::-webkit-scrollbar-track]:rounded-full
@@ -242,7 +244,7 @@ export default function ChatPage() {
                 [&::-webkit-scrollbar-thumb]:bg-gray-300
                 dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-                { userProfile &&
+                {userProfile &&
                     <MessageList
                         socketRef={socketRef}
                         messageList={messagesList}
@@ -251,11 +253,11 @@ export default function ChatPage() {
                     />
                 }
             </div>}
-            {userProfile  && (<Footer className="w-full mt-2"
+            {userProfile && (<Footer className="w-full mt-2"
                 socketRef={socketRef}
                 setMessagesList={setMessagesList}
                 userProfile={userProfile}
-                conversationId={conversationId || ''} 
+                conversationId={conversationId || ''}
             />)}
         </div>
     )

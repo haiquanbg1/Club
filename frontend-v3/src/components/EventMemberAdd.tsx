@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import FriendApiRequest from "@/apiRequest/friend"
 import { useToast } from "@/hooks/use-toast"
 import MemberCard from "@/components/MemberCard";
 import { Button } from "./ui/button";
@@ -68,7 +67,7 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
         }
 
         try {
-            const res = await ClubApiRequest.addParticipant(body)
+            await ClubApiRequest.addParticipant(body)
             setSelected("")
             // resetMember()
             resetMember()

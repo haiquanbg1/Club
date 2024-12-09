@@ -17,8 +17,8 @@ import {
 } from "@/schemaValidations/notification.schema";
 import { useParams } from "react-router-dom";
 import NotificationApiRequest from "@/apiRequest/notification";
-import socket from "../../socket";
-import { useState } from "react";
+// import socket from "../../socket";
+// import { useState } from "react";
 
 const NotiFormSchema = NotificationBody;
 export default function NotiForm({
@@ -63,7 +63,7 @@ export default function NotiForm({
       }
       form.reset();
       console.log(res);
-    } catch (error) {}
+    } catch (error) { }
   };
   return (
     <Form {...form}>
