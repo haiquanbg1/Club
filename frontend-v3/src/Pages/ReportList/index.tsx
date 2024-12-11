@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import ReportCard from "./ReportCard";
 import { useParams } from "react-router-dom";
-import ClubApiRequest from "@/apiRequest/club";
+
 import ReportApiRequest from "@/apiRequest/report";
 
 interface report {

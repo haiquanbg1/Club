@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
 // Tạo lớp HttpError để xử lý lỗi HTTP
 export class HttpError extends Error {
     status: number;

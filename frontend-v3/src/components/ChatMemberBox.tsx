@@ -53,7 +53,7 @@ export default function ChatMemberBox() {
             console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
-            console.log(chat)
+            console.log(`chat`)
             console.log(response)
         } catch (error) {
             console.log(error)
@@ -120,7 +120,7 @@ export default function ChatMemberBox() {
                     <MemberCard admin={checkRole} chatPage={true} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
                 ))}
             </div>
-            {/* {
+            {
                 checkRole &&
                 <div className="text-center absolute bottom-2 right-20">
                     <Button variant={"denied"} onClick={handleDelete}>Xóa câu lạc bộ</Button>
@@ -131,7 +131,7 @@ export default function ChatMemberBox() {
                 <div className="text-center absolute bottom-2 right-20">
                     <Button variant={"denied"} onClick={handleOut}>Rời câu lạc bộ</Button>
                 </div>
-            } */}
+            }
         </div >
     )
 }

@@ -124,7 +124,7 @@ export function RegisterForm() {
                             <FormField
                                 control={form.control}
                                 name="gender"
-                                render={({ field }) => (
+                                render={() => (
                                     <FormItem className="flex-1">
                                         <FormLabel>Gender</FormLabel>
                                         <Select onValueChange={value => value === "Nam" ? form.setValue("gender", 1) : form.setValue("gender", 0)}>

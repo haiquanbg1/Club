@@ -1,9 +1,8 @@
 import EventCard from '@/components/EventCard'
-import { GetEventResType } from '@/schemaValidations/event.schema'
-import React, { useEffect, useState } from 'react'
+
+import { useEffect, useState } from 'react'
 import ClubApiRequest from '@/apiRequest/club'
-import { UseDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/redux/store'
+
 import { useParams } from 'react-router-dom'
 
 interface event {

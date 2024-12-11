@@ -50,7 +50,7 @@ export default function CreateClubForm() {
         formData.append("userData", JSON.stringify(values));
         formData.append('avatar', selectedFile ? selectedFile : "");
         try {
-            const res = await ClubApiRequest.create(formData)
+            await ClubApiRequest.create(formData)
 
             setSelectedFile(null)
             form.reset()

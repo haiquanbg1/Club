@@ -1,4 +1,4 @@
-import { Mail, Pencil, CirclePlus, Settings } from "lucide-react"
+import { Mail, Pencil, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -22,9 +22,9 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { EventBody, EventBodyType } from "@/schemaValidations/club.schema";
-import { format, parse } from "date-fns"
+import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { useEffect } from "react";
+
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -48,7 +48,7 @@ interface header {
     resetInfo: () => Promise<void>;
     isAdmin: boolean
 }
-export default function Header({ title, start_time, isAdmin, description, resetInfo, resetMember }: header) {
+export default function Header({ title, isAdmin, description, resetInfo, resetMember }: header) {
     const { toast } = useToast()
     const [open, setOpen] = useState<boolean>(false)
     const [openSetting, setOpenSetting] = useState<boolean>(false)
@@ -69,10 +69,13 @@ export default function Header({ title, start_time, isAdmin, description, resetI
 
     const handleOut = async () => {
         try {
-            const res = await ClubApiRequest.outEvent({ event_id: eventId || "" })
+            await ClubApiRequest.outEvent({ event_id: eventId || "" })
             localStorage.setItem("callEvent", "false")
             navigate(`/club/${clubId}`)
-            console.log(res)
+            toast({
+                // title: "Scheduled: Catch up",
+                description: "Đã rời sự kiện",
+            })
         } catch (error) {
 
         }
@@ -83,7 +86,7 @@ export default function Header({ title, start_time, isAdmin, description, resetI
             club_id: clubId || ""
         }
         try {
-            const res = await ClubApiRequest.deleteEvent(body)
+            await ClubApiRequest.deleteEvent(body)
             localStorage.setItem("callEvent", "false")
             navigate(`/club/${clubId}`)
 

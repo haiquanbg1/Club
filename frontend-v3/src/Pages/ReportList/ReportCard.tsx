@@ -1,6 +1,6 @@
 import ReportApiRequest from "@/apiRequest/report";
-import { Avatar } from "@/components/ui/avatar";
-import { CheckCircle2, Ellipsis, X } from "lucide-react";
+
+import { CheckCircle2, X } from "lucide-react";
 interface report {
     id: string;
     title: string;

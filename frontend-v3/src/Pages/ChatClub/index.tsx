@@ -134,7 +134,7 @@ export default function ChatPage() {
             setMessagesList(() => [...messagesRef.current]);
         } catch (error) {
             console.error(error);
-            
+
         } finally {
             setLoading(false); // Tắt trạng thái loading sau khi fetch xong
         }
@@ -225,7 +225,7 @@ export default function ChatPage() {
 
     return (
         <div className="h-screen flex flex-col bg-gray-700 relative">
-            {clubProfile && <Header clubProfile={clubProfile}/>}
+            {clubProfile && <Header clubProfile={clubProfile} />}
             {<div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-2 mt-2
                 [&::-webkit-scrollbar]:w-2
                 [&::-webkit-scrollbar-track]:rounded-full
@@ -245,7 +245,7 @@ export default function ChatPage() {
                     />
                 }
             </div>}
-            {userProfile  && (<Footer className="w-full mt-2"
+            {userProfile && (<Footer className="w-full mt-2"
                 socketRef={socketRef}
                 userProfile={userProfile}
                 setMessagesList={setMessagesList}

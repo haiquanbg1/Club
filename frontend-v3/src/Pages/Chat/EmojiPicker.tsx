@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // emoji_list của bạn
 const emoji_list = [
-  '👍',  
-  '❤️',  
-  '😂',  
-  '😢',  
-  '😡',  
+  '👍',
+  '❤️',
+  '😂',
+  '😢',
+  '😡',
 ];
 
 type EmojiPickerProps = {

@@ -67,7 +67,7 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
                 location: scheduleForm.getValues("location")
             }
             // const res = await ClubApiRequest.createEvent(body)
-            const res = await ClubApiRequest.createSchedule(body)
+            await ClubApiRequest.createSchedule(body)
             resetSchedules()
             toast({
                 description: "Tạo lịch trình thành công"

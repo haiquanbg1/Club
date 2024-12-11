@@ -17,7 +17,6 @@ export const GetNotificationRes = z
         data: z.array(z.object({
             title: z.string(),
             description: z.string(),
-            status: z.string(),
             id: z.string()
         }))
     })

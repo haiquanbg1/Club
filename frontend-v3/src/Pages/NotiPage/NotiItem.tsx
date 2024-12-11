@@ -5,10 +5,11 @@ interface notification {
     id: string,
     title: string,
     description: string,
-    status: string
+
 }
 
-export default function NotiItem({ id, title, description, status }: notification) {
+export default function NotiItem({ id, title, description }: notification) {
+    console.log(id)
     return (
         <div className="flex space-x-4">
             <Avatar className="w-[80px] h-[80px]">

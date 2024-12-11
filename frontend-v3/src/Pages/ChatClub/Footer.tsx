@@ -5,8 +5,10 @@ import { FaPaperPlane, FaSmile } from 'react-icons/fa';
 import { CgAdd } from "react-icons/cg";
 import { FiImage } from "react-icons/fi";
 import { useRef, useEffect } from 'react';
-import { MessageStatus, Profile } from '../Chat/index';
+import { Profile } from '../Chat/index';
 import { MessageConverType } from './index';
+// import { ClubProfile } from './index';
+
 import axios from 'axios';
 import { v4 } from 'uuid';
 
@@ -18,7 +20,7 @@ type Props = {
     conversationId: string;
 }
 
-export default function Footer({ className, socketRef, userProfile, conversationId }: Props) {
+export default function Footer({ className, socketRef, setMessagesList, userProfile, conversationId }: Props) {
     const [message, setMessage] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -33,17 +35,25 @@ export default function Footer({ className, socketRef, userProfile, conversation
         // Gửi tin nhắn qua socket
         if (socketRef.current && conversationId) {
             const messageObject: MessageConverType = {
-                id: v4(),
-                react: [],
+                //tạm fix
+                id: "",
+                react: "",
                 content: message,
-                status: MessageStatus.Show,
                 sender_id: userProfile.id,
+                display_name: userProfile.display_name,
                 createdAt: new Date(),
-                sender: { display_name: userProfile.display_name, avatar: userProfile.avatar }
+                // avatar: {
+                //     avatar: '/images/thang.png',
+                // }
+                avatar: '/images/thang.png',
+
             };
             socketRef.current.emit('on-chat', messageObject);
             setMessage('');
-            // setSelectedImage(null);
+            //tạm fix
+            setMessagesList([])
+            setSelectedImage(null);
+            // Gửi tin nhắn qua API
             try {
                 const response = await axios.post(`http://localhost:8080/api/v1/message/create`, {
                     id: messageObject.id,

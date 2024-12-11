@@ -8,7 +8,6 @@ interface notification {
     id: string,
     title: string,
     description: string,
-    status: string
 }
 
 export default function NotificationPage() {
