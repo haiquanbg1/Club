@@ -20,7 +20,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelectEmoji }) => {
         {emoji_list.map((emoji, index) => (
           <button
             key={index}
-            className="emoji-item text-1xl hover:bg-slate-300 border rounded-lg focus:bg-blue-700"
+            className="emoji-item text-xl hover:bg-slate-300 border rounded-lg focus:bg-blue-700"
             onClick={() => onSelectEmoji(emoji)}
           >
             {emoji}

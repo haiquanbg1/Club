@@ -1,7 +1,4 @@
 const { User, Reaction } = require("../models/index");
-const { Op, where } = require('sequelize');
-const { use } = require("../routes/api");
-
 
 const create = async (insertClause) => {
     const reaction = await Reaction.create(insertClause);
@@ -26,11 +23,13 @@ const drop = async (id) => {
 
 const findAllReactInMessage = async (message_id) => {
     const reacts = await Reaction.findAll({
-        include: [{
-            model: User,
-            as: "sender",
-            attributes: ['display_name', 'avatar']
-        }],
+        include: [
+            {
+                model: User,
+                as: 'sender',
+                attributes: ['avatar', 'display_name']
+            },
+        ],
         where: {
             message_id: message_id
         },
@@ -38,6 +37,7 @@ const findAllReactInMessage = async (message_id) => {
         // offset: offset, // Bỏ qua số bản ghi dựa trên trang hiện tại
         // order: [['createdAt', 'DESC']]
     });
+    console.log(reacts);
     return reacts;
 }
 

@@ -14,20 +14,25 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // Mỗi Reaction thuộc về một Message
             Reaction.belongsTo(models.Message, {
-                foreignKey: 'message_id',  
-                as: 'message',  
-                onDelete: 'CASCADE',  
+                foreignKey: 'message_id',
+                as: 'message',
+                onDelete: 'CASCADE',
+            });
+            Reaction.belongsTo(models.User, {
+                foreignKey: 'user_id',
+                as: 'sender',
+                onDelete: 'CASCADE',
             });
         }
     }
 
     Reaction.init({
         message_id: {
-            type: DataTypes.UUID,  
+            type: DataTypes.UUID,
             allowNull: false,
             references: {
-                model: 'Messages',  
-                key: 'id',  
+                model: 'Messages',
+                key: 'id',
             },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
@@ -36,24 +41,24 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false,
             references: {
-              model: 'Users',
-              key: 'id',
+                model: 'Users',
+                key: 'id',
             },
-          },
+        },
         react: {
-            type: DataTypes.TEXT,  
+            type: DataTypes.TEXT,
             allowNull: false,
-            defaultValue: '',  
+            defaultValue: '',
         },
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,  
+            defaultValue: DataTypes.NOW,
         },
         updatedAt: {
             allowNull: false,
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,  
+            defaultValue: DataTypes.NOW,
         }
     }, {
         sequelize,

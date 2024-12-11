@@ -46,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         otherKey: 'friend_id',
       });
+
+      User.hasMany(models.Reaction, {
+        foreignKey: 'user_id',
+        as: 'sentReactions',
+    });
     }
 
   }

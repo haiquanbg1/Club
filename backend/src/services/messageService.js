@@ -1,4 +1,5 @@
-const { Message, User, Conversation } = require('../models/index');
+const { Message, User, Conversation, Reaction } = require('../models/index');
+const { Op } = require("sequelize")
 
 const create = async (insertClause) => {
     const message = await Message.create(insertClause);
@@ -38,16 +39,29 @@ const findAllForOneUserInOneConver = async (user_id, conversation_id) => {
 }
 
 // find all mes of conver
-const findAll = async (conversation_id, limit, offset) => {
+const findAll = async (conversation_id, user_id, limit = 10, offset) => {
+    const whereClause = {
+        [Op.and]: [
+            { conversation_id },
+            { [Op.or]: [
+                { status: 'show' },
+                { status: 'hided', sender_id: user_id }
+            ] }
+        ]
+    };
     const messages = await Message.findAll({
-        include: [{
-            model: User,
-            as: "sender",
-            attributes: ['display_name', 'avatar']
-        }],
-        where: {
-            conversation_id: conversation_id
-        },
+        include: [
+            {
+                model: User,
+                as: 'sender',
+                attributes: ['avatar', 'display_name']
+            }, {
+                model: Reaction,
+                as: 'react',
+                attributes: ['react', 'user_id', 'message_id']
+            }
+        ],
+        where: whereClause,
         limit: limit, // Giới hạn số lượng bản ghi trả về
         offset: offset, // Bỏ qua số bản ghi dựa trên trang hiện tại
         order: [['createdAt', 'DESC']]
@@ -55,6 +69,14 @@ const findAll = async (conversation_id, limit, offset) => {
     return messages;
 }
 
+const changeStatus = async (message_id, status) => {
+    return await Message.update({ status }, {
+        where: {
+            id: message_id
+        }
+    });
+}
+
 module.exports = {
-    create, update, drop, findOne, findAllForOneUserInOneConver, findAll
+    create, update, drop, findOne, findAllForOneUserInOneConver, findAll, changeStatus
 };

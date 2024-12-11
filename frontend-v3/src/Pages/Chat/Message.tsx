@@ -8,7 +8,6 @@ import EmojiPicker from "./EmojiPicker";
 import { MessageStatus, MessageType } from ".";
 import AlertDeleteMyMes from "./AlertDeleteMyMes";
 import AlertDeleteOtherMes from "./AlertDeleteOtherMes";
-import { set } from "date-fns";
 import axios from "axios";
 
 type Props = {
@@ -60,7 +59,7 @@ export default function Message({
         }
     };
 
-    const addEmoji = (emoji: string) => {
+    const addEmoji = async (emoji: string) => {
         setReact(emoji);
         setShowEmojiPicker(false);
         if (socketRef.current) {
@@ -90,14 +89,46 @@ export default function Message({
         // socketRef.current.emit('react', messageObject);
     };
 
-    const handleDeleteForMyMessage = () => {
+    const handleDeleteForMyMessage = async () => {
         socketRef.current.emit('delete-my-message', content.id);
-        setReact('');
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/v1/message/friend/delete`, {
+                data: {  // Sử dụng `data` thay vì `params`
+                    message_id: content.id
+                },
+                withCredentials: true
+            });
+            if (response.status === 200) {
+                console.log('Delete success');
+            } else {
+                console.error('Delete failed');
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const handleDeleteForOtherMessage = () => {
+    const handleDeleteForOtherMessage = async () => {
         socketRef.current.emit('delete-other-message', { messageId: content.id, userId: userId });
-        setReact('');
+        try {
+            const response = await axios.patch(`http://localhost:8080/api/v1/message/friend/changeStatusMessage`, {
+                status: 'hided',
+                message_id: content.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                withCredentials: true
+            });
+            if (response.status === 200) {
+                console.log('change success');
+            } else {
+                console.error('change failed');
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
     };
 
     const confirmDeleteForMyMessage = () => {
@@ -123,21 +154,26 @@ export default function Message({
 
     useEffect(() => {
         if (socketRef.current) {
-            console.log('tin 1')
             socketRef.current.on('react', async (message: any) => {
-                console.log('react:', message);
                 if (message.id === content.id && message.userId !== userId) {
-                    console.log('msg change', message)
+                    // console.log('msg change', message)
                     setReact(message.react);
                 }
-                const token = localStorage.getItem('token');
+                
+            });
+        }
+    }, [socketRef, socketRef.current]);
+
+    useEffect(() => {
+        if (react !== '') {
+            const fetchReact = async () => {
                 try {
                     const response = await axios.patch(`http://localhost:8080/api/v1/message/friend/changeReact`, {
-                        message_id: message.id,
-                        react: message.react
+                        message_id: content.id,
+                        react: react
                     }, {
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
                         },
                         withCredentials: true
                     });
@@ -146,14 +182,14 @@ export default function Message({
                     } else {
                         console.error('change avatar failed');
                     }
-
+        
                 } catch (error) {
                     console.error(error);
                 }
-
-            });
+            }
+            fetchReact();
         }
-    }, [react, socketRef.current, socketRef]);
+    }, [react]);
 
 
 

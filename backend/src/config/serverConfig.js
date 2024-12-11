@@ -84,8 +84,16 @@ module.exports = (app) => {
             io.to(channelId).emit('delete-other-message', message);
         });
 
-        socket.on('react', (message) => {
-            io.to(channelId).emit('react', message);
+        socket.on('receive-react', (message) => {
+            io.to(channelId).emit('receive-react', message);
+        });
+
+        socket.on('send-react', (message) => {
+            io.to(channelId).emit('send-react', message);
+        });
+
+        socket.on('on-chat-club', (message) => {
+            io.to(channelId).emit('on-chat-club', message);
         });
     });
 

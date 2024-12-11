@@ -3,13 +3,15 @@ import Message from '../ChatClub/Message';
 import { useEffect } from 'react';
 import { Profile } from '../Chat/index'; // Đường dẫn tới file định nghĩa kiểu dữ liệu
 import { MessageConverType } from './index';
-import axios from "axios";
+import { ClubProfile } from './index';
 
 type MessageListProps = {
   socketRef: React.RefObject<any>;
   messageList: MessageConverType[];
   setMessagesList: (messages: MessageConverType[] | ((messages: MessageConverType[]) => MessageConverType[])) => void;
   userProfile: Profile;
+  clubProfile: ClubProfile;
+  conversationId: string;
 };
 
 function MessageList({ socketRef, messageList, setMessagesList, userProfile }: MessageListProps) {
@@ -20,39 +22,35 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile }: M
       setMessagesList((prevMessages: MessageConverType[]) => [...prevMessages, message]);
     };
 
-    const handleDeleteMessage = async (messageId: string) => {
-      try {
-        const response = await axios.delete(`http://localhost:8080/api/v1/message/delete`, {
-          params: {
-            message_id: messageId
-          },
-          withCredentials: true
-        })
-        if (response.status === 200) {
-          console.log('Delete message success');
-        } else {
-          console.error('Delete message failed');
-        }
+    const handleDeleteMyMessage = (messageId: string) => {
+      setMessagesList((prevMessagesList) =>
+        prevMessagesList.filter((message) => message.id !== messageId)
+      );
+    };
 
-      } catch (error) {
-        console.error(error);
+    const handleDeleteOtherMessage = (messageDeleted: any) => {
+      if (userProfile && messageDeleted.userId === userProfile.id) {
+        setMessagesList((prevMessagesList) =>
+          prevMessagesList.filter((message) => message.id !== messageDeleted.messageId)
+        );
       }
-      messageList = messageList.filter((message) => message.id !== messageId);
-      setMessagesList(messageList);
     };
 
     if (socketRef.current) {
       socketRef.current.on('on-chat', handleNewMessage);
-      socketRef.current.on('delete-message', handleDeleteMessage);
+      socketRef.current.on('delete-my-message', handleDeleteMyMessage);
+      socketRef.current.on('delete-other-message', handleDeleteOtherMessage);
     }
 
     // Cleanup khi component unmount
     return () => {
       if (socketRef.current) {
         socketRef.current.off('on-chat');
+        socketRef.current.off('delete-my-message');
+        socketRef.current.off('delete-other-message');
       }
     };
-  }, [socketRef, messageList]);
+  }, [socketRef.current, messageList, socketRef]);
 
 
 
@@ -60,17 +58,20 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile }: M
     <>
       <div>
         {/* {isFetching && <Loading />} */}
-        {messageList.map((message, index) => (
+        {messageList.map((message) => (
           <Message
-            key={message.id || index}
+            key={message.id}
             orientation={(message.sender_id == userProfile.id) ? "right" : 'left'}
-            author={{display_name : message.display_name, avatar : message.avatar}}
+            author={message.sender}
             content={{
               message: message.content,
               sender_id: message.sender_id,
               created_at: message.createdAt,
+              react: message.react,
+              status: message.status,
               id: message.id || '',
             }}
+            userId={userProfile.id}
             socketRef={socketRef}
           />
         ))}

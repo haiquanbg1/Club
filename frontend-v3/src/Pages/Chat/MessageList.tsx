@@ -2,7 +2,6 @@
 import Message from './Message';
 import { useEffect } from 'react';
 import { MessageType, Profile } from './index'; // Đường dẫn tới file định nghĩa kiểu dữ liệu
-import axios from 'axios';
 
 type MessageListProps = {
   socketRef: React.RefObject<any>;
@@ -14,7 +13,7 @@ type MessageListProps = {
   // isFetching: boolean;
 };
 
-function MessageList({ socketRef, messageList, setMessagesList, userProfile, friendProfile, messageRef }: MessageListProps) {
+function MessageList({ socketRef, messageList, setMessagesList, userProfile, friendProfile }: MessageListProps) {
 
   useEffect(() => {
     // handle New Message socket
@@ -23,50 +22,14 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
       // console.log('messageList:', messageList);
     };
 
-    const handleDeleteMyMessage = async (messageId: string) => {
-      console.log('Delete my message:', messageId);
-      try {
-        const response = await axios.delete(`http://localhost:8080/api/v1/message/friend/delete`, {
-          data: {  // Sử dụng `data` thay vì `params`
-            message_id: messageId
-          },
-          withCredentials: true
-        });
-        if (response.status === 200) {
-          console.log('Delete success');
-        } else {
-          console.error('Delete failed');
-        }
-      } catch (error) {
-        console.error(error);
-      }
-
+    const handleDeleteMyMessage = (key: string) => {
+      // console.log('Delete my message:', messageId);
       setMessagesList((prevMessagesList) =>
-        prevMessagesList.filter((message) => message.id !== messageId)
+        prevMessagesList.filter((message) => message.id !== key)
       );
     };
 
-    const handleDeleteOtherMessage = async (messageDeleted: any) => {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await axios.patch(`http://localhost:8080/api/v1/message/friend/changeStatusMessage`, {
-          status: 'hided',
-          message_id: messageDeleted.messageId
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-          withCredentials: true
-        });
-        if (response.status === 200) {
-          console.log('change success');
-        } else {
-          console.error('change failed');
-        }
-      }
-      catch (error) {
-        console.error(error);
-      }
+    const handleDeleteOtherMessage = (messageDeleted: any) => {
       if (userProfile && messageDeleted.userId === userProfile.id) {
         setMessagesList((prevMessagesList) =>
           prevMessagesList.filter((message) => message.id !== messageDeleted.messageId)
@@ -76,25 +39,20 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
 
     if (socketRef.current) {
       socketRef.current.on('on-chat', handleNewMessage);
-      socketRef.current.on('delete-my-message', async (messageId: string) => {
-        await handleDeleteMyMessage(messageId)
-      });
-
-      socketRef.current.on('delete-other-message', async (messageDeleted: any) => {
-        await handleDeleteOtherMessage(messageDeleted);
-      });
+      socketRef.current.on('delete-my-message', handleDeleteMyMessage);
+      socketRef.current.on('delete-other-message', handleDeleteOtherMessage);
 
     }
 
-      // Cleanup khi component unmount
-      return () => {
-        if (socketRef.current) {
-          socketRef.current.off('on-chat');
-          socketRef.current.off('delete-message');
-          socketRef.current.off('react');
-        }
-      };
-    }, [socketRef.current, messageList, socketRef]);
+    // Cleanup khi component unmount
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('on-chat');
+        socketRef.current.off('delete-my-message');
+        socketRef.current.off('delete-other-message');
+      }
+    };
+  }, [socketRef.current, messageList, socketRef]);
 
 
 
@@ -103,15 +61,15 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
     <>
       <div>
         {/* {isFetching && <Loading />} */}
-        {messageList.map((message, index) => (
+        {messageList.map((message) => (
           (
             <Message
               userId={userProfile.id}
-              key={index}
+              key={message.id}
               orientation={(message.sender_id == userProfile.id) ? "right" : 'left'}
-              author={message.sender_id == userProfile.id ? { display_name: message.sender.display_name, avatar: userProfile.avatar }
-                : { display_name: message.sender.display_name, avatar: friendProfile.avatar }}
-  
+              author={message.sender_id == userProfile.id ? { display_name: userProfile.display_name, avatar: userProfile.avatar }
+                : { display_name: friendProfile.display_name, avatar: friendProfile.avatar }}
+
               content={{
                 message: message.message,
                 sender_id: message.sender_id,
@@ -123,7 +81,7 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               }}
               socketRef={socketRef}
             />
-          )) 
+          ))
         )}
       </div>
     </>

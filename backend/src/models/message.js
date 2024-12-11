@@ -23,6 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
+
+      Message.hasMany(models.Reaction, {
+        foreignKey: 'message_id',
+        as: 'react',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
     }
   }
   Message.init({

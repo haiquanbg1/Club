@@ -99,7 +99,7 @@ export default function ChatPage() {
     const fetchMessages = async (offset = 0) => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8080/api/v1/message/${friendId}/old`, {
+            const response = await axios.get(`http://localhost:8080/api/v1/message/friend/${friendId}/old`, {
                 params: {
                     offset
                 },
@@ -121,7 +121,7 @@ export default function ChatPage() {
                 console.log('fetch 1 lan')
             }
 
-
+            // console.log('fetch message:', messages);
             setMessagesList(() => [...messagesRef.current]);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -133,7 +133,7 @@ export default function ChatPage() {
     const connectSocket = async () => {
 
         const channelId = [userProfile?.id, friendId].sort().join('/');
-        console.log('channelId:', channelId);
+        // console.log('channelId:', channelId);
 
         socketRef.current = socketIOClient(host, {
             query: { channelId }
@@ -219,6 +219,10 @@ export default function ChatPage() {
             }
         };
     }, [lastScrollTop]);
+
+    useEffect(() => {
+        messagesRef.current = messagesList;
+    }, [messagesList]);
 
     return (
         <div className="h-screen flex flex-col bg-gray-700 relative">
