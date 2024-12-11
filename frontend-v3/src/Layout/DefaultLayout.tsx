@@ -117,7 +117,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                 </div>
             </div>
 
-            <div className="w-full h-full overflow-auto">{children}</div>
+            <div className="w-full h-full overflow-auto bg-[#2b2d31]">{children}</div>
 
         </div>
     );

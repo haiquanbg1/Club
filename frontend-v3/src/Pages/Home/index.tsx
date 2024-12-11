@@ -1,7 +1,7 @@
 
 
 import HeaderHome from "@/components/HeaderHome"
-import ListFriend from "./ListFriend"
+// import ListFriend from "./ListFriend"
 import Welcome from "./Welcome"
 
 
@@ -14,7 +14,7 @@ export default function Home() {
             <div className="flex flex-1 h-full">
 
 
-                <ListFriend></ListFriend>
+                {/* <ListFriend></ListFriend> */}
 
 
                 <div className="bg-[#3A3A3A] w-full">
