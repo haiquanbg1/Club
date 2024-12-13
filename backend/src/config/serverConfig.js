@@ -84,6 +84,10 @@ module.exports = (app) => {
             io.to(channelId).emit('delete-other-message', message);
         });
 
+        socket.on('remove-react', (message) => {
+            io.to(channelId).emit('remove-react', message);
+        });
+
         socket.on('receive-react', (message) => {
             io.to(channelId).emit('receive-react', message);
         });
@@ -92,8 +96,8 @@ module.exports = (app) => {
             io.to(channelId).emit('send-react', message);
         });
 
-        socket.on('on-chat-club', (message) => {
-            io.to(channelId).emit('on-chat-club', message);
+        socket.on('receive-react-list', (message) => {
+            io.to(channelId).emit('receive-react-list', message);
         });
     });
 

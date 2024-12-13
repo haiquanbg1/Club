@@ -58,7 +58,7 @@ const findAll = async (conversation_id, user_id, limit = 10, offset) => {
             }, {
                 model: Reaction,
                 as: 'react',
-                attributes: ['react', 'user_id', 'message_id']
+                attributes: ['react', 'user_id', 'message_id'],
             }
         ],
         where: whereClause,

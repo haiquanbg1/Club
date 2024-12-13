@@ -28,27 +28,28 @@ const create = async (req, res) => {
 // có thể lắng nghe và drop hoặc change trạng thái của react ở đây luôn
 const createReact = async (req, res) => {
     const { message_id, react, user_id, id } = req.body;
-    console.log(req.body);
+    console.log('body:', req.body);
 
     try {
         const reactExist = await reactService.findOne(message_id, user_id);
-
+        // console.log('reactExist: ', reactExist);
         if (reactExist) {
-            if (reactExist.react === react) {
+            if (reactExist.react == react) {
                 await reactService.drop(reactExist.id);
+                console.log('drop success');
                 return successResponse(res, StatusCodes.OK, "Đã xoá phản ứng.");
             } else {
-                await reactService.update(reactExist.id, { react });
-                return successResponse(res, StatusCodes.OK, "Đã thay đổi phản ứng.");
+                await reactService.drop(reactExist.id);
+                // return successResponse(res, StatusCodes.OK, "Đã thay đổi phản ứng.");
             }
-        } else {
-            await reactService.create({
-                message_id,
-                react,
-                user_id,
-                id
-            });
         }
+        await reactService.create({
+            message_id,
+            react,
+            user_id,
+            id
+        });
+        console.log('create success');
         return successResponse(res, StatusCodes.CREATED, "Đã tạo phản ứng.");
     } catch (error) {
         return errorResponse(
@@ -61,7 +62,7 @@ const createReact = async (req, res) => {
 
 const findAllByConversation = async (req, res) => {
     const { conversation_id } = req.params;
-    const offset = parseInt(req.query.offset) 
+    const offset = parseInt(req.query.offset)
     const limit = 10;
     const user = req.user;
     try {
@@ -72,7 +73,7 @@ const findAllByConversation = async (req, res) => {
         for (let i = 0; i < messages.length; i++) {
             // const image = cloudinary.getImage("Avatar", messages[i].sender.avatar);
             const image = await cloudinary.getImage("Avatar", messages[i].sender.avatar);
-            
+
             data.push({
                 id: messages[i].id,
                 content: messages[i].content,
@@ -109,7 +110,7 @@ const findAllReactInMessage = async (req, res) => {
             data.push({
                 id: reacts[i].id,
                 react: reacts[i].react,
-                user_id: reacts[i].sender_id,
+                user_id: reacts[i].user_id,
                 message_id: message_id,
                 sender: {
                     avatar: image,

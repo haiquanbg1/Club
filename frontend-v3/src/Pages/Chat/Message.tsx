@@ -73,21 +73,30 @@ export default function Message({
         }
     };
 
+    const fetchReact = async (emoji: string) => {
+        try {
+            const response = await axios.patch(`http://localhost:8080/api/v1/message/friend/changeReact`, {
+                message_id: content.id,
+                react: emoji
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                withCredentials: true
+            });
+            if (response.status === 200) {
+                console.log('change avatar success');
+            } else {
+                console.error('change avatar failed');
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     const removeEmoji = () => {
-        setReact('');
-        // console.log(react);
-        // const messageObject: MessageType = {
-        //     id: content.id,
-        //     message: content.message,
-        //     sender_id: content.sender_id,
-        //     receiver_id: content.receiver_id,
-        //     createdAt: content.created_at,
-        //     react: '',
-        //     status: MessageStatus.Show,
-        //     sender: author
-        // };
-        // // console.log('messageObject:', messageObject);
-        // socketRef.current.emit('react', messageObject);
+        socketRef.current.emit('remove-react', { id: content.id, react: '', user_id: userId });
     };
 
     const handleDeleteForMyMessage = async () => {
@@ -162,33 +171,22 @@ export default function Message({
                 }
                 
             });
+            socketRef.current.on('remove-react', async (message: any) => {
+                if (message.id === content.id) {
+                    setReact('');
+                    if (message.user_id == userId) {
+                        fetchReact('');
+                        console.log('remove react');
+                    }
+                }
+                
+            });
         }
     }, [socketRef, socketRef.current]);
 
     useEffect(() => {
         if (react !== '') {
-            const fetchReact = async () => {
-                try {
-                    const response = await axios.patch(`http://localhost:8080/api/v1/message/friend/changeReact`, {
-                        message_id: content.id,
-                        react: react
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`
-                        },
-                        withCredentials: true
-                    });
-                    if (response.status === 200) {
-                        console.log('change avatar success');
-                    } else {
-                        console.error('change avatar failed');
-                    }
-        
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-            fetchReact();
+            fetchReact(react);
         }
     }, [react]);
 
@@ -257,10 +255,10 @@ export default function Message({
                             />
                         )}
 
-                        <button className="px-1 py-1 bg-slate-400 rounded-3xl hover:bg-yellow-600 justify-center"
+                        {/* <button className="px-1 py-1 bg-slate-400 rounded-3xl hover:bg-yellow-600 justify-center"
                             onClick={removeEmoji}>
                             <MdReply size={18} />
-                        </button>
+                        </button> */}
                     </div>
                     {/* Hover Time */}
                     <div className={`absolute w-max top-full ${orientation === "right" ? "left-0" : "right-0"} hidden group-hover:flex items-center gap-2 bg-gray-700 text-white text-xs p-1 rounded shadow-lg`}

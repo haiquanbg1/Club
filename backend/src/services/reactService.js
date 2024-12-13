@@ -37,7 +37,7 @@ const findAllReactInMessage = async (message_id) => {
         // offset: offset, // Bỏ qua số bản ghi dựa trên trang hiện tại
         // order: [['createdAt', 'DESC']]
     });
-    console.log(reacts);
+    console.log('reacts', reacts);
     return reacts;
 }
 

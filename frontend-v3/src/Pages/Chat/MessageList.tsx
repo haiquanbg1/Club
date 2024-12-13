@@ -53,15 +53,6 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
       }
     };
   }, [socketRef.current, messageList, socketRef]);
-    // Cleanup khi component unmount
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.off('on-chat');
-        socketRef.current.off('delete-message');
-        socketRef.current.off('react');
-      }
-    };
-  }, [socketRef.current, messageList, socketRef]);
 
 
 
@@ -79,9 +70,6 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               author={message.sender_id == userProfile.id ? { display_name: userProfile.display_name, avatar: userProfile.avatar }
                 : { display_name: friendProfile.display_name, avatar: friendProfile.avatar }}
 
-              author={message.sender_id == userProfile.id ? { display_name: message.sender.display_name, avatar: userProfile.avatar }
-                : { display_name: message.sender.display_name, avatar: friendProfile.avatar }}
-
               content={{
                 message: message.message,
                 sender_id: message.sender_id,
@@ -93,7 +81,6 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               }}
               socketRef={socketRef}
             />
-          ))
           ))
         )}
       </div>

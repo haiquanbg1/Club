@@ -1,67 +1,80 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import { Button } from '../../components/ui/button';
 import { ReactType } from '.';
-import { useEffect, useState } from 'react';
-import { set } from 'date-fns';
-import axios from 'axios';
+import { useEffect } from 'react';
+import ReactItem from './ReactItem';
 
 type Props = {
   openState: boolean;
   setOpenState: (openState: boolean) => void;
   handleDeleteCancel: () => void;
-  reactList: ReactType[];
   message_id: string;
   socketRef: React.RefObject<any>;
+  setReactListStated: (reacts: ReactType[] | ((reacts: ReactType[]) => ReactType[])) => void;
+  reactListStated: ReactType[];
 };
 
 const ListReact = ({
   openState,
   setOpenState,
   handleDeleteCancel,
-  reactList,
   message_id,
-  socketRef
+  socketRef,
+  setReactListStated,
+  reactListStated,
 }: Props) => {
 
-  const [reactListStated, setReactListStated] = useState<ReactType[]>([]);
+  
 
-  useEffect(() => {
-    // console.log('reactList', reactList);
-    const fetchReactList = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/v1/message/react`, {
-          params: {
-            message_id
-          },
-          withCredentials: true
-        });
-        // console.log('response', response);
-        setReactListStated(response.data.data);
-      } catch (error) {
-        console.log('error', error);
-      }
-    }
-    fetchReactList();
-
-  }, [reactList]);
-
-  useEffect(() => {
-    socketRef.current.on('receive-react', (reactObj: ReactType) => {
-      if (reactObj.message_id === message_id) {
-        const react = reactListStated.find((react) => react.user_id === reactObj.user_id);
-        if (react?.react == reactObj.react) {
-          // loc di nhung tin nhắn lặp lại kể cả với bất kỳ ai
-          setReactListStated((prevReactList) => prevReactList.filter((react) => react.user_id !== reactObj.user_id));
+  const processReact = (reactObj: ReactType) => {
+    if (reactObj.message_id === message_id) {
+      // kiểm tra nếu đã tồn tại reactObj này trong reactList thì sẽ xóa nó đi
+      setReactListStated((prevReactList) => {
+        const existReact = prevReactList.find(
+            react => react.user_id === reactObj.user_id && react.message_id === message_id
+        );
+        console.log('reactList 1:', prevReactList);
+        console.log('reactObj:', reactObj);
+        if (existReact) {
+            console.log('existReact 2:', existReact);
+            if (existReact.react === reactObj.react) {
+                // Xóa react nếu giống nhau
+                console.log('remove 1 lan')
+                return prevReactList.filter(
+                    react => !(react.user_id === reactObj.user_id && react.react === reactObj.react)
+                );
+                
+            } else {
+                // Thay thế react
+                console.log('update 1 lan')
+                return prevReactList.map(react => 
+                    react.user_id === reactObj.user_id && react.message_id === message_id
+                        ? { ...reactObj } 
+                        : react
+                );
+            }
         } else {
-          // bỏ tin nhắn cũ thay bằng tin mới
-          const tempReact = reactListStated.filter((react) => react.user_id !== reactObj.user_id)
-          setReactListStated([...tempReact, reactObj]);
-          // console.log('list', reactList);
+            // Thêm mới react
+            console.log('add 1 lan')
+            return [...prevReactList, { ...reactObj }];
         }
-
-      }
     });
-  }, [socketRef, socketRef.current]);
+
+    }
+  };
+
+  
+
+  useEffect(() => {
+
+    if (socketRef.current) {
+      socketRef.current.on('receive-react-list', processReact);
+    }
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('receive-react-list');
+      }
+    };
+  }, [socketRef.current]);
 
   return (
     <AlertDialog.Root open={openState} onOpenChange={setOpenState}>
@@ -76,17 +89,11 @@ const ListReact = ({
           </AlertDialog.Description>
           <div className="flex flex-col gap-4 mt-4">
             {reactListStated.map((react) => (
-              <div key={react.id} className="flex items-center gap-4 relative">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={react.sender.avatar}
-                    alt="avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                  <span className="text-sm font-semibold">{react.sender.display_name}</span>
-                  <span className="text-lg absolute right-0">{react.react}</span>
-                </div>
-              </div>
+              <ReactItem
+                key={react.id}
+                reactItemChild={react}
+                socketRef={socketRef}
+              />
             ))}
           </div>
           <div className="flex gap-4 justify-center w-full mt-6">
@@ -95,7 +102,7 @@ const ListReact = ({
                 className="px-4 py-2 bg-gray-500 rounded-lg hover:bg-gray-700 text-sm font-semibold w-full"
                 onClick={handleDeleteCancel}
               >
-                Cancel
+                Exit
               </button>
             </AlertDialog.Cancel>
           </div>

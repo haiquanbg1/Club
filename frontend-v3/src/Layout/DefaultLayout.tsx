@@ -99,7 +99,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                                             </div>
                                         </TooltipTrigger>
                                         <TooltipContent side="left">
-                                            <p>T{club.name}</p>
+                                            <p>{club.name}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>

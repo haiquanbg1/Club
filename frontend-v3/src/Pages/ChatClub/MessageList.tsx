@@ -73,6 +73,7 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile }: M
             }}
             userId={userProfile.id}
             socketRef={socketRef}
+            userProfile={userProfile}
           />
         ))}
       </div>

@@ -1,21 +1,18 @@
 import moment from "moment";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '../Chat/Avatar';
 import { FaSmile } from 'react-icons/fa';
 // import { TiDelete } from "react-icons/ti";
 import { UserChat } from "../Chat";
-import { MdReply } from "react-icons/md";
 import EmojiPicker from "../Chat/EmojiPicker";
 import AlertDeleteMyMes from "../Chat/AlertDeleteMyMes";
 import AlertDeleteOtherMes from "../Chat/AlertDeleteOtherMes";
 import axios from "axios";
-import { MessageStatus } from "../Chat/index";
+import { MessageStatus, Profile } from "../Chat/index";
 import { ReactType } from ".";
-import { number } from "zod";
-import { List } from "lucide-react";
 import ListReact from "./ListReact";
 import { v4 } from "uuid";
-import { set } from "date-fns";
+
 
 type Props = {
     orientation: "left" | "right";
@@ -23,6 +20,7 @@ type Props = {
     content: ContentProps;
     socketRef: React.RefObject<any>;
     userId: string;
+    userProfile: Profile;
 };
 
 type ContentProps = {
@@ -39,7 +37,8 @@ export default function Message({
     author,
     content,
     socketRef,
-    userId
+    userId,
+    userProfile
 }: Props) {
 
     const formatDate = (date: Date) => {
@@ -49,6 +48,8 @@ export default function Message({
     const [reactList, setReactList] = useState<ReactType[]>(content.react);
 
     const [react, setReact] = useState('');
+
+    const [reactListStated, setReactListStated] = useState<ReactType[]>([]);
 
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -70,22 +71,23 @@ export default function Message({
     };
 
     const addEmoji = (emoji: string) => {
+        console.log('emoji:', emoji);
         const reactObject: ReactType = {
             react: emoji,
-            user_id: userId,
+            user_id: userProfile.id,
             message_id: content.id,
             id: v4(),
             sender: {
-                avatar: author.avatar,
-                display_name: author.display_name,
+                avatar: userProfile.avatar,
+                display_name: userProfile.display_name,
             }
         };
         setShowEmojiPicker(false);
         if (socketRef.current) {
             socketRef.current.emit('receive-react', reactObject);
-            socketRef.current.emit('send-react', reactObject);
+            socketRef.current.emit('receive-react-list', reactObject);
         }
-
+        createReact(reactObject);
     };
 
     const handleDeleteForMyMessage = async () => {
@@ -156,7 +158,7 @@ export default function Message({
     // nếu rồi thì sao
     // nếu chưa thì sao
 
-    const fetchReact = async (reactObj: ReactType) => {
+    const createReact = async (reactObj: ReactType) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/message/createReact`, {
                 message_id: reactObj.message_id,
@@ -180,13 +182,40 @@ export default function Message({
         }
     };
 
-    // bđ
-    useEffect(() => {
-        // console.log('reactList', reactList);
-        const firstReact = reactList.find((react, index) => index === 0);
-        setReact(firstReact ? firstReact.react : '');
-    }, []);
+    // fetch lần đầu
+      useEffect(() => {
+        const fetchReactList = async () => {
+          try {
+            axios.get('http://localhost:8080/api/v1/message/react', {
+              params: {
+                message_id: content.id
+              },
+              withCredentials: true
+            }).then(res => {
+            setReactListStated(res.data.data);
+            });
+          } catch (error) {
+            console.log('error', error);
+          }
+        }
+        fetchReactList();
+      }, [reactList]);
 
+    // const handleReceiveReactList = (reactObj: ReactType) => {
+    //     // if (isDataLoaded) {
+    //     //   setReactQueue((prevReactQueue) => [...prevReactQueue, reactObj]);
+    //     // } else {
+    //       processReact(reactObj);
+    //     // }
+    //   };
+
+    // bđ v chứng tỏ reactList là đúng còn quả fetch kia thì sai
+    useEffect(() => {
+        const firstReact = reactList.find((_, index) => index === 0);
+        setReact(firstReact ? firstReact.react : '');
+    }, [reactList]);
+
+    // bắt sự kiện click ra ngoài để ẩn emoji picker
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -194,44 +223,80 @@ export default function Message({
         };
     }, []);
 
+    // nhận sự kiện từ socket
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('receive-react', (reactObj: ReactType) => {
-                // console.log('react:', message);
-                // những thằng khác nhận hay cả chính thằng gửi cũng nhận
+                
                 if (reactObj.message_id === content.id) {
-                    const reactCheck = reactList.find((react) => react.user_id === reactObj.user_id);
-                    if (reactCheck?.react == reactObj.react) {
-                        setReact('');
-                        // loc di nhung tin nhắn lặp lại kể cả với bất kỳ ai
-                        setReactList((prevReactList) => prevReactList.filter((react) => react.user_id !== reactObj.user_id));
-                    } else {
-                        setReact(reactObj.react);
-                        // bỏ tin nhắn cũ thay bằng tin mới
-                        const tempReact = reactList.filter((react) => react.user_id !== reactObj.user_id)
-                        setReactList([...tempReact, reactObj]);
-                        // console.log('list', reactList);
-                    }
-
+                    setReactList((prevReactList) => {
+                        const existReact = prevReactList.find(
+                            react => react.user_id === reactObj.user_id && react.message_id === content.id
+                        );
+                        console.log('reactList 1:', prevReactList);
+                        console.log('reactObj:', reactObj);
+                        if (existReact) {
+                            console.log('existReact 2:', existReact);
+                            if (existReact.react === reactObj.react) {
+                                // Xóa react nếu giống nhau
+                                console.log('remove 1 lan')
+                                return prevReactList.filter(
+                                    react => !(react.user_id === reactObj.user_id && react.react === reactObj.react)
+                                );
+                                
+                            } else {
+                                // Thay thế react
+                                console.log('update 1 lan')
+                                return prevReactList.map(react => 
+                                    react.user_id === reactObj.user_id && react.message_id === content.id
+                                        ? { ...reactObj } 
+                                        : react
+                                );
+                                
+                            }
+                        } else {
+                            // Thêm mới react
+                            console.log('add 1 lan')
+                            return [...prevReactList, { ...reactObj }];
+                        }
+                    });
+    
+                    
                 }
 
             });
+
+            // socketRef.current.on('receive-react-list', (reactObj: ReactType) => {
+            //     // kiểm tra reactObj có phải là tin nhắn này ko
+            //     if (reactObj.message_id === content.id) {
+            //         // kiểm tra nếu đã tồn tại reactObj này trong reactList thì sẽ xóa nó đi
+            //         const existReact = reactListStated.find(react => (react.user_id === reactObj.user_id));
+            //         // console.log('existReact', existReact);
+            //         if (existReact) {
+            //             if (existReact.react === reactObj.react) {
+            //                 setReactListStated((prevReactList) => {
+            //                     return prevReactList.filter(react => !(react.user_id === reactObj.user_id && react.react === reactObj.react));
+            //                 });
+            //                 // console.log('remove 1 lan')
+            //             } else {
+            //                 setReactListStated((prevReactList) => {
+            //                     const tempList = prevReactList.filter(react => !(react.user_id === reactObj.user_id));
+            //                     // console.log('update 1 lan')
+            //                     return [...tempList, reactObj];
+            //                 });
+            //             }
+            //         } else {
+            //             setReactListStated((prevReactList) => {
+            //                 return [...prevReactList, reactObj];
+            //             });
+            //             // console.log('add 1 lan')
+            //         }
+
+            //     }
+
+            // });
         }
     }, [socketRef.current, socketRef]);
-
-    useEffect(() => {
-        // bên thằng nào gửi thì thằng đó sẽ đổi db của mình
-        const send_react = async () => {
-            if (socketRef.current) {
-                socketRef.current.on('send-react', (reactObj: ReactType) => {
-                    if (userId === reactObj.user_id && reactObj.message_id === content.id) {
-                        fetchReact(reactObj);
-                    }
-                });
-            }
-        }
-        send_react();
-    }, [react, socketRef.current]);
 
     return (
         <div className={`flex w-full ${orientation === "right" ? "justify-end" : "justify-start"} group relative mt-2 mb-2`}>
@@ -334,7 +399,8 @@ export default function Message({
                                 openState={isReactDialogOpen}
                                 setOpenState={setIsReactDialogOpen}
                                 handleDeleteCancel={leaveReact}
-                                reactList={reactList}
+                                reactListStated={reactListStated}
+                                setReactListStated={setReactListStated}
                             />
 
                         </>

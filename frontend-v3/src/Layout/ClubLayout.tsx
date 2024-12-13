@@ -186,7 +186,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                 <div className="overflow-auto flex-1 scrollbar-hide">
                     <div className="flex items-center justify-between p-2 cursor-pointer" onClick={() => navigate(`/club/${clubId}`)}>
                         <div></div>
-                        <h1 className="text-center text-[24px] font-bold" >Nemui</h1>
+                        <h1 className="text-center text-[24px] font-bold">Nemui</h1>
                         {
                             checkRole &&
                             (<>
@@ -195,7 +195,6 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         <Ellipsis className="cursor-pointer" />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="w-56 bg-gray-200 text-[black]">
-
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]  "
                                             onClick={() => setEventOpen(!eventOpen)}
