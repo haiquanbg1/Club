@@ -70,6 +70,9 @@ function MessageList({ socketRef, messageList, setMessagesList, userProfile, fri
               author={message.sender_id == userProfile.id ? { display_name: userProfile.display_name, avatar: userProfile.avatar }
                 : { display_name: friendProfile.display_name, avatar: friendProfile.avatar }}
 
+              // author={message.sender_id == userProfile.id ? { display_name: message.sender.display_name, avatar: userProfile.avatar }
+              //   : { display_name: message.sender.display_name, avatar: friendProfile.avatar }}
+
               content={{
                 message: message.message,
                 sender_id: message.sender_id,

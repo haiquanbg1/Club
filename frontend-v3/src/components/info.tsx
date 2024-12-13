@@ -50,7 +50,7 @@ export default function Info() {
                 <DropdownMenuItem onClick={logoutHandle}>
                     Đăng xuất
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => { navigate("/me") }}>
+                <DropdownMenuItem onClick={() => { navigate("/userProfile") }}>
                     View Profile
                 </DropdownMenuItem>
             </DropdownMenuContent>

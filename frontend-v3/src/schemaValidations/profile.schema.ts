@@ -17,7 +17,7 @@ export const UserProfileRes = z.object({
         email: z.string(),
         avatar: z.string(),
         birthday: z.string(),
-        gender: z.number(),
+        gender: z.boolean(),
         id: z.string()
     })
 })

@@ -7,6 +7,8 @@ import ClubLayout from './Layout/ClubLayout';
 import NotFound from './Pages/NotFound';
 import AuthGuard from './Middleware/Auth/AuthGuard';
 import { isAuthenticated } from './Middleware/Auth/authUtils';
+import ChatLayout from './Layout/ChatLayout';
+import HomeLayout from './Layout/HomeLayout';
 interface RouteConfig {
   path: string;
   component: React.FC; // Giả định rằng các component là các functional components
@@ -53,9 +55,27 @@ function App() {
                             )
                           }
                           {
-                            route.layout !== 'clubLayout' &&
+                            route.layout === 'chatLayout' &&
                             (
+                              <ChatLayout>
+                                <Page />
+                              </ChatLayout>
+                            )
+                          }
+                          {
+                            route.layout === 'no' &&
+                            (
+
                               <Page />
+
+                            )
+                          }
+                          {
+                            (route.layout !== 'clubLayout' && route.layout !== 'chatLayout' && route.layout !== 'no') &&
+                            (
+                              <HomeLayout>
+                                <Page />
+                              </HomeLayout>
                             )
                           }
                         </Layout>

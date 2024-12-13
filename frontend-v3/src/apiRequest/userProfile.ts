@@ -5,7 +5,7 @@ import { MessageResType } from "../schemaValidations/common.schema";
 
 
 const userApiRequest = {
-    getProfile: (id?: string) => http.get<UserProfileResType>(`user/profile/${id}`),
+    getProfile: (id?: string) => http.get<UserProfileResType>(`user/profile/?user_id=${id}`),
     delete: () => http.delete<MessageResType>('user/delete', {}),
     update: (body: any) => http.patch<UserProfileResType>('user/update', body),
     changePassword: (body: ChangePasswordFormType) => http.patch<any>('user/changePassword', body),

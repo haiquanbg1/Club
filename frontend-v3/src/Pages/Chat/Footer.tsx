@@ -56,7 +56,7 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
             try {
                 const response = await axios.post(`http://localhost:8080/api/v1/message/friend/${friendProfile.id}/send`, {
                     message: messageObject.message,
-                    message_id : messageObject.id
+                    message_id: messageObject.id
                 }, {
                     withCredentials: true
                 });
@@ -68,7 +68,7 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-        if (emojiPickerRef.current 
+        if (emojiPickerRef.current
             && emojiPickerButtonRef.current
             && !emojiPickerRef.current.contains(e.target as Node)
             && !emojiPickerButtonRef.current.contains(e.target as Node)) {
@@ -106,7 +106,7 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
 
             <form
                 onSubmit={handleSubmit}
-                className="w-full h-9 p-1 text-white bg-gray-800 rounded-3xl flex items-center relative">
+                className="w-full h-9 p-1 text-white bg-[#44474e] rounded-3xl flex items-center relative">
                 <input
                     id="msg"
                     type="text"
@@ -114,18 +114,18 @@ export default function Footer({ className, socketRef, userProfile, friendProfil
                     placeholder={`Aa`}
                     required
                     onChange={handleChange}
-                    className='flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none'
+                    className='flex-1 h-full p-1.5 bg-[#44474e] text-white rounded-3xl outline-none'
                 />
-                <button 
-                    type="button" 
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                     className="p-2 text-white hover:bg-slate-500 shadow-sm rounded-3xl cursor-pointer absolute right-0"
                     ref={emojiPickerButtonRef}>
                     <FaSmile size={18} />
                 </button>
 
             </form>
-            <button type="submit" className="ml-2 mr-2 p-2 bg-blue-500 text-white rounded-3xl flex items-center"
+            <button type="submit" className="ml-2 mr-2 p-2 bg-[#44474e] text-white rounded-3xl flex items-center"
                 onClick={handleSubmit}>
                 <FaPaperPlane size={18} />
             </button>

@@ -11,7 +11,7 @@ interface info {
     email: string;
     avatar: string;
     birthday: string;
-    gender: number;
+    gender: boolean;
     resetInfo?: () => Promise<void>
 }
 export default function ProfileCard({ id, resetInfo, display_name, email, avatar, birthday, gender }: info) {

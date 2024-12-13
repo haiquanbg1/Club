@@ -5,6 +5,7 @@ import socketIOClient from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
+import userApiRequest from "@/apiRequest/userProfile";
 
 const host = 'http://localhost:8080';
 
@@ -34,7 +35,7 @@ export type Profile = {
     id: string;
     display_name: string;
     email: string;
-    birthday: Date;
+    birthday: string;
     gender: boolean;
     avatar: string;
 }
@@ -43,7 +44,7 @@ export default function ChatPage() {
 
     // friend ID
     const { id: friendId } = useParams<{ id: string }>();
-
+    const { userId } = useParams()
     const location = useLocation();
 
     const socketRef = useRef<any>(null);
@@ -67,13 +68,15 @@ export default function ChatPage() {
 
     const fetchFriendProfile = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/user/profile', {
-                params: {
-                    user_id: friendId
-                },
-                withCredentials: true
-            });
-            setFriendProfile(response.data.data);
+            console.log(friendId);
+            // const response = await axios.get('http://localhost:8080/api/v1/user/profile', {
+            //     params: {
+            //         user_id: friendId
+            //     },
+            //     withCredentials: true
+            // });
+            const response = await userApiRequest.getProfile(userId)
+            setFriendProfile(response.payload.data);
             // console.log('Friend profile:', response.data.data);
         } catch (error) {
             console.error('Error fetching friend profile:', error);
@@ -83,13 +86,9 @@ export default function ChatPage() {
     // Fetch dữ liệu người dùng
     const fetchUserProfile = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/user/profile', {
-                params: {
-                    user_id: '@me'
-                },
-                withCredentials: true
-            });
-            setUserProfile(response.data.data);
+            const response = await userApiRequest.getProfile()
+            // setFriendProfile();
+            setUserProfile(response.payload.data);
             // console.log('User profile:', response.data.data);
         } catch (error) {
             console.error('Error fetching user profile:', error);
@@ -129,7 +128,7 @@ export default function ChatPage() {
             setLoading(false); // Tắt trạng thái loading sau khi fetch xong
         }
     };
-   
+
     const connectSocket = async () => {
 
         const channelId = [userProfile?.id, friendId].sort().join('/');
@@ -225,7 +224,7 @@ export default function ChatPage() {
     }, [messagesList]);
 
     return (
-        <div className="h-screen flex flex-col bg-gray-700 relative">
+        <div className="h-screen flex flex-col bg-[#313338] relative">
             {friendProfile && <Header friendProfile={friendProfile} />}
             {<div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-2 mt-2
                 [&::-webkit-scrollbar]:w-2

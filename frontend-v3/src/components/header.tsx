@@ -10,7 +10,7 @@ export default function Header() {
     const pathName = location.pathname;
     const isAuth = pathName === "/login" || pathName === "/register"
     return (
-        <div >
+        <div className='' >
             {!isAuth &&
                 <ul className='space-y-4 items-center  pt-[4px] '>
                     {/* <li>
