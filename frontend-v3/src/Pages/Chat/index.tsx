@@ -68,14 +68,15 @@ export default function ChatPage() {
 
     const fetchFriendProfile = async () => {
         try {
-            console.log(friendId);
             // const response = await axios.get('http://localhost:8080/api/v1/user/profile', {
             //     params: {
             //         user_id: friendId
             //     },
             //     withCredentials: true
             // });
+            console.log(userId)
             const response = await userApiRequest.getProfile(userId)
+            console.log(response)
             setFriendProfile(response.payload.data);
             // console.log('Friend profile:', response.data.data);
         } catch (error) {
@@ -86,7 +87,7 @@ export default function ChatPage() {
     // Fetch dữ liệu người dùng
     const fetchUserProfile = async () => {
         try {
-            const response = await userApiRequest.getProfile()
+            const response = await userApiRequest.getProfile("")
             // setFriendProfile();
             setUserProfile(response.payload.data);
             // console.log('User profile:', response.data.data);
@@ -98,7 +99,7 @@ export default function ChatPage() {
     const fetchMessages = async (offset = 0) => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:8080/api/v1/message/friend/${friendId}/old`, {
+            const response = await axios.get(`http://localhost:8080/api/v1/message/friend/${userId}/old`, {
                 params: {
                     offset
                 },

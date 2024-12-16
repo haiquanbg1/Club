@@ -6,7 +6,7 @@ const routes = {
     club: '/club/:clubId',
     conversation: '/club/:clubId/conversation/:conversationId',
     chat: 'friend/:userId/chat',
-    clubProfile: '/clubProfile/:userId',
+    clubProfile: '/clubProfile/:clubId',
     // event: "/event/:id",
     createClub: "/createClub",
     friend: "/friend",
