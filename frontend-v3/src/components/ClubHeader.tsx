@@ -4,9 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function ClubHeader() {
     const navigate = useNavigate()
     const { clubId } = useParams();
-    // const { clubName } = useParams();
-    // const clubName = location.pathname.slice(6)
-    // console.log(clubName)
     const handleCLick = () => {
         const arr = localStorage.getItem("adminClubs")
         if (arr?.includes(clubId || "")) {

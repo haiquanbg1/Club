@@ -1,6 +1,6 @@
 import PendingFriendCard from "@/components/PendingFriendCard";
 import AddFriendForm from "./AddFriendForm";
-import ListFriend from "../Home/ListFriend";
+// import ListFriend from "../Home/ListFriend";
 import { useEffect, useState } from "react"
 import FriendApiRequest from "@/apiRequest/friend"
 import HeaderHome from "@/components/HeaderHome";
@@ -34,7 +34,7 @@ export default function FriendPage() {
             {/* <div>Home page</div> */}
             <div className="flex flex-1 h-full">
 
-                <ListFriend></ListFriend>
+                {/* <ListFriend></ListFriend> */}
                 <div className="bg-#3A3A3A] w-full">
                     <HeaderHome />
                     <div className="p-4">

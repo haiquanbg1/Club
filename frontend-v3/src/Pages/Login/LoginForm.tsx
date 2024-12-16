@@ -40,23 +40,23 @@ export default function LoginForm() {
     }, []);
 
     const onSubmit = async (values: any) => {
-        const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
+        // const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
 
-        // Gửi token đến backend để xác minh CAPTCHA
-        const res = await fetch("http://fall2024c8g7.int3306.freeddns.org/api/v1/auth/verify-turnstile", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ "cf-turnstile-response": token }),
-        });
-        const result = await res.json();
-        if (!result.success) {
-            toast({
-                description: "Capcha error"
-                // description: "There was a problem with your request.",
-            })
-        }
+        // // Gửi token đến backend để xác minh CAPTCHA
+        // const res = await fetch("http://fall2024c8g7.int3306.freeddns.org/api/v1/auth/verify-turnstile", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({ "cf-turnstile-response": token }),
+        // });
+        // const result = await res.json();
+        // if (!result.success) {
+        //     toast({
+        //         description: "Capcha error"
+        //         // description: "There was a problem with your request.",
+        //     })
+        // }
         try {
             const result = await authApiRequest.login(values)
             toast({
@@ -121,10 +121,10 @@ export default function LoginForm() {
                         </FormItem>
                     )}
                 />
-                <div
+                {/* <div
                     className="cf-turnstile"
                     data-sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
-                ></div>
+                ></div> */}
                 <Button type="submit" className="w-full text-[20px] font-bold">Đăng nhập</Button>
             </form>
         </Form>

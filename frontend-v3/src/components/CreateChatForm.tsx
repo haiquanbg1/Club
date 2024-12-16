@@ -2,8 +2,10 @@ import { useParams } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import ChatApiRequest from "@/apiRequest/chat";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CreateChatForm({ setChatOpen }: { setChatOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+    const toast = useToast()
     const { clubId } = useParams()
     const [chatName, setChatName] = useState("")
     const createChat = async () => {
