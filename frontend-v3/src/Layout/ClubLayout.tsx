@@ -51,7 +51,7 @@ import ClubApiRequest from "@/apiRequest/club";
 import CreateChatForm from "@/components/CreateChatForm";
 import ChatApiRequest from "@/apiRequest/chat";
 import ChatMemberBox from "@/components/ChatMemberBox";
-
+import { useToast } from "@/hooks/use-toast";
 
 const eventSchema = EventBody
 
@@ -67,8 +67,8 @@ interface chat {
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
     // const clubId = useSelector((state: RootState) => state.club.clubId);
+    const { toast } = useToast()
     const location = useLocation()
-    console.log(location.pathname)
     const { clubId } = useParams()
     const [eventOpen, setEventOpen] = useState(false)
     const [chatOpen, setChatOpen] = useState(false)
@@ -126,9 +126,12 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             setEventOpen(false)
             getJoinedEvent()
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
-        console.log(format(values.start_time, "yyyy/MM/dd"))
     }
 
     useEffect(() => {
@@ -141,11 +144,15 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
         localStorage.setItem("callEvent", "true")
         try {
             const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
-            console.log(response)
+
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setJoinedEvent(response.payload.data);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     useEffect(() => {
@@ -172,7 +179,6 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             const res = await ClubApiRequest.delete(body)
             navigate("/")
             localStorage.setItem("call", "false")
-            console.log(res)
         } catch (error) {
 
         }

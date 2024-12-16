@@ -18,7 +18,6 @@ export default function FriendPage() {
     const getPending = async () => {
         try {
             const response = await FriendApiRequest.pending()
-            console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setPending(response.payload.data);
         } catch (error) {

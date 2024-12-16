@@ -22,7 +22,7 @@ export default function Account() {
             navigate("/login")
         }
         catch (error: any) {
-            console.log(error.payload)
+
             toast({
                 variant: "destructive",
                 title: "Uh oh! Something went wrong.",

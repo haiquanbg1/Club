@@ -39,6 +39,7 @@ import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UpdateScheduleBody, UpdateScheduleBodyType } from "@/schemaValidations/event.schema"
+import { useToast } from "@/hooks/use-toast"
 interface Schedule {
     title?: string
     id?: string,
@@ -51,7 +52,8 @@ interface Schedule {
 
 const updateScheduleSchema = UpdateScheduleBody
 export default function Schedule({ id, location, title, description, resetSchedules, start_time, end_time }: Schedule) {
-    const { eventId, clubId } = useParams()
+    const { toast } = useToast()
+    const { clubId } = useParams()
     const [scheduleOpen, setScheduleOpen] = useState(false)
     const UpdateScheduleForm = useForm<UpdateScheduleBodyType>({
         resolver: zodResolver(updateScheduleSchema),
@@ -64,20 +66,29 @@ export default function Schedule({ id, location, title, description, resetSchedu
         },
     })
     const handleDelete = async () => {
-        console.log(eventId)
-        console.log(id)
 
         try {
-            const res = await ClubApiRequest.deleteSchedule({
+            await ClubApiRequest.deleteSchedule({
                 club_id: clubId || "",
                 schedule_id: id || "",
             });
             if (resetSchedules) {
                 resetSchedules();
             }
-            console.log(res);
+            toast({
+
+                title: "Thành công",
+                description: "Đã xóa",
+
+            })
+
         } catch (error) {
-            console.log(error);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+
+            })
         }
     }
     useEffect(() => {
@@ -96,14 +107,24 @@ export default function Schedule({ id, location, title, description, resetSchedu
                 location: ""
             }
             // const res = await ClubApiRequest.createEvent(body)
-            const res = await ClubApiRequest.updateSchedule(body)
+            await ClubApiRequest.updateSchedule(body)
             if (resetSchedules) {
                 resetSchedules()
             }
-            console.log(res)
+            toast({
+
+                title: "Thành công",
+                description: "Đã thay đổi lịch trình",
+
+            })
             setScheduleOpen(false)
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+
+            })
         }
     }
 

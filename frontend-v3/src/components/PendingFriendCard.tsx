@@ -7,7 +7,6 @@ export default function PendingFriendCard({ senderId, senderName, avatar, resetP
             await FriendApiRequest.accept({ user_id: senderId, display_name: senderName })
             resetPendingList()
         } catch (error) {
-            console.log(error)
         }
     }
 
@@ -16,7 +15,6 @@ export default function PendingFriendCard({ senderId, senderName, avatar, resetP
             await FriendApiRequest.deny({ user_id: senderId })
             resetPendingList()
         } catch (error) {
-            console.log(error)
         }
     }
     return (

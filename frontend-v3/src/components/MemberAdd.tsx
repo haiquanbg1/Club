@@ -23,7 +23,6 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
     const getAdding = async () => {
         try {
             const response = await MemberApiRequest.getAdding(clubId)
-            console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setListAdding(response.payload.data);
 
@@ -65,16 +64,19 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
         }
 
         try {
-            const res = await MemberApiRequest.add(body)
+            await MemberApiRequest.add(body)
             setSelected("")
             resetMember()
-            console.log(res)
             toast({
                 description: "Success",
             })
             setOpen(false)
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -84,7 +86,11 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
             const list = res.payload.data.filter(user => user.user_id != localStorage.getItem("user_id"))
             setChatAddList(list)
         } catch (error) {
-
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -120,16 +126,19 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
         }
 
         try {
-            const res = await ChatApiRequest.addParticipant(body)
+            await ChatApiRequest.addParticipant(body)
             setChatSelected("")
             resetMember()
-            console.log(res)
             toast({
                 description: "Success",
             })
             setOpen(false)
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     useEffect(() => {

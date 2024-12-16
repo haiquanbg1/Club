@@ -40,22 +40,13 @@ export default function MemberBox() {
             setCheckRole(true)
         }
     }, [location, localStorage])
-    // console.log(id)
-    // console.log(location)
     const getMember = async () => {
-        // const clubId = location.pathname.slice(5)
-        // if (localStorage.getItem("club_id") == "") {
-        //     navigate("/")
-        // }
         try {
             const response = await MemberApiRequest.get(clubId || "")
-            console.log(1)
-            console.log(response)
-            // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setMembers(response.payload.data);
 
         } catch (error) {
-            console.log(error)
+
         }
     }
     useEffect(() => {
@@ -67,15 +58,18 @@ export default function MemberBox() {
             const body = {
                 "club_id": localStorage.getItem("club_id")
             }
-            const res = await MemberApiRequest.out(body)
-            console.log(res)
+            await MemberApiRequest.out(body)
             localStorage.setItem("call", "false")
             navigate("/")
             toast({
                 description: "Success",
             })
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -84,12 +78,16 @@ export default function MemberBox() {
             const body = {
                 "club_id": clubId || ""
             }
-            const res = await ClubApiRequest.delete(body)
+            await ClubApiRequest.delete(body)
             localStorage.setItem("call", "false")
             navigate("/")
-            console.log(res)
-        } catch (error) {
 
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     return (

@@ -62,7 +62,7 @@ export default function NotiForm({
         resetNoti();
       }
       form.reset();
-      console.log(res);
+
     } catch (error) { }
   };
   return (

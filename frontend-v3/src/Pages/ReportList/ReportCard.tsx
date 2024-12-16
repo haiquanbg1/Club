@@ -16,8 +16,8 @@ export default function ReportCard({ id, title, message, status, reset }: report
                 report_id: id,
                 status: "read"
             }
-            const res = await ReportApiRequest.update(body)
-            console.log(res)
+            await ReportApiRequest.update(body)
+
             reset()
         } catch (error) {
 
@@ -29,8 +29,7 @@ export default function ReportCard({ id, title, message, status, reset }: report
             const body = {
                 report_id: id,
             }
-            const res = await ReportApiRequest.delete(body)
-            console.log(res)
+            await ReportApiRequest.delete(body)
             reset()
         } catch (error) {
 

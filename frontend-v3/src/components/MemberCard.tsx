@@ -28,8 +28,9 @@ interface Member {
     resetMember2?: () => Promise<void>
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
+import { useToast } from "@/hooks/use-toast"
 export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admin, avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
+    const { toast } = useToast()
     const { clubId, eventId, conversationId } = useParams()
     const handleDelete = async () => {
         const body = {
@@ -37,13 +38,20 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
             "club_id": clubId || ""
         }
         try {
-            const res = await MemberApiRequest.delete(body)
-            console.log(res)
+            await MemberApiRequest.delete(body)
             if (resetMember) {
                 resetMember()
             }
+            toast({
+                title: "Thành công",
+                description: "Đã xóa thành viên",
+            })
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     const handleDeleteChatMember = async () => {
@@ -53,13 +61,20 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
             "conversation_id": conversationId || ""
         }
         try {
-            const res = await ChatApiRequest.deleteParticipant(body)
-            console.log(res)
+            await ChatApiRequest.deleteParticipant(body)
+            toast({
+                title: "Thành công",
+                description: "Đã xóa thành viên",
+            })
             if (resetMember) {
                 resetMember()
             }
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -70,16 +85,23 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
             "user_id": id || "",
         }
         try {
-            const res = await ClubApiRequest.acceptRequest(body)
+            await ClubApiRequest.acceptRequest(body)
             if (resetMember) {
                 resetMember()
             }
             if (resetMember2) {
                 resetMember2()
             }
-            console.log(res)
+            toast({
+                title: "Thành công"
+            })
+
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -90,16 +112,20 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
             "user_id": id || "",
         }
         try {
-            const res = await ClubApiRequest.denyRequest(body)
+            await ClubApiRequest.denyRequest(body)
             if (resetMember) {
                 resetMember()
             }
             if (resetMember2) {
                 resetMember2()
             }
-            console.log(res)
+
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
 
@@ -110,16 +136,23 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
             "user_id": id || "",
         }
         try {
-            const res = await ClubApiRequest.kickParticipant(body)
+            await ClubApiRequest.kickParticipant(body)
             if (resetMember) {
                 resetMember()
             }
             if (setOpen) {
                 setOpen(false)
             }
-            console.log(res)
+            toast({
+                title: "Thành công",
+                description: "Đã xóa thành viên",
+            })
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     return (

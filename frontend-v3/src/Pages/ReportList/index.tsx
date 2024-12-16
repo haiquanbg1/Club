@@ -21,9 +21,9 @@ export default function ReportListPage() {
         try {
             const res = await ReportApiRequest.get(clubId || "")
             setReports(res.payload.data)
-            console.log(`report ${reports}`)
+
         } catch (error) {
-            console.log(error)
+
         }
     }
 

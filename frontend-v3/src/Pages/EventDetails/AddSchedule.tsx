@@ -74,13 +74,12 @@ export default function AddSchedule({ resetSchedules }: { resetSchedules: () => 
             })
             setEventOpen(false)
         } catch (error: any) {
-            console.log(error.payload)
             toast({
                 description: "Có lỗi xảy ra.",
                 variant: "destructive", // Để lỗi hiển thị nổi bật
             });
         }
-        // console.log(format(values.start_time, "MM/dd/yyyy"))
+
     }
 
     return (

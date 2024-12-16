@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import userApiRequest from '@/apiRequest/userProfile';
-
+import { useToast } from '@/hooks/use-toast';
 function convertDateFormat(dateString: string) {
     // Tách chuỗi ngày thành các phần
     const parts = dateString.split('/');
@@ -42,36 +42,57 @@ function convertDateFormat(dateString: string) {
 }
 
 export default function ChangeWindow({ display_name, birthDay, resetInfo }: { display_name: string, birthDay: string, resetInfo?: () => Promise<void> }) {
+    const { toast } = useToast()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState("")
     const [birth, setBirth] = useState("")
     const handleSubmitName = async () => {
         try {
-            const result = await userApiRequest.update(
+            await userApiRequest.update(
                 {
                     "display_name": name
                 }
             )
-            console.log(result?.payload)
+            toast({
+
+                title: "Thành công",
+                description: "Đã thay đổi thông tin",
+
+            })
             setName("")
             if (resetInfo) {
                 resetInfo()
             }
         } catch (error: any) {
-            console.log(error.payload)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+
+            })
         }
     }
     const handleSubmitBirth = async () => {
         try {
-            const result = await userApiRequest.update(
+            await userApiRequest.update(
                 {
                     "birthday": convertDateFormat(birth)
                 }
             )
-            console.log(result?.payload)
+            toast({
+
+                title: "Thành công",
+                description: "Đã thay đổi thông tin",
+
+            })
             setBirth("")
         } catch (error: any) {
-            console.log(error.payload)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+
+            })
         }
     }
     return (

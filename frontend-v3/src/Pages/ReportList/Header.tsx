@@ -5,9 +5,7 @@ export default function Header() {
 
     const navigate = useNavigate()
     const { clubId } = useParams();
-    // const { clubName } = useParams();
-    // const clubName = location.pathname.slice(6)
-    // console.log(clubName)
+
     return (
         <div className="w-full  bg-[#393e46] p-2 flex justify-between items-center">
             <div className="font-bold text-[20px]">Danh sách báo cáo</div>

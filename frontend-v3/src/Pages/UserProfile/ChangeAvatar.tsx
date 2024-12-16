@@ -24,18 +24,16 @@ export default function ChangeAvatar({ resetInfo }: { resetInfo: () => Promise<v
     const handleUpload = async () => {
         const formData = new FormData();
         formData.append('image', selectedFile ? selectedFile : "");
-        // formData.forEach((value, key) => {
-        //     console.log(key, value);  // In ra từng key và value trong FormData
-        // });
+
         try {
             const res = await userApiRequest.changeAvatar(formData)
             localStorage.setItem("avatar", res.payload.data.avatar)
-            // console.log(res)
+
             resetInfo()
             setSelectedFile(null)
             setOpen(false)
         } catch (error: any) {
-            console.error('Error uploading image:', error.payload);
+
         }
     };
     return (

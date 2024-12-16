@@ -103,8 +103,13 @@ export default function Header({ title, isAdmin, description, resetInfo, resetMe
                 description: values.description,
                 start_time: format(values.start_time, "yyyy/MM/dd"),
             }
-            const res = await ClubApiRequest.updateEvent(body)
-            console.log(res)
+            await ClubApiRequest.updateEvent(body)
+            toast({
+
+                title: "Thành công",
+                description: "Đã lưu thay đổi",
+
+            })
             setEventOpen(false)
             resetInfo()
         } catch (error) {

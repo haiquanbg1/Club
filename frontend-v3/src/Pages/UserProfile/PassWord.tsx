@@ -47,7 +47,6 @@ export default function Password() {
             form.reset()
             setOpen(false)
         } catch (error: any) {
-            console.log(error.status)
             if (error.status === 400) {
                 form.setError('curPass', {
                     type: 'server',

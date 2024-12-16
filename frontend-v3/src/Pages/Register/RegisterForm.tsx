@@ -43,7 +43,7 @@ export function RegisterForm() {
 
 
     async function onSubmit(values: RegisterBodyType) {
-        // console.log(values)
+
         if (loading) return
         setLoading(true)
         if (!validateDate(values.birthday)) {
@@ -62,8 +62,8 @@ export function RegisterForm() {
             })
             setShowOTP(true)
         } catch (error: any) {
-            console.log(1)
-            console.log(error.payload)
+
+
             const errors = error.payload.message
             //     const errors = error.payload.errors as {
             //         field: string

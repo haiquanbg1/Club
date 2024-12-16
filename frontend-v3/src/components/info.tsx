@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from '@/hooks/use-toast'
 import authApiRequest from "@/apiRequest/auth"
 import { useNavigate } from 'react-router-dom'
-
 export default function Info() {
     const navigate = useNavigate()
     const { toast } = useToast()
@@ -20,10 +19,8 @@ export default function Info() {
                 description: result?.payload.message
                 // description: "There was a problem with your request.",
             })
-            console.log(result)
             navigate('/login')
         } catch (error: any) {
-            console.log(error.payload)
             toast({
                 variant: "destructive",
                 title: "Uh oh! Something went wrong.",

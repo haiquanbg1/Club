@@ -37,7 +37,6 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.get()
-                console.log('lấy club')
                 const clubsData = response.payload.data.map((item) => ({
                     name: item.name || "",
                     id: item.id,
@@ -52,7 +51,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                 // Giả sử API trả về mảng các object có cấu trúc tương tự Item
                 setClubs(clubsData);
             } catch (error) {
-                console.error('Error fetching data:', error);
+
             }
         };
 

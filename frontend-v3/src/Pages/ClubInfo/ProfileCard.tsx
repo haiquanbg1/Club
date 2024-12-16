@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 interface Club {
     name: string;
     id: string;
     avatar: string;
 }
 export default function ProfileCard() {
+    const { toast } = useToast()
     const [club, setClub] = useState<Club>()
     const [edit, setEdit] = useState(false)
     const [open, setOpen] = useState(false)
@@ -37,10 +39,9 @@ export default function ProfileCard() {
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.getClub(clubId || "")
-                console.log(response)
                 setClub(response.payload.data[0]);
             } catch (error) {
-                console.error('Error fetching data:', error);
+
             }
         };
 
@@ -58,17 +59,22 @@ export default function ProfileCard() {
         formData.append('avatar', selectedFile ? selectedFile : "");
         formData.append('club_id', clubId ? clubId : "");
 
-        formData.forEach((value, key) => {
-            console.log(key, value);  // In ra từng key và value trong FormData
-        });
         try {
-            const res = await ClubApiRequest.changeAvatar(formData)
-            // localStorage.setItem("avatar", res.payload.data.avatar)
-            console.log(res)
+            await ClubApiRequest.changeAvatar(formData)
+            toast({
+
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+
+            })
             setSelectedFile(null)
             setOpenDialog(false)
         } catch (error: any) {
-            console.error('Error uploading image:', error.payload);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     };
     return (

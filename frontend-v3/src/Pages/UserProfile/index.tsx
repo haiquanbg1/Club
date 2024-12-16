@@ -23,9 +23,9 @@ export default function UserProfilePage() {
         try {
             const result = await userApiRequest.getProfile(userId || "")
             setInfo(result?.payload)
-            console.log(result?.payload)
+
         } catch (error: any) {
-            console.log(error.payload)
+
             toast({
                 variant: "destructive",
                 title: "Uh oh! Something went wrong.",

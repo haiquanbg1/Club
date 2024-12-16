@@ -1,7 +1,9 @@
 import FriendApiRequest from '@/apiRequest/friend';
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast';
 export default function AddFriendForm() {
+    const { toast } = useToast()
     const [id, setId] = useState("")
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setId(event.target.value); // Cập nhật state với giá trị mới
@@ -9,11 +11,18 @@ export default function AddFriendForm() {
 
     const handleSubmit = async () => {
         try {
-            const res = await FriendApiRequest.add({ user_id: id })
-            console.log(res)
+            await FriendApiRequest.add({ user_id: id })
+            toast({
+                title: "Thành công",
+                description: "Đã gửi kết bạn",
+            })
             setId("")
         } catch (error: any) {
-            console.log(error.payload)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     return (

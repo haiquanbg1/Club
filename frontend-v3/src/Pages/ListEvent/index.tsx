@@ -22,11 +22,9 @@ export default function ListEventPage() {
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.getJoinedEvent(clubId ? clubId : "")
-                console.log(response)
                 // Giả sử API trả về mảng các object có cấu trúc tương tự Item
                 setJoinedEvents(response.payload.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
             }
         };
 
@@ -37,11 +35,11 @@ export default function ListEventPage() {
         const fetchData = async () => {
             try {
                 const response = await ClubApiRequest.getUnjoinedEvent(clubId ? clubId : "")
-                console.log(response)
+
                 // Giả sử API trả về mảng các object có cấu trúc tương tự Item
                 setUnjoinedEvents(response.payload.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+
             }
         };
 

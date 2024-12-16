@@ -19,8 +19,7 @@ export default function ReportPage() {
     const handleContentChange = (e: any) => {
         setContent(e.target.value);
     };
-    console.log(title)
-    console.log(content)
+
     const navigate = useNavigate()
     const { clubId } = useParams()
 
@@ -38,9 +37,9 @@ export default function ReportPage() {
             })
             setContent("")
             setTitle("")
-            console.log(res)
+
         } catch (error) {
-            console.log(error)
+
         }
     }
     return (

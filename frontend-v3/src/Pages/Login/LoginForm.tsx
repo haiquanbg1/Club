@@ -66,10 +66,9 @@ export default function LoginForm() {
             localStorage.setItem("name", result.payload.data.user.display_name)
             localStorage.setItem("avatar", result.payload.data.user.avatar)
             localStorage.setItem("user_id", result.payload.data.user.id)
-            console.log(result)
+
             navigate('/')
         } catch (error: any) {
-            console.log(error.payload)
             const errors = error.payload.message
             if (error.status === 400) {
                 form.setError('password', {

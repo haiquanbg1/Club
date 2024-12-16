@@ -20,7 +20,6 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
     const getAdding = async () => {
         try {
             const response = await MemberApiRequest.get(clubId || "")
-            console.log(response)
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
             setListAdding(response.payload.data);
 
@@ -76,7 +75,11 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
             })
             setOpen(false)
         } catch (error) {
-            console.log(error)
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
         }
     }
     return (

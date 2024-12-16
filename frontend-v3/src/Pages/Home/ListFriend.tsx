@@ -16,14 +16,12 @@ export default function ListFriend() {
   const navigate = useNavigate();
 
   const handleClick = (friend_id: string) => {
-    console.log(friend_id);
     navigate(`/friend/${friend_id}/chat`);
   };
 
   const getFriend = async () => {
     try {
       const response = await FriendApiRequest.getFriend(search);
-      console.log(response);
       // Giả sử API trả về mảng các object có cấu trúc tương tự Item
       setListFriend(response.payload.data);
     } catch (error) { }
