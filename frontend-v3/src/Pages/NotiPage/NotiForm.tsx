@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import NotificationApiRequest from "@/apiRequest/notification";
 // import socket from "../../socket";
 // import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const NotiFormSchema = NotificationBody;
 export default function NotiForm({
@@ -28,6 +29,7 @@ export default function NotiForm({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resetNoti?: () => Promise<void>;
 }) {
+  const { toast } = useToast()
   const { clubId } = useParams();
   const form = useForm<NotificationBodyType>({
     resolver: zodResolver(NotiFormSchema),
@@ -56,14 +58,27 @@ export default function NotiForm({
         club_id: clubId || "",
       };
 
-      const res = await NotificationApiRequest.create(body);
+      await NotificationApiRequest.create(body);
       setOpen(false);
       if (resetNoti) {
         resetNoti();
       }
-      form.reset();
 
-    } catch (error) { }
+      form.reset();
+      toast({
+
+        title: "Thành công",
+        description: "Tạo thông báo thành công",
+
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+
+      })
+    }
   };
   return (
     <Form {...form}>

@@ -17,7 +17,7 @@ export default function Home() {
                 {/* <ListFriend></ListFriend> */}
 
 
-                <div className="bg-[#3A3A3A] w-full">
+                <div className="bg-[#313338] w-full">
                     <HeaderHome />
                     <Welcome></Welcome>
                 </div>

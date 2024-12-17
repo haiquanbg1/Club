@@ -5,6 +5,7 @@ export default function PendingFriendCard({ senderId, senderName, avatar, resetP
     const handleAccept = async () => {
         try {
             await FriendApiRequest.accept({ user_id: senderId, display_name: senderName })
+            localStorage.setItem("friend", "checked")
             resetPendingList()
         } catch (error) {
         }
@@ -18,7 +19,7 @@ export default function PendingFriendCard({ senderId, senderName, avatar, resetP
         }
     }
     return (
-        <div className="border-[1px] border-[#ccc] border-[solid] p-4">
+        <div className="border-[2px] border-[#3d3f46] rounded-lg border-[solid] p-4">
             <div className="flex items-center mb-4">
                 <Avatar className="mr-3">
                     <AvatarImage src={avatar} />

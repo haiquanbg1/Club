@@ -38,7 +38,7 @@ export default function FriendPage() {
                     <HeaderHome />
                     <div className="p-4">
                         <AddFriendForm />
-                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 pt-4">
                             {pending.map((user, index) => (
                                 <div key={index}>
                                     <PendingFriendCard senderId={user.user_id} senderName={user.display_name} avatar={user.avatar} resetPendingList={getPending} />

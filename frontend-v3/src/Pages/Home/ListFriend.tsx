@@ -28,13 +28,13 @@ export default function ListFriend() {
   };
   useEffect(() => {
     getFriend();
-  }, []);
+
+    localStorage.setItem("friend", "check")
+  }, [localStorage.getItem("friend")]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (search) {
-        getFriend();
-      }
+      getFriend();
     }, 1000);
 
     // Xóa timeout nếu search thay đổi trước khi kết thúc 3 giây
@@ -42,7 +42,7 @@ export default function ListFriend() {
   }, [search]);
   return (
     <div className=" bg-[#2b2d31] flex-1 overflow-auto p-2">
-      <h3 className="text-center text-[20px] mb-3">Bạn bè</h3>
+      <h3 className="text-center text-[24px] mt-1 font-bold mb-4 ">Bạn bè</h3>
       <Input
         className="mb-2 bg-transparent focus-visible:ring-0 focus:outline-none focus:ring-none border-[white] ring-offset-0"
         placeholder="Nhập tên bạn bè"
@@ -50,7 +50,7 @@ export default function ListFriend() {
       />
       {listFriend.map((friend, index) => (
         <div
-          className="flex items-center mb-4 cursor-pointer hover:bg-slate-400 p-1"
+          className="flex items-center rounded-lg mb-4 cursor-pointer hover:bg-[#3d3f46] p-1"
           key={index}
           onClick={() => handleClick(friend.friend_id)}
         >

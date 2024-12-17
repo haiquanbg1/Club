@@ -64,9 +64,9 @@ const findOne = async (req, res) => {
 
 const findAllByClub = async (req, res) => {
     const { club_id } = req.params;
-
+    const user = req.user;
     try {
-        const notifications = await notificationService.findAll(club_id);
+        const notifications = await notificationService.findAll(club_id, user.id);
 
         const data = [];
 
@@ -80,6 +80,7 @@ const findAllByClub = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

@@ -73,7 +73,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <div className="w-[40px] h-[40px] rounded-xl cursor-pointer flex justify-start items-center">
+                                    <div className="w-[44px] h-[44px] rounded-xl cursor-pointer flex justify-start items-center">
                                         <div className="rounded-full bg-slate-300 h-full w-full p-2 hover:bg-violet-500 hover:rounded-xl">
                                             <Image src="https://logos-world.net/wp-content/uploads/2020/12/Discord-Logo.png" alt=""></Image>
                                         </div>
@@ -91,11 +91,16 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                                 <TooltipProvider key={index}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <div className="w-[40px] h-[40px] rounded-xl cursor-pointer flex justify-start items-center">
-                                                <div className="rounded-full bg-slate-300 h-full w-full p-2 hover:bg-violet-500 hover:rounded-xl">
-                                                    <Image src={club.avatar} alt=""></Image>
-                                                </div>
+                                            <div className="w-[44px] h-[44px] cursor-pointer overflow-hidden  transition-all duration-50">
+                                                <img
+                                                    src={club.avatar}
+                                                    className="w-full h-full object-cover rounded-full hover:rounded-xl transition-all duration-50"
+                                                    alt=""
+                                                />
                                             </div>
+                                            {/* <div className="w-[40px] h-[40px] rounded-full cursor-pointer flex items-center justify-center bg-slate-300 group hover:rounded-xl hover:bg-violet-500 transition-all duration-300">
+                                                <img src={club.avatar} className="h-[80%] w-[80%] object-cover rounded-full transition-all duration-300" alt="" />
+                                            </div> */}
                                         </TooltipTrigger>
                                         <TooltipContent side="left">
                                             <p>{club.name}</p>
@@ -105,7 +110,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                             </div>
                         ))
                     }
-                    <div className="w-[40px] h-[40px] rounded-xl cursor-pointer flex justify-start items-center" onClick={() => navigate('/createClub')}>
+                    <div className="w-[44px] h-[44px] rounded-xl cursor-pointer flex justify-start items-center" onClick={() => navigate('/createClub')}>
                         <Plus className="rounded-full bg-slate-700 h-full w-full p-2 hover:bg-green-500 hover:rounded-xl"></Plus>
                     </div>
                 </div>
