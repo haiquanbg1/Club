@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       react: {
-        type: DataTypes.TEXT,
-        allowNull: false, 
+        type: DataTypes.STRING(255),
+        allowNull: false,
         defaultValue: ''
       },
       status: {

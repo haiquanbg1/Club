@@ -69,6 +69,7 @@ const getOldMessages = async (req, res) => {
         return successResponse(res, StatusCodes.OK, 'Get Old Mess success', directMessages);
 
     } catch (error) {
+        console.log(error);
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

@@ -1,8 +1,29 @@
 const { StatusCodes } = require("http-status-codes");
 const eventService = require("../services/eventService");
+const memberService = require("../services/memberService");
+const notificationService = require("../services/notificationService");
+const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 const formatDate = require("../utils/formatDate");
+
+const notificationForAll = async (club_id, title, description) => {
+    // Thông báo cho club
+    const notification = await notificationService.create({
+        club_id,
+        title,
+        description
+    });
+
+    // Thông báo cho từng user
+    const clubMembers = await memberService.findAll(club_id);
+    for (let i = 0; i < clubMembers; i++) {
+        notificationService.addNotificationForUser(
+            clubMembers[i].user_id,
+            notification.id
+        );
+    }
+}
 
 const create = async (req, res) => {
     const { club_id, name, description, start_time } = req.body;
@@ -22,6 +43,12 @@ const create = async (req, res) => {
             status: 'accepted'
         });
 
+        await notificationForAll(
+            club_id,
+            "Hoạt động",
+            `Hoạt động ${name} sẽ được bắt đầu từ ngày ${start_time}!`
+        );
+
         return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");
     } catch (error) {
         console.log(error);
@@ -36,6 +63,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
     const { event_id, name, description, start_time } = req.body;
+    const club_id = req.body.club_id || req.params.club_id || req.query.club_id;
 
     const updateClause = Object.assign(
         {},
@@ -46,6 +74,16 @@ const update = async (req, res) => {
 
     try {
         await eventService.update(event_id, updateClause);
+
+        if (start_time) {
+            const event = await eventService.findAllForClub(club_id, event_id);
+
+            await notificationForAll(
+                club_id,
+                "Hoạt động",
+                `Hoạt động ${event[0].name} đã thay đổi thời gian bắt đầu thành ${start_time}`
+            )
+        }
 
         return successResponse(res, StatusCodes.OK, "Cập nhật thành công.");
     } catch (error) {
@@ -191,15 +229,25 @@ const findAllUserWithKey = async (req, res) => {
 
 const addParticipant = async (req, res) => {
     const { event_id, user_id } = req.body;
+    const club_id = req.body.club_id || req.params.club_id || req.query.club_id;
+
     try {
         const isInClub = await eventService.findOne({
             event_id,
             user_id
         });
 
-        // if (isInClub) {
-        //     return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
-        // }
+        if (isInClub && isInClub.status == "accepted") {
+            return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
+        }
+
+        // const event = await eventService.findAllForClub(club_id, event_id);
+        // const user = await us
+        // await notificationForAll(
+        //     club_id,
+        //     "Thành viên hoạt động",
+        //     ``
+        // )
 
         await eventService.addParticipant({
             event_id,
