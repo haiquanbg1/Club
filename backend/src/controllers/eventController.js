@@ -17,8 +17,8 @@ const notificationForAll = async (club_id, title, description) => {
 
     // Thông báo cho từng user
     const clubMembers = await memberService.findAll(club_id);
-    for (let i = 0; i < clubMembers; i++) {
-        notificationService.addNotificationForUser(
+    for (let i = 0; i < clubMembers.length; i++) {
+        const a = await notificationService.addNotificationForUser(
             clubMembers[i].user_id,
             notification.id
         );
@@ -45,8 +45,8 @@ const create = async (req, res) => {
 
         await notificationForAll(
             club_id,
-            "Hoạt động",
-            `Hoạt động ${name} sẽ được bắt đầu từ ngày ${start_time}!`
+            "Hoạt động mới",
+            `Sự kiện ${name} sẽ được bắt đầu từ ngày ${start_time}!`
         );
 
         return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");

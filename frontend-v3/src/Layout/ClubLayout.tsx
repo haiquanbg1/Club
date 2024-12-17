@@ -125,10 +125,15 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             }
             await ClubApiRequest.createEvent(body)
             // sau khi tạo sẽ gửi thông báo
-            await NotificationApiRequest.create({
-                title: "Sự kiện mới",
-                description: `Đã thêm sự kiện mới trong câu lạc bộ`,
-                club_id: clubId || ""
+            // await NotificationApiRequest.create({
+            //     title: "Sự kiện mới",
+            //     description: `Đã thêm sự kiện mới trong câu lạc bộ`,
+            //     club_id: clubId || ""
+            // })
+            toast({
+
+                title: "Thành công",
+                description: "Tạo sự kiện thành công.",
             })
             setEventOpen(false)
             getJoinedEvent()
