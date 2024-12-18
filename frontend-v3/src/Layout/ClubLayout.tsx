@@ -176,7 +176,6 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             const res = await ChatApiRequest.get(clubId || "")
             setChats(res.payload.data)
         } catch (error) {
-
         }
     }
     useEffect(() => {
@@ -253,7 +252,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                                             </DialogDescription>
                                         </DialogHeader>
-                                        <CreateChatForm setChatOpen={setChatOpen} getChat={getChat()}></CreateChatForm>
+                                        <CreateChatForm setChatOpen={setChatOpen} getChat={getChat} ></CreateChatForm>
                                     </DialogContent>
                                 </Dialog>
 
