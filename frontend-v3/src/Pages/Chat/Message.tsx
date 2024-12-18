@@ -181,24 +181,36 @@ export default function Message({
   }, []);
 
   useEffect(() => {
+    console.log("socketRef.current", socketRef.current);
     if (socketRef.current) {
-      socketRef.current.on("react", async (message: any) => {
+      socketRef.current.on("react", (message: any) => {
         if (message.id === content.id && message.userId !== userId) {
-          // console.log('msg change', message)
           setReact(message.react);
         }
       });
-      socketRef.current.on("remove-react", async (message: any) => {
+  
+      socketRef.current.on("remove-react", (message: any) => {
         if (message.id === content.id) {
           setReact("");
-          if (message.user_id == userId) {
+          if (message.user_id === userId) {
             fetchReact("");
             console.log("remove react");
           }
         }
       });
+    } else {
+      console.error("Socket is not connected");
     }
-  }, [socketRef, socketRef.current]);
+  
+    // Cleanup khi component bị hủy
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off("react");
+        socketRef.current.off("remove-react");
+      }
+    };
+  }, [socketRef.current, socketRef]); 
+  
 
   useEffect(() => {
     if (react !== "") {

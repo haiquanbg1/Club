@@ -88,6 +88,10 @@ module.exports = (app) => {
             io.to(channelId).emit('remove-react', message);
         });
 
+        socket.on('react', (message) => {
+            io.to(channelId).emit('react', message);
+        });
+
         socket.on('receive-react', (message) => {
             io.to(channelId).emit('receive-react', message);
         });

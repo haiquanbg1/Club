@@ -42,7 +42,7 @@ export type Profile = {
 
 export default function ChatPage() {
   // friend ID
-  const { id: friendId } = useParams<{ id: string }>();
+  // const { id: friendId } = useParams<{ id: string }>();
   const { userId } = useParams();
   const location = useLocation();
 
@@ -139,7 +139,7 @@ export default function ChatPage() {
   };
 
   const connectSocket = async () => {
-    const channelId = [userProfile?.id, friendId].sort().join("/");
+    const channelId = [userProfile?.id, userId].sort().join("/");
     // console.log('channelId:', channelId);
 
     socketRef.current = socketIOClient(host, {
@@ -202,15 +202,19 @@ export default function ChatPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      messagesRef.current = [];
+      setLastScrollTop(0);
       await fetchFriendProfile();
       await fetchUserProfile();
       await fetchMessages(); // Fetch tin nhắn
+      
       if (userProfile?.id) {
         connectSocket();
       }
     };
     fetchData();
-  }, [friendId, userProfile?.id, location.search]);
+    
+  }, [userId, userProfile?.id, location.search]);
 
   useEffect(setScrollToBottom, [messagesRef.current.length]);
 

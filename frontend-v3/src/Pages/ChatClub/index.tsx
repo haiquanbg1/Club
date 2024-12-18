@@ -207,6 +207,8 @@ export default function ChatPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      messagesRef.current = [];
+      setLastScrollTop(0);
       await fetchInfoClub();
       await fetchUserProfile();
       await fetchMessages();

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { FaPaperPlane, FaSmile } from "react-icons/fa";
-import { CgAdd } from "react-icons/cg";
-import { FiImage } from "react-icons/fi";
 import { useRef, useEffect } from "react";
 import { MessageStatus, Profile } from "../Chat/index";
 import { MessageConverType } from "./index";
@@ -91,13 +89,6 @@ export default function Footer({
     setMessage((prevMessage) => prevMessage + emoji.native);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // setSelectedImage(file);
-    }
-  };
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -107,22 +98,10 @@ export default function Footer({
 
   return (
     <div className={`${className} relative flex mb-1`}>
-      <button className="w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer">
-        <CgAdd size={20} />
-      </button>
-      <label className="w-9 h-9 p-2 hover:bg-slate-500 shadow-md rounded-3xl cursor-pointer">
-        <FiImage size={20} />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
-      </label>
 
       <form
         onSubmit={handleSubmit}
-        className="w-full h-9 p-1 text-white bg-gray-800 rounded-3xl flex items-center relative"
+        className="w-full h-9 p-1 ml-1 text-white bg-gray-800 rounded-3xl flex items-center relative"
       >
         <input
           id="msg"
