@@ -15,14 +15,12 @@ const create = async (req, res) => {
         });
 
         const users = await memberService.findAll(club_id);
-
-        // chưa cần await vì gửi qua socket
-        for (let i = 0; i < users.length; i++) {
-            await notificationService.addNotificationForUser(
-                users[i].users.id,
+        users.forEach((user) => {
+            notificationService.addNotificationForUser(
+                user.user.id,
                 notification.id
             );
-        }
+        });
 
         return successResponse(res, StatusCodes.CREATED, "Đã tạo thông báo.");
     } catch (error) {

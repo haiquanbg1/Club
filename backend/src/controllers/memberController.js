@@ -1,6 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const memberService = require("../services/memberService");
 const friendService = require("../services/friendService");
+const notificationService = require("../services/notificationService");
+const roleService = require("../services/roleService");
 const { successResponse, errorResponse } = require("../utils/response");
 const roles = require("../utils/role");
 const cloudinary = require("../utils/cloudinary");
@@ -68,6 +70,20 @@ const outMember = async (req, res) => {
 
     try {
         await memberService.deleteMember(club_id, user.id);
+
+        const manager = await roleService.findOne({
+            role_id: 2,
+            club_id
+        });
+        const notification = await notificationService.create({
+            club_id,
+            title: "Câu lạc bộ",
+            description: `${user.display_name} đã rời khỏi câu lạc bộ.`
+        });
+        await notificationService.addNotificationForUser(
+            manager.user_id,
+            notification.id
+        );
 
         return successResponse(res, StatusCodes.OK, "Thành công.");
     } catch (error) {

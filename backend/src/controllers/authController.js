@@ -56,6 +56,7 @@ const login = async (req, res) => {
             refreshToken,
         });
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

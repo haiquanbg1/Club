@@ -1,3 +1,4 @@
+const event = require('../models/event');
 const { Event, EventParticipant, User } = require('../models/index');
 const { Op } = require("sequelize");
 
@@ -176,6 +177,12 @@ const acceptPending = async (user_id, event_id) => {
     })
 }
 
+const findOneEvent = async (event_id) => {
+    return await Event.findOne({
+        id: event_id
+    });
+}
+
 module.exports = {
     create,
     update,
@@ -189,5 +196,6 @@ module.exports = {
     findAllUser,
     askToJoin,
     acceptPending,
-    findEventUserPending
+    findEventUserPending,
+    findOneEvent
 };
