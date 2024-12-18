@@ -27,17 +27,17 @@ export default function LoginForm() {
     },
   });
 
-  useEffect(() => {
-    // Load Turnstile script
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    script.async = true;
-    document.body.appendChild(script);
+  // useEffect(() => {
+  //   // Load Turnstile script
+  //   const script = document.createElement("script");
+  //   script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+  //   script.async = true;
+  //   document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
   const onSubmit = async (values: any) => {
     // const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;

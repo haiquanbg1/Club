@@ -1,7 +1,24 @@
 const scheduleService = require("../services/scheduleService");
+const eventService = require("../services/eventService");
+const notificationService = require("../services/notificationService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { StatusCodes } = require("http-status-codes");
 const formatDate = require("../utils/formatDate");
+
+const notificationForAll = async (club_id, event_id, title, description) => {
+    // Thông báo cho club
+    const notification = await notificationService.create({
+        club_id,
+        title,
+        description
+    });
+
+    const eventMembers = await eventService.findAllUser(event_id, "", "accepted");
+    // Gửi thông báo cho từng thành viên mà không chờ đợi kết quả
+    eventMembers.forEach(member => {
+        notificationService.addNotificationForUser(member.user_id, notification.id);
+    });
+}
 
 const create = async (req, res) => {
     const { event_id, title, description, start_time, end_time, location } = req.body;
@@ -16,8 +33,17 @@ const create = async (req, res) => {
             location
         });
 
+        const event = await eventService.findOneEvent(event_id);
+        await notificationForAll(
+            event.club_id,
+            event_id,
+            "Lịch trình",
+            `Đã có lịch trình mới trong hoạt động ${event.name}.`
+        );
+
         return successResponse(res, StatusCodes.CREATED, "Tạo lịch trình thành công.")
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

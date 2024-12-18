@@ -3,6 +3,7 @@ const eventService = require("../services/eventService");
 const memberService = require("../services/memberService");
 const notificationService = require("../services/notificationService");
 const userService = require("../services/userService");
+const roleService = require("../services/roleService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
 const formatDate = require("../utils/formatDate");
@@ -15,14 +16,11 @@ const notificationForAll = async (club_id, title, description) => {
         description
     });
 
-    // Thông báo cho từng user
     const clubMembers = await memberService.findAll(club_id);
-    for (let i = 0; i < clubMembers.length; i++) {
-        const a = await notificationService.addNotificationForUser(
-            clubMembers[i].user_id,
-            notification.id
-        );
-    }
+    // Gửi thông báo cho từng thành viên mà không chờ đợi kết quả
+    clubMembers.forEach(member => {
+        notificationService.addNotificationForUser(member.user_id, notification.id);
+    });
 }
 
 const create = async (req, res) => {
@@ -46,7 +44,7 @@ const create = async (req, res) => {
         await notificationForAll(
             club_id,
             "Hoạt động mới",
-            `Sự kiện ${name} sẽ được bắt đầu từ ngày ${start_time}!`
+            `Hoạt động ${name} sẽ được bắt đầu từ ngày ${start_time}!`
         );
 
         return successResponse(res, StatusCodes.CREATED, "Tạo hoạt động thành công.");
@@ -76,12 +74,12 @@ const update = async (req, res) => {
         await eventService.update(event_id, updateClause);
 
         if (start_time) {
-            const event = await eventService.findAllForClub(club_id, event_id);
+            const event = await eventService.findOneEvent(event_id);
 
             await notificationForAll(
                 club_id,
                 "Hoạt động",
-                `Hoạt động ${event[0].name} đã thay đổi thời gian bắt đầu thành ${start_time}`
+                `Hoạt động ${event.name} đã thay đổi thời gian bắt đầu thành ${start_time}`
             )
         }
 
@@ -241,13 +239,16 @@ const addParticipant = async (req, res) => {
             return errorResponse(res, StatusCodes.CONFLICT, "Người này đã có trong sự kiện.");
         }
 
-        // const event = await eventService.findAllForClub(club_id, event_id);
-        // const user = await us
-        // await notificationForAll(
-        //     club_id,
-        //     "Thành viên hoạt động",
-        //     ``
-        // )
+        const event = await eventService.findOneEvent(event_id);
+        const notification = await notificationService.create({
+            club_id,
+            title: "Hoạt động",
+            description: `Bạn đã được thêm vào ${event.name}.`
+        });
+        await notificationService.addNotificationForUser(
+            user_id,
+            notification.id
+        );
 
         await eventService.addParticipant({
             event_id,
@@ -269,6 +270,21 @@ const outEvent = async (req, res) => {
     try {
         await eventService.outEvent(event_id, user.id);
 
+        const event = await eventService.findOneEvent(event_id);
+        const manager = await roleService.findOne({
+            role_id: 2,
+            club_id: event.club_id
+        });
+        const notification = await notificationService.create({
+            club_id,
+            title: "Hoạt động",
+            description: `${user.display_name} đã rời khỏi ${event.name}.`
+        });
+        await notificationService.addNotificationForUser(
+            manager.user_id,
+            notification.id
+        );
+
         return successResponse(res, StatusCodes.OK, "Rời hoạt động thành công.");
     } catch (error) {
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
@@ -277,9 +293,20 @@ const outEvent = async (req, res) => {
 
 const kick = async (req, res) => {
     const { event_id, user_id, club_id } = req.body;
-    console.log(user_id, event_id, club_id)
+
     try {
         await eventService.outEvent(event_id, user_id);
+
+        const event = await eventService.findOneEvent(event_id);
+        const notification = await notificationService.create({
+            club_id,
+            title: "Hoạt động",
+            description: `Bạn đã bị đá khỏi ${event.name}`
+        });
+        await notificationService.addNotificationForUser(
+            user_id,
+            notification.id
+        );
 
         return successResponse(res, StatusCodes.OK, "Đã xoá người dùng khỏi hoạt động.");
     } catch (error) {
@@ -290,10 +317,24 @@ const kick = async (req, res) => {
 const askToJoin = async (req, res) => {
     const user = req.user;
     const { event_id } = req.body;
-    console.log(event_id)
-    console.log(user.id)
+
     try {
         await eventService.askToJoin(user.id, event_id);
+
+        const event = await eventService.findOneEvent(event_id);
+        const manager = await roleService.findOne({
+            role_id: 2,
+            club_id: event.club_id
+        });
+        const notification = await notificationService.create({
+            club_id: event.club_id,
+            title: "Thành viên hoạt động",
+            description: `${user.display_name} xin tham gia ${event.name}.`
+        });
+        await notificationService.addNotificationForUser(
+            manager.user_id,
+            notification.id
+        );
 
         return successResponse(res, StatusCodes.CREATED, "Đã đăng ký tham gia thành công.");
     } catch (error) {
@@ -312,6 +353,17 @@ const acceptPending = async (req, res) => {
     try {
         await eventService.acceptPending(user_id, event_id);
 
+        const event = await eventService.findOneEvent(event_id);
+        const notification = await notificationService.create({
+            club_id,
+            title: "Hoạt động",
+            description: `Yêu cầu tham gia ${event.name} của bạn được chấp nhận.`
+        });
+        await notificationService.addNotificationForUser(
+            user_id,
+            notification.id
+        );
+
         return successResponse(res, StatusCodes.OK, "Đã đồng ý cho tham gia.");
     } catch (error) {
         return errorResponse(
@@ -327,6 +379,17 @@ const denyPending = async (req, res) => {
 
     try {
         await eventService.outEvent(event_id, user_id);
+
+        const event = await eventService.findOneEvent(event_id);
+        const notification = await notificationService.create({
+            club_id,
+            title: "Hoạt động",
+            description: `Yêu cầu tham gia ${event.name} của bạn bị từ chối.`
+        });
+        await notificationService.addNotificationForUser(
+            user_id,
+            notification.id
+        );
 
         return successResponse(res, StatusCodes.OK, "Đã từ chối cho tham gia.");
     } catch (error) {
