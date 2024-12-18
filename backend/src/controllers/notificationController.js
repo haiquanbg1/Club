@@ -63,9 +63,10 @@ const findOne = async (req, res) => {
 const findAllByClub = async (req, res) => {
     const { club_id } = req.params;
     const user = req.user;
+    const { page } = req.query;
+
     try {
-        const notifications = await notificationService.findAll(club_id, user.id);
-        console.log(user.id)
+        const notifications = await notificationService.findAll(club_id, user.id, page);
 
         const data = [];
 
