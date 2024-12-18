@@ -18,7 +18,7 @@ const create = async (req, res) => {
 
         // chưa cần await vì gửi qua socket
         for (let i = 0; i < users.length; i++) {
-            notificationService.addNotificationForUser(
+            await notificationService.addNotificationForUser(
                 users[i].users.id,
                 notification.id
             );
@@ -64,9 +64,10 @@ const findOne = async (req, res) => {
 
 const findAllByClub = async (req, res) => {
     const { club_id } = req.params;
-
+    const user = req.user;
     try {
-        const notifications = await notificationService.findAll(club_id);
+        const notifications = await notificationService.findAll(club_id, user.id);
+        console.log(user.id)
 
         const data = [];
 
@@ -74,12 +75,14 @@ const findAllByClub = async (req, res) => {
             data.push({
                 id: notifications[i].notification.id,
                 title: notifications[i].notification.title,
+                description: notifications[i].notification.description,
                 createdAt: formatDate(notifications[i].notification.createdAt)
             });
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

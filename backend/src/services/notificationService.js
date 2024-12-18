@@ -21,10 +21,10 @@ const drop = async (id) => {
     })
 }
 
-const addNotificationForUser = async (user_id, notificaion_id) => {
+const addNotificationForUser = async (user_id, notification_id) => {
     return await UserNotification.create({
         user_id,
-        notificaion_id
+        notification_id
     });
 }
 
@@ -53,13 +53,13 @@ const findAll = async (club_id, user_id) => {
     return notifications;
 }
 
-const updateSeen = async (notificaion_id, user_id) => {
+const updateSeen = async (notification_id, user_id) => {
     return await UserNotification.update({
         read_at: new Date.now()
     }, {
         where: {
             user_id,
-            notificaion_id
+            notification_id
         }
     });
 }

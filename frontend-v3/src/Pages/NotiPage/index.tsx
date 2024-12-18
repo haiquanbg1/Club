@@ -36,7 +36,7 @@ export default function NotificationPage() {
     return (
         <div className="flex flex-col h-screen">
             <Header resetNoti={getNotifications} isAdmin={checkRole} />
-            <div className="p-2 flex-1 overflow-auto">
+            <div className="p-2 flex-1 overflow-auto scrollbar-hide">
                 <NotiList notifications={notifications} />
             </div>
         </div>

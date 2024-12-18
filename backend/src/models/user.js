@@ -50,14 +50,14 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Notification, {  // Sửa từ 'Conversations' thành 'Conversation'
         through: 'user_notification',
         foreignKey: 'user_id',                // Khóa ngoại trỏ về User trong Conversation_Participants
-        otherKey: 'notificaion_id',          // Khóa ngoại trỏ về Conversation trong Conversation_Participants
+        otherKey: 'notification_id',          // Khóa ngoại trỏ về Conversation trong Conversation_Participants
         as: 'notifications'                     // Alias cho các Conversation mà User tham gia
       });
 
       User.hasMany(models.Reaction, {
         foreignKey: 'user_id',
-        as: 'sentReactions',  
-      }); 
+        as: 'sentReactions',
+      });
     }
 
   }

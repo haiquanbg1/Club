@@ -52,6 +52,7 @@ import CreateChatForm from "@/components/CreateChatForm";
 import ChatApiRequest from "@/apiRequest/chat";
 import ChatMemberBox from "@/components/ChatMemberBox";
 import { useToast } from "@/hooks/use-toast";
+import NotificationApiRequest from "@/apiRequest/notification";
 
 const eventSchema = EventBody
 
@@ -123,6 +124,17 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                 start_time: format(values.start_time, "yyyy/MM/dd"),
             }
             await ClubApiRequest.createEvent(body)
+            // sau khi tạo sẽ gửi thông báo
+            // await NotificationApiRequest.create({
+            //     title: "Sự kiện mới",
+            //     description: `Đã thêm sự kiện mới trong câu lạc bộ`,
+            //     club_id: clubId || ""
+            // })
+            toast({
+
+                title: "Thành công",
+                description: "Tạo sự kiện thành công.",
+            })
             setEventOpen(false)
             getJoinedEvent()
         } catch (error) {
@@ -176,7 +188,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             const body = {
                 "club_id": clubId || ""
             }
-            const res = await ClubApiRequest.delete(body)
+            await ClubApiRequest.delete(body)
             navigate("/")
             localStorage.setItem("call", "false")
         } catch (error) {

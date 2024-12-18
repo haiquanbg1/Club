@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'user'
       });
       UserNotification.belongsTo(models.Notification, {
-        foreignKey: 'notificaion_id',
+        foreignKey: 'notification_id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         as: 'notification'

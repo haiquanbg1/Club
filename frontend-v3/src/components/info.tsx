@@ -32,7 +32,7 @@ export default function Info() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant='noOutline' size='icon'>
+                <Button variant='noOutline' className="bg-transparent" size='icon'>
                     <Avatar>
                         <AvatarImage src={localStorage.getItem("avatar") || ""} alt="" />
                         <AvatarFallback>CN</AvatarFallback>
