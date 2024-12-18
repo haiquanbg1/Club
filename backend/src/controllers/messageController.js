@@ -92,6 +92,7 @@ const findAllByConversation = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
     } catch (error) {
+        console.log(error);
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

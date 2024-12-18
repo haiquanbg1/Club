@@ -277,7 +277,7 @@ const outEvent = async (req, res) => {
             club_id: event.club_id
         });
         const notification = await notificationService.create({
-            club_id,
+            club_id: event.club_id,
             title: "Hoạt động",
             description: `${user.display_name} đã rời khỏi ${event.name}.`
         });
@@ -356,7 +356,7 @@ const acceptPending = async (req, res) => {
 
         const event = await eventService.findOneEvent(event_id);
         const notification = await notificationService.create({
-            club_id,
+            club_id: event.club_id,
             title: "Hoạt động",
             description: `Yêu cầu tham gia ${event.name} của bạn được chấp nhận.`
         });
@@ -367,6 +367,7 @@ const acceptPending = async (req, res) => {
 
         return successResponse(res, StatusCodes.OK, "Đã đồng ý cho tham gia.");
     } catch (error) {
+        console.log(error);
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -383,7 +384,7 @@ const denyPending = async (req, res) => {
 
         const event = await eventService.findOneEvent(event_id);
         const notification = await notificationService.create({
-            club_id,
+            club_id: event.club_id,
             title: "Hoạt động",
             description: `Yêu cầu tham gia ${event.name} của bạn bị từ chối.`
         });

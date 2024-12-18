@@ -180,9 +180,13 @@ const acceptPending = async (user_id, event_id) => {
 }
 
 const findOneEvent = async (event_id) => {
-    return await Event.findOne({
-        id: event_id
-    });
+    return await Event.findOne(
+        {
+            where: {
+                id: event_id
+            }
+        }
+    );
 }
 
 module.exports = {

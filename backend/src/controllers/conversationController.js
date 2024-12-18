@@ -3,6 +3,7 @@ const conversationService = require("../services/conversationService");
 const userService = require("../services/userService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
+const conversation = require("../models/conversation");
 
 const create = async (req, res) => {
     const { club_id, name } = req.body;
@@ -71,16 +72,17 @@ const drop = async (req, res) => {
 
 const findAllInClub = async (req, res) => {
     const { club_id } = req.params;
+    const user = req.user;
 
     try {
-        const conversations = await conversationService.findAllForClub(club_id);
+        const conversations = await conversationService.findAllForUser(user.id, club_id);
 
         const data = [];
 
         for (let i = 0; i < conversations.length; i++) {
             data.push({
-                conversation_id: conversations[i].id,
-                name: conversations[i].name
+                conversation_id: conversations[i].conversation.id,
+                name: conversations[i].conversation.name
             });
         }
 
@@ -123,6 +125,11 @@ const addParticipant = async (req, res) => {
     const { conversation_id, user_id } = req.body;
 
     try {
+        const isInConversation = await conversationService.isInConversation(user_id, conversation_id);
+        if (isInConversation) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Người này đã trong đoạn chat.");
+        }
+
         const user = await userService.findOne({
             id: user_id
         });
