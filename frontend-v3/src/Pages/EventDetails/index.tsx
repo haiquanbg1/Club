@@ -110,7 +110,7 @@ export default function EventDetailsPage() {
     return (
         <div className="flex flex-col h-screen">
             <div className="flex-1 overflow-auto scrollbar-hide">
-                <Header isAdmin={checkRole} resetInfo={getEvent} resetMember={getParticipantAccept} start_time={event?.start_time || ""} description={event?.description || ""} title={event?.name ? event.name : ""} />
+                <Header eventList={accepted} isAdmin={checkRole} resetInfo={getEvent} resetMember={getParticipantAccept} start_time={event?.start_time || ""} description={event?.description || ""} title={event?.name ? event.name : ""} />
                 <div className="pl-[40px] pr-[40px] flex space-x-2">
                     <div className="flex-[2]">
                         <Details time={event?.start_time} type={event?.description} quantity={accepted.length} />

@@ -68,6 +68,7 @@ interface chat {
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
     // const clubId = useSelector((state: RootState) => state.club.clubId);
+    const [club, setClub] = useState("")
     const { toast } = useToast()
     const location = useLocation()
     const { clubId } = useParams()
@@ -83,6 +84,18 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
             setCheckRole(true)
         }
     }, [])
+
+    const getName = async () => {
+        try {
+            const res = await ClubApiRequest.get(clubId || "")
+            setClub(res.payload.data[0].name)
+        } catch (error) {
+
+        }
+    }
+    useEffect(() => {
+        getName()
+    }, [location])
     // const [date, setDate] = useState<Date>()
     const navigate = useNavigate()
     // const { id } = useParams()
@@ -203,7 +216,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                 <div className="overflow-auto flex-1 scrollbar-hide">
                     <div className="flex items-center justify-between p-2 cursor-pointer" onClick={() => navigate(`/club/${clubId}`)}>
                         <div></div>
-                        <h1 className="text-center text-[24px] font-bold">Nemui</h1>
+                        <h1 className="text-center text-[24px] font-bold">{club}</h1>
                         {
                             checkRole &&
                             (<>
@@ -218,11 +231,11 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         >
                                             Thêm sự kiện
                                         </DropdownMenuCheckboxItem>
-                                        <DropdownMenuCheckboxItem
+                                        {/* <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                         >
                                             Thêm ban trực thuộc
-                                        </DropdownMenuCheckboxItem>
+                                        </DropdownMenuCheckboxItem> */}
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                             onClick={() => setChatOpen(true)}
@@ -356,7 +369,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="space-y-2 pt-1 mt-2 pb-1">
-                        <FeatureBox group="Các ban trực thuộc" />
+                        {/* <FeatureBox group="Các ban trực thuộc" /> */}
                         {/* <FeatureBox group="Sự kiện chưa đăng ký" /> */}
                         <div className="flex items-center hover:bg-slate-400 cursor-pointer select-none" onClick={() => navigate(`/club/listEvent/${clubId}`)}>
                             <ChevronRight />

@@ -64,7 +64,6 @@ const findAllByClub = async (req, res) => {
     const { club_id } = req.params;
     const user = req.user;
     const { page } = req.query;
-
     try {
         const notifications = await notificationService.findAll(club_id, user.id, page);
 
@@ -75,6 +74,7 @@ const findAllByClub = async (req, res) => {
                 id: notifications[i].notification.id,
                 title: notifications[i].notification.title,
                 description: notifications[i].notification.description,
+                status: "no",
                 createdAt: formatDate(notifications[i].notification.createdAt)
             });
         }

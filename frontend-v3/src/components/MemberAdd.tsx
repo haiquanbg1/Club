@@ -11,7 +11,8 @@ interface Adding {
     display_name: string;
     avatar: string
 }
-export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetMember: () => Promise<void>, isChat?: boolean }) {
+
+export default function MemberAdd({ setOpen, resetMember, isChat, chatList }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetMember: () => Promise<void>, isChat?: boolean, chatList?: Adding[] }) {
     const { toast } = useToast()
     const [listAdding, setListAdding] = useState<Adding[]>([])
     const [chatAddList, setChatAddList] = useState<Adding[]>([])
@@ -81,10 +82,16 @@ export default function MemberAdd({ setOpen, resetMember, isChat }: { setOpen: R
     }
 
     const getChatAdd = async () => {
+
         try {
             const res = await MemberApiRequest.get(clubId || "")
-            const list = res.payload.data.filter(user => user.user_id != localStorage.getItem("user_id"))
-            setChatAddList(list)
+            let chatUserIds = new Set()
+            if (chatList) {
+                chatUserIds = new Set(chatList.map((item) => item.user_id));
+            }
+            const uniqueMembers = res.payload.data.filter((item) => !chatUserIds.has(item.user_id));
+            // const list = res.payload.data.filter(user => user.user_id != localStorage.getItem("user_id"))
+            setChatAddList(uniqueMembers)
         } catch (error) {
             toast({
                 variant: "destructive",

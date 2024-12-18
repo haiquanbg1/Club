@@ -12,7 +12,7 @@ interface Adding {
     display_name: string;
     avatar: string;
 }
-export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetMember: () => Promise<void>; }) {
+export default function EventMemberAdd({ setOpen, resetMember, eventList }: { setOpen: React.Dispatch<React.SetStateAction<boolean>>, resetMember: () => Promise<void>, eventList: Adding[] }) {
     const { toast } = useToast()
     const [listAdding, setListAdding] = useState<Adding[]>([])
     const [selected, setSelected] = useState("")
@@ -21,12 +21,9 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
         try {
             const response = await MemberApiRequest.get(clubId || "")
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-            const data = response.payload.data.filter((item: {
-                user_id: string;
-                display_name: string;
-                avatar: string;
-            }) => item.user_id !== localStorage.getItem("user_id"));
-            setListAdding(data);
+            const chatUserIds = new Set(eventList.map((item) => item.user_id));
+            const uniqueMembers = response.payload.data.filter((item) => !chatUserIds.has(item.user_id));
+            setListAdding(uniqueMembers);
         } catch (error) {
 
         }

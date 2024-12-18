@@ -1,6 +1,8 @@
 import ClubHeader from "@/components/ClubHeader";
 import ProfileCard from "../ClubInfo/ProfileCard";
+
 export default function ClubPage() {
+
     return (
         <div>
             <ClubHeader />

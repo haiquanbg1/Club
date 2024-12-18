@@ -36,7 +36,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         localStorage.setItem("call", "true")
         const fetchData = async () => {
             try {
-                const response = await ClubApiRequest.get()
+                const response = await ClubApiRequest.get("")
                 const clubsData = response.payload.data.map((item) => ({
                     name: item.name || "",
                     id: item.id,

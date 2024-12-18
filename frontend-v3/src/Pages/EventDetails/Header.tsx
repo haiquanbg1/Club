@@ -47,8 +47,14 @@ interface header {
     resetMember: () => Promise<void>;
     resetInfo: () => Promise<void>;
     isAdmin: boolean
+    eventList: user[]
 }
-export default function Header({ title, isAdmin, description, resetInfo, resetMember }: header) {
+interface user {
+    display_name: string;
+    avatar: string;
+    user_id: string;
+}
+export default function Header({ title, isAdmin, description, resetInfo, resetMember, eventList }: header) {
     const { toast } = useToast()
     const [open, setOpen] = useState<boolean>(false)
     const [openSetting, setOpenSetting] = useState<boolean>(false)
@@ -145,7 +151,7 @@ export default function Header({ title, isAdmin, description, resetInfo, resetMe
                                     <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
                                 </DialogTitle>
                             </DialogHeader>
-                            <EventMemberAdd resetMember={resetMember} setOpen={setOpen} />
+                            <EventMemberAdd eventList={eventList} resetMember={resetMember} setOpen={setOpen} />
                         </DialogContent>
                     </Dialog>
                 }

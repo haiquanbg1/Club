@@ -108,7 +108,7 @@ export default function ChatMemberBox() {
                                     <div className="text-center bg-[#414141] pt-4 pb-4 text-[24px] mb-0">Thêm thành viên</div>
                                 </DialogTitle>
                             </DialogHeader>
-                            <MemberAdd isChat={true} setOpen={setOpen} resetMember={getMember} />
+                            <MemberAdd isChat={true} setOpen={setOpen} chatList={members} resetMember={getMember} />
                         </DialogContent>
                     </Dialog>
                 }
