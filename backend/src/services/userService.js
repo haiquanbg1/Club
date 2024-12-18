@@ -1,3 +1,4 @@
+const conversation = require("../models/conversation");
 const { User } = require("../models/index");
 const { Op } = require('sequelize');
 

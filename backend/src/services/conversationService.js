@@ -43,12 +43,15 @@ const findAllForClub = async (club_id) => {
 }
 
 // find all conver in one user từ conver này lọc tiếp theo findAllForClub
-const findAllForUser = async (user_id) => {
+const findAllForUser = async (user_id, club_id) => {
     const conversations = await ConversationParticipant.findAll({
         include: [
             {
                 model: Conversation,
-                as: 'conversation'
+                as: 'conversation',
+                where: {
+                    club_id: club_id
+                }
             }
         ],
         where: {
@@ -92,7 +95,16 @@ const outConversation = async (conversation_id, user_id) => {
     });
 }
 
+const isInConversation = async (user_id, conversation_id) => {
+    return await ConversationParticipant.findOne({
+        where: {
+            user_id,
+            conversation_id
+        }
+    })
+}
+
 module.exports = {
     create, update, drop, findOne, findAllForClub, findAllForUser,
-    findAllUser, addParticipant, outConversation
+    findAllUser, addParticipant, outConversation, isInConversation
 }
