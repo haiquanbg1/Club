@@ -3,6 +3,7 @@ const messageService = require("../services/messageService");
 const reactService = require("../services/reactService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
+const deleted_message = require("../services/deleteMesService");
 
 const create = async (req, res) => {
     const { conversation_id, content, id } = req.body;
@@ -162,11 +163,32 @@ const changeStatus = async (req, res) => {
     }
 }
 
+const deleteOtherMessage = async (req, res) => {
+    const { conversation_id, user_id, message_id } = req.body;
+    console.log('body:', req.body);
+    try {
+        await deleted_message.createDeleteOtherMessage({
+            conversation_id,
+            user_id,
+            message_id
+        });
+
+        return successResponse(res, StatusCodes.CREATED, "Đã xoá tin nhắn.");
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     create,
     findAllByConversation,
     drop,
     changeStatus,
     findAllReactInMessage,
-    createReact
+    createReact,
+    deleteOtherMessage
 }

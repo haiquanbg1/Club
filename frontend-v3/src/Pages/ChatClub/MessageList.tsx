@@ -18,12 +18,8 @@ type MessageListProps = {
   conversationId: string;
 };
 
-function MessageList({
-  socketRef,
-  messageList,
-  setMessagesList,
-  userProfile,
-}: MessageListProps) {
+function MessageList({ socketRef, messageList, setMessagesList, userProfile, conversationId }: MessageListProps) {
+
   useEffect(() => {
     // handle New Message socket
     const handleNewMessage = (message: MessageConverType) => {
@@ -71,6 +67,7 @@ function MessageList({
         {/* {isFetching && <Loading />} */}
         {messageList.map((message) => (
           <Message
+            conversationId={conversationId}
             key={message.id}
             orientation={message.sender_id == userProfile.id ? "right" : "left"}
             author={message.sender}

@@ -3,6 +3,7 @@ const messageController = require("../../controllers/messageController");
 const authMiddleware = require("../../middlewares/authMiddleware");
 const managerMiddleware = require("../../middlewares/managerMiddleware");
 const directMessageController = require('../../controllers/directMesController');
+const { route } = require("./authApi");
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.patch("/changeStatusMessage", authMiddleware, messageController.changeSta
 router.get("/react", authMiddleware, messageController.findAllReactInMessage);
 router.post("/createReact", authMiddleware, messageController.createReact);
 router.get("/club/:conversation_id", authMiddleware, messageController.findAllByConversation);
+router.post("/deleteOtherMessage", authMiddleware, messageController.deleteOtherMessage);
 
 router.post("/friend/:friend_id/send", authMiddleware, directMessageController.create);
 router.delete('/friend/delete/', authMiddleware, directMessageController.drop);
