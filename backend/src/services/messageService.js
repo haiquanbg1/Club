@@ -1,5 +1,6 @@
 const { Message, User, Conversation, Reaction } = require('../models/index');
 const { Op } = require("sequelize")
+const deleteMesService = require('./deleteMesService');
 
 const create = async (insertClause) => {
     const message = await Message.create(insertClause);
@@ -38,17 +39,35 @@ const findAllForOneUserInOneConver = async (user_id, conversation_id) => {
     return messages;
 }
 
+const buildWhereClause = async (conversation_id, user_id) => {
+    // Lấy danh sách message_id từ DeletedMessage
+    const deletedMessageIds = await deleteMesService.findAllForConversation(conversation_id, user_id);
+    
+    console.log('deletedMessageIds:', deletedMessageIds);
+    // Xây dựng whereClause
+    const whereClause = {
+      [Op.and]: [
+        { conversation_id },
+        {
+          [Op.or]: [
+            { status: 'show' },
+            { status: 'hided', sender_id: user_id },
+          ],
+        },
+        {
+          // Lọc các tin không nằm trong message_id đã bị xóa
+          id: {
+            [Op.notIn]: deletedMessageIds,
+          },
+        },
+      ],
+    };
+    return whereClause;
+}
+
 // find all mes of conver
 const findAll = async (conversation_id, user_id, limit = 10, offset) => {
-    const whereClause = {
-        [Op.and]: [
-            { conversation_id },
-            { [Op.or]: [
-                { status: 'show' },
-                { status: 'hided', sender_id: user_id }
-            ] }
-        ]
-    };
+    const whereClause = await buildWhereClause(conversation_id, user_id);
     const messages = await Message.findAll({
         include: [
             {
@@ -77,6 +96,14 @@ const changeStatus = async (message_id, status) => {
     });
 }
 
+const deleteOtherMessage = async (conversation_id, user_id, message_id) => {
+    return await deleteMesService.createDeleteOtherMessage({
+        conversation_id,
+        user_id,
+        message_id
+    });
+}
+
 module.exports = {
-    create, update, drop, findOne, findAllForOneUserInOneConver, findAll, changeStatus
+    create, update, drop, findOne, findAllForOneUserInOneConver, findAll, changeStatus, deleteOtherMessage
 };

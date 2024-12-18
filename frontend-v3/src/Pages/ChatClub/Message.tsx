@@ -21,6 +21,7 @@ type Props = {
     socketRef: React.RefObject<any>;
     userId: string;
     userProfile: Profile;
+    conversationId: string;
 };
 
 type ContentProps = {
@@ -38,7 +39,8 @@ export default function Message({
     content,
     socketRef,
     userId,
-    userProfile
+    userProfile,
+    conversationId
 }: Props) {
 
     const formatDate = (date: Date) => {
@@ -115,20 +117,17 @@ export default function Message({
     const handleDeleteForOtherMessage = async () => {
         socketRef.current.emit('delete-other-message', { messageId: content.id, userId: userId });
         try {
-            const response = await axios.patch(`http://localhost:8080/api/v1/message/changeStatusMessage`, {
-                data: {
-                    message_id: content.id,
-                    status: 'hide'
-                },
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
+            const response = await axios.post(`http://localhost:8080/api/v1/message/deleteOtherMessage`, {
+                message_id: content.id,
+                user_id: userId,
+                conversation_id: conversationId,
+            }, {
                 withCredentials: true
-            })
+            });
             if (response.status === 200) {
-                console.log('change success');
+                console.log('delete success');
             } else {
-                console.error('change failed');
+                console.error('delete failed');
             }
         }
         catch (error) {
@@ -183,23 +182,23 @@ export default function Message({
     };
 
     // fetch lần đầu
-      useEffect(() => {
+    useEffect(() => {
         const fetchReactList = async () => {
-          try {
-            axios.get('http://localhost:8080/api/v1/message/react', {
-              params: {
-                message_id: content.id
-              },
-              withCredentials: true
-            }).then(res => {
-            setReactListStated(res.data.data);
-            });
-          } catch (error) {
-            console.log('error', error);
-          }
+            try {
+                axios.get('http://localhost:8080/api/v1/message/react', {
+                    params: {
+                        message_id: content.id
+                    },
+                    withCredentials: true
+                }).then(res => {
+                    setReactListStated(res.data.data);
+                });
+            } catch (error) {
+                console.log('error', error);
+            }
         }
         fetchReactList();
-      }, [reactList]);
+    }, [reactList]);
 
     // const handleReceiveReactList = (reactObj: ReactType) => {
     //     // if (isDataLoaded) {
@@ -227,7 +226,7 @@ export default function Message({
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('receive-react', (reactObj: ReactType) => {
-                
+
                 if (reactObj.message_id === content.id) {
                     setReactList((prevReactList) => {
                         const existReact = prevReactList.find(
@@ -243,16 +242,16 @@ export default function Message({
                                 return prevReactList.filter(
                                     react => !(react.user_id === reactObj.user_id && react.react === reactObj.react)
                                 );
-                                
+
                             } else {
                                 // Thay thế react
                                 console.log('update 1 lan')
-                                return prevReactList.map(react => 
+                                return prevReactList.map(react =>
                                     react.user_id === reactObj.user_id && react.message_id === content.id
-                                        ? { ...reactObj } 
+                                        ? { ...reactObj }
                                         : react
                                 );
-                                
+
                             }
                         } else {
                             // Thêm mới react
@@ -260,8 +259,8 @@ export default function Message({
                             return [...prevReactList, { ...reactObj }];
                         }
                     });
-    
-                    
+
+
                 }
 
             });
