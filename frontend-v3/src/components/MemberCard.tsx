@@ -164,7 +164,7 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
                 </Avatar>
                 <div>{name}</div>
             </div>
-            {(!noMore && admin) &&
+            {(!noMore && admin && id != localStorage.getItem("user_id")) &&
                 (<div className="ml-auto cursor-pointer">
                     <DropdownMenu>
                         <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>

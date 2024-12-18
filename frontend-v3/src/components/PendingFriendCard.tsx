@@ -3,12 +3,20 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useDispatch } from "react-redux";
 import { setFriend } from "@/redux/friendSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function PendingFriendCard({ senderId, senderName, avatar, resetPendingList }: { senderId: string, senderName: string, avatar: string, resetPendingList: () => Promise<void> }) {
     const dispatch = useDispatch();
-
+    const friend = useSelector((state: RootState) => state.friend.friend);
     const updateFriend = () => {
-        dispatch(setFriend("newFriendValue")); // Cập nhật Redux state
+        if (friend == "") {
+            dispatch(setFriend("newFriendValue"));
+        }
+        else {
+            dispatch(setFriend(""));
+        }
+        // Cập nhật Redux state
     };
     const handleAccept = async () => {
         try {

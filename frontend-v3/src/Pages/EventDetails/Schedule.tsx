@@ -66,7 +66,6 @@ export default function Schedule({ id, location, title, description, resetSchedu
         },
     })
     const handleDelete = async () => {
-
         try {
             await ClubApiRequest.deleteSchedule({
                 club_id: clubId || "",
@@ -176,7 +175,7 @@ export default function Schedule({ id, location, title, description, resetSchedu
                 {/* <DialogTrigger asChild>
                     <Button className="flex-1 text-white bg-[#444a53] hover:bg-[#4e555f] font-bold text-[18px]">Thêm bài viết</Button>
                 </DialogTrigger> */}
-                <DialogContent className="p-4">
+                <DialogContent className="p-4 h-[800px]">
                     <DialogHeader>
                         <DialogTitle>
                             <div className="text-center space-y-4 mb-2">

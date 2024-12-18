@@ -21,8 +21,12 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
         try {
             const response = await MemberApiRequest.get(clubId || "")
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-            setListAdding(response.payload.data);
-
+            const data = response.payload.data.filter((item: {
+                user_id: string;
+                display_name: string;
+                avatar: string;
+            }) => item.user_id !== localStorage.getItem("user_id"));
+            setListAdding(data);
         } catch (error) {
 
         }
@@ -74,11 +78,11 @@ export default function EventMemberAdd({ setOpen, resetMember }: { setOpen: Reac
                 description: "Success",
             })
             setOpen(false)
-        } catch (error) {
+        } catch (error: any) {
             toast({
                 variant: "destructive",
                 title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
+                description: error.payload.message,
             })
         }
     }

@@ -259,7 +259,7 @@ const addParticipant = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Thêm thành viên thành công.");
     } catch (error) {
-        console.log(`error ${error.message}`)
+        console.log(error)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }

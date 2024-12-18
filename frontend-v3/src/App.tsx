@@ -16,7 +16,7 @@ interface RouteConfig {
 }
 
 function App() {
-  localStorage.setItem("friend", "check")
+  localStorage.setItem("vite-ui-theme", "dark")
   return (
     <ThemeProvider >
       <Router>

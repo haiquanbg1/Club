@@ -42,7 +42,7 @@ export default function ListFriend() {
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
   return (
-    <div className=" bg-[#2b2d31] flex-1 overflow-auto p-2">
+    <div className=" bg-[#2b2d31] flex-1 overflow-auto p-2 scrollbar-hide">
       <h3 className="text-center text-[24px] mt-1 font-bold mb-4 ">Bạn bè</h3>
       <Input
         className="mb-2 bg-transparent focus-visible:ring-0 focus:outline-none focus:ring-none border-[white] ring-offset-0"
