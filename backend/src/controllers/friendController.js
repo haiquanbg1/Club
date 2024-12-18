@@ -21,6 +21,10 @@ const addFriend = async (req, res) => {
             return errorResponse(res, StatusCodes.CONFLICT, "Người dùng đã gửi yêu cầu cho bạn, vui lòng kiểm tra danh sách.");
         }
 
+        if (user_id == user.id) {
+            return errorResponse(res, StatusCodes.CONFLICT, "Bạn không thể gửi cho bạn.");
+        }
+
         const friend = await userService.findOne({
             id: user_id
         });

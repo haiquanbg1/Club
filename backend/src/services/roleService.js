@@ -1,7 +1,9 @@
 const { Role, member_role } = require("../models/index");
 
 const findOne = async (whereClause) => {
-    const role = await Role.findOne(whereClause);
+    const role = await Role.findOne({
+        where: whereClause
+    });
     return role;
 }
 

@@ -29,7 +29,9 @@ const addNotificationForUser = async (user_id, notification_id) => {
 }
 
 const findOne = async (whereClause) => {
-    const notification = await Notification.findOne(whereClause);
+    const notification = await Notification.findOne({
+        where: whereClause
+    });
     return notification;
 }
 

@@ -27,7 +27,9 @@ const drop = async (id) => {
 }
 
 const findOne = async (whereClause) => {
-    const report = await Report.findOne(whereClause);
+    const report = await Report.findOne({
+        where: whereClause
+    });
     return report;
 }
 

@@ -228,6 +228,7 @@ const findAllUserWithKey = async (req, res) => {
 const addParticipant = async (req, res) => {
     const { event_id, user_id } = req.body;
     const club_id = req.body.club_id || req.params.club_id || req.query.club_id;
+    console.log(user_id);
 
     try {
         const isInClub = await eventService.findOne({

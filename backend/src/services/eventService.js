@@ -24,7 +24,9 @@ const drop = async (id) => {
 }
 
 const findOne = async (whereClause) => {
-    const event = await EventParticipant.findOne(whereClause);
+    const event = await EventParticipant.findOne({
+        where: whereClause
+    });
     return event;
 }
 

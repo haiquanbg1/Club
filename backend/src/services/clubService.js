@@ -1,7 +1,9 @@
 const { Club, member_role, Role } = require("../models/index");
 
 const findOne = async (whereClause) => {
-    const club = await Club.findOne(whereClause);
+    const club = await Club.findOne({
+        where: whereClause
+    });
     return club;
 }
 

@@ -22,7 +22,9 @@ const drop = async (id) => {
 }
 
 const findOne = async (whereClause) => {
-    const schedule = await Schedule.findOne(whereClause);
+    const schedule = await Schedule.findOne({
+        where: whereClause
+    });
     return schedule;
 }
 

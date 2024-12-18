@@ -24,7 +24,9 @@ const drop = async (id) => {
 }
 
 const findOne = async (whereClause) => {
-    const message = await Message.findOne(whereClause);
+    const message = await Message.findOne({
+        where: whereClause
+    });
     return message;
 }
 
@@ -42,25 +44,25 @@ const findAllForOneUserInOneConver = async (user_id, conversation_id) => {
 const buildWhereClause = async (conversation_id, user_id) => {
     // Lấy danh sách message_id từ DeletedMessage
     const deletedMessageIds = await deleteMesService.findAllForConversation(conversation_id, user_id);
-    
+
     console.log('deletedMessageIds:', deletedMessageIds);
     // Xây dựng whereClause
     const whereClause = {
-      [Op.and]: [
-        { conversation_id },
-        {
-          [Op.or]: [
-            { status: 'show' },
-            { status: 'hided', sender_id: user_id },
-          ],
-        },
-        {
-          // Lọc các tin không nằm trong message_id đã bị xóa
-          id: {
-            [Op.notIn]: deletedMessageIds,
-          },
-        },
-      ],
+        [Op.and]: [
+            { conversation_id },
+            {
+                [Op.or]: [
+                    { status: 'show' },
+                    { status: 'hided', sender_id: user_id },
+                ],
+            },
+            {
+                // Lọc các tin không nằm trong message_id đã bị xóa
+                id: {
+                    [Op.notIn]: deletedMessageIds,
+                },
+            },
+        ],
     };
     return whereClause;
 }
