@@ -1,4 +1,5 @@
 const { User } = require("../models/index");
+const { Op } = require('sequelize');
 
 const findAll = async (whereClause) => {
   return await User.findAll({
@@ -36,6 +37,16 @@ const update = async (id, updateClause) => {
   });
 };
 
+const findUserWithKey = async (key) => {
+  return await User.findAll({
+    where: {
+      display_name: {
+        [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+      }
+    }
+  });
+}
+
 module.exports = {
   findAll,
   findOne,
@@ -43,4 +54,5 @@ module.exports = {
   drop,
   update,
   findByPk,
+  findUserWithKey
 };

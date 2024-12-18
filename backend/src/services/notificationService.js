@@ -34,8 +34,11 @@ const findOne = async (whereClause) => {
 }
 
 // find all noti of 1 club for user
-const findAll = async (club_id, user_id) => {
+const findAll = async (club_id, user_id, page) => {
     // add limit, offset, order by
+    const limit = 7;
+    const offset = page * limit;
+
     const notifications = await UserNotification.findAll({
         include: [
             {
@@ -48,7 +51,10 @@ const findAll = async (club_id, user_id) => {
         ],
         where: {
             user_id
-        }
+        },
+        limit,
+        offset,
+        order: [['createdAt', 'DESC']]
     });
     return notifications;
 }

@@ -113,7 +113,7 @@ const find = async (req, res) => {
                 start_time,
                 end_time,
                 location: schedule[i].location
-            })
+            });
         }
 
         return successResponse(res, StatusCodes.OK, "Thành công.", data);
