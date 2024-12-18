@@ -51,7 +51,7 @@ const findAll = async (user_id) => {
     return friends;
 }
 
-const findAllPending = async (user_id) => {
+const findAllPending = async (user_id, key = "") => {
     const friends = await ManageFriend.findAll({
         include: [{
             model: User,
@@ -60,7 +60,10 @@ const findAllPending = async (user_id) => {
         }],
         where: {
             friend_id: user_id,
-            status: 'pending'
+            status: 'pending',
+            display_name: {
+                [Op.startsWith]: key // Tìm kiếm những display_name bắt đầu bằng cụm từ tìm kiếm
+            }
         }
     });
     return friends;

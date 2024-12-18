@@ -1,9 +1,11 @@
 const { StatusCodes } = require("http-status-codes");
 const userService = require("../services/userService");
+const friendService = require("../services/friendService");
 const { successResponse, errorResponse } = require("../utils/response");
 const { uploadImage, getImage, deleteImage } = require("../utils/cloudinary");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
+const cloudinary = require("../utils/cloudinary");
 const formatDate = require("../utils/formatDate");
 
 const changeAvatar = async (req, res) => {
@@ -162,11 +164,68 @@ const changePassword = async (req, res) => {
     }
 }
 
+const getUserStartWith = async (req, res) => {
+    const user = req.user;
+    const { text } = req.query;
+
+    try {
+        const friendAccepted = await friendService.findFriendWithKey(user.id, text);
+        const friendPending = await friendService.findAllPending(user.id, text);
+        const idAccepted = friendAccepted.map((user) => {
+            return user.friend_id
+        });
+        const idPending = friendPending.map((user) => {
+            return user.friend_id
+        });
+
+        const users = await userService.findUserWithKey(text);
+
+        const data = [];
+        for (let i = 0; i < users.length; i++) {
+            const image = await cloudinary.getImage("Avatar", users[i].avatar);
+            if (idAccepted.includes(users[i].id)) {
+                data.push({
+                    user_id: users[i].id,
+                    avatar: image,
+                    display_name: users[i].display_name,
+                    status: 2
+                });
+                continue;
+            }
+            if (idPending.includes(users[i].id)) {
+                data.push({
+                    user_id: users[i].id,
+                    avatar: image,
+                    display_name: users[i].display_name,
+                    status: 1
+                });
+                continue;
+            }
+            data.push({
+                user_id: users[i].id,
+                avatar: image,
+                display_name: users[i].display_name,
+                status: 0
+            });
+        }
+
+        return successResponse(res, StatusCodes.OK, "Thành công", data);
+
+    } catch (error) {
+        return errorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
+    }
+}
+
 module.exports = {
     changeAvatar,
     findUser,
     update,
     deleteUser,
     deleteAccount,
-    changePassword
+    changePassword,
+    getUserStartWith
 }
