@@ -14,6 +14,9 @@ interface PendingUser {
 }
 export default function FriendPage() {
     const [pending, setPending] = useState<PendingUser[]>([])
+    useEffect(() => {
+        localStorage.setItem("friend", "check")
+    }, [])
 
     const getPending = async () => {
         try {

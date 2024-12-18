@@ -20,6 +20,7 @@ export default function ListFriend() {
   };
 
   const getFriend = async () => {
+    localStorage.setItem("friend", "check")
     try {
       const response = await FriendApiRequest.getFriend(search);
       // Giả sử API trả về mảng các object có cấu trúc tương tự Item
@@ -28,9 +29,7 @@ export default function ListFriend() {
   };
   useEffect(() => {
     getFriend();
-
-    localStorage.setItem("friend", "check")
-  }, [localStorage.getItem("friend")]);
+  }, []);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

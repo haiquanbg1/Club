@@ -207,13 +207,13 @@ export default function ChatPage() {
       await fetchFriendProfile();
       await fetchUserProfile();
       await fetchMessages(); // Fetch tin nhắn
-      
+
       if (userProfile?.id) {
         connectSocket();
       }
     };
     fetchData();
-    
+
   }, [userId, userProfile?.id, location.search]);
 
   useEffect(setScrollToBottom, [messagesRef.current.length]);
@@ -260,7 +260,7 @@ export default function ChatPage() {
               setMessagesList={setMessagesList}
               userProfile={userProfile}
               friendProfile={friendProfile}
-              // isFeatching={loading}
+            // isFeatching={loading}
             />
           )}
         </div>
