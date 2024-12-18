@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Header from "@/components/header";
 
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 
-import { setRoles } from "@/redux/clubReducer";
+// import { setRoles } from "@/redux/clubReducer";
 import { useState, useEffect } from 'react';
 import ClubApiRequest from "@/apiRequest/club";
 
@@ -27,7 +27,7 @@ interface Club {
 
 
 function DefaultLayout({ children }: { children: React.ReactNode }) {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     // const clubId = useSelector((state: RootState) => state.club.clubId);
     const [clubs, setClubs] = useState<Club[]>([
     ]);
@@ -57,9 +57,9 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
 
         fetchData();  // Gọi hàm fetch khi component render lần đầu
     }, [localStorage.getItem("call")]);
-    const handleSelectClub = (club_id: string, club_role: string) => {
+    const handleSelectClub = (club_id: string) => {
         // dispatch(setClubId(club_id));
-        dispatch(setRoles(club_id, club_role))
+        // dispatch(setRoles(club_id, club_role))
         localStorage.setItem('club_id', club_id)
         navigate(`/club/${club_id}`)
     }
@@ -87,7 +87,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     {
                         clubs.map((club, index) => (
-                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id, club.role)}>
+                            <div className="mb-3" key={index} onClick={() => handleSelectClub(club.id)}>
                                 <TooltipProvider key={index}>
                                     <Tooltip>
                                         <TooltipTrigger asChild>

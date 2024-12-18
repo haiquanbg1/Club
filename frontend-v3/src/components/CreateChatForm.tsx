@@ -4,7 +4,7 @@ import { useState } from "react";
 import ChatApiRequest from "@/apiRequest/chat";
 import { useToast } from "@/hooks/use-toast";
 
-export default function CreateChatForm({ setChatOpen }: { setChatOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function CreateChatForm({ setChatOpen, getChat }: { setChatOpen: React.Dispatch<React.SetStateAction<boolean>>, getChat: Promise<void> }) {
     const { toast } = useToast()
     const { clubId } = useParams()
     const [chatName, setChatName] = useState("")
@@ -20,6 +20,7 @@ export default function CreateChatForm({ setChatOpen }: { setChatOpen: React.Dis
                 description: "Đã tạo thành công đoạn chat",
             })
             setChatName("")
+            getChat
             setChatOpen(false)
         } catch (error) {
 

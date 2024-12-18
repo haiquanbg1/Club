@@ -16,7 +16,7 @@ interface RouteConfig {
 }
 
 function App() {
-
+  localStorage.setItem("friend", "check")
   return (
     <ThemeProvider >
       <Router>

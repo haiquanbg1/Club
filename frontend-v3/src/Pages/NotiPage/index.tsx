@@ -12,6 +12,8 @@ interface notification {
 
 export default function NotificationPage() {
     const [notifications, setNotifications] = useState<notification[]>([])
+    const [page, setPage] = useState(1)
+    const [loading, setLoading] = useState(false)
     const { clubId } = useParams()
     const adminList = localStorage.getItem("adminClubs")
     const [checkRole, setCheckRole] = useState(false)
@@ -23,21 +25,24 @@ export default function NotificationPage() {
 
     const getNotifications = async () => {
         try {
-            const res = await NotificationApiRequest.get(clubId || "")
-            setNotifications(res.payload.data)
+            setLoading(true);
+            const res = await NotificationApiRequest.get(clubId || "", page)
+            setNotifications((prev) => [...prev, ...res.payload.data]); // Gộp thông báo mới
         } catch (error) {
 
+        } finally {
+            setLoading(false); // Kết thúc tải
         }
     }
 
     useEffect(() => {
         getNotifications()
-    }, [clubId])
+    }, [clubId, page])
     return (
         <div className="flex flex-col h-screen">
             <Header resetNoti={getNotifications} isAdmin={checkRole} />
             <div className="p-2 flex-1 overflow-auto scrollbar-hide">
-                <NotiList notifications={notifications} />
+                <NotiList notifications={notifications} setPage={setPage} loading={loading} />
             </div>
         </div>
     )

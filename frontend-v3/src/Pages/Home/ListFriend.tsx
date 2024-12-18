@@ -3,7 +3,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 interface Friend {
   user_id: string;
   friend_id: string;
@@ -13,6 +14,7 @@ interface Friend {
 export default function ListFriend() {
   const [listFriend, setListFriend] = useState<Friend[]>([]);
   const [search, setSearch] = useState("");
+  const friend = useSelector((state: RootState) => state.friend.friend);
   const navigate = useNavigate();
 
   const handleClick = (friend_id: string) => {
@@ -20,7 +22,6 @@ export default function ListFriend() {
   };
 
   const getFriend = async () => {
-    localStorage.setItem("friend", "check")
     try {
       const response = await FriendApiRequest.getFriend(search);
       // Giả sử API trả về mảng các object có cấu trúc tương tự Item
@@ -28,8 +29,9 @@ export default function ListFriend() {
     } catch (error) { }
   };
   useEffect(() => {
+    console.log(1)
     getFriend();
-  }, []);
+  }, [friend]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

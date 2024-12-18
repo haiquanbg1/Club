@@ -52,7 +52,7 @@ import CreateChatForm from "@/components/CreateChatForm";
 import ChatApiRequest from "@/apiRequest/chat";
 import ChatMemberBox from "@/components/ChatMemberBox";
 import { useToast } from "@/hooks/use-toast";
-import NotificationApiRequest from "@/apiRequest/notification";
+// import NotificationApiRequest from "@/apiRequest/notification";
 
 const eventSchema = EventBody
 
@@ -253,7 +253,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                                             </DialogDescription>
                                         </DialogHeader>
-                                        <CreateChatForm setChatOpen={setChatOpen}></CreateChatForm>
+                                        <CreateChatForm setChatOpen={setChatOpen} getChat={getChat()}></CreateChatForm>
                                     </DialogContent>
                                 </Dialog>
 

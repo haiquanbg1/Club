@@ -1,4 +1,5 @@
 import ListFriend from "@/Pages/Home/ListFriend";
+// import { useEffect, useState } from "react";
 
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
