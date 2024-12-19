@@ -2,7 +2,7 @@ import MemberBox from "@/components/MemberBox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BellRing, Ellipsis } from "lucide-react";
-import { ChevronRight } from "lucide-react";
+// import { Calendar1Icon } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -24,7 +24,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useEffect } from "react";
 import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar } from "@/components/ui/calendar";
 import {
     Popover,
     PopoverContent,
@@ -53,7 +53,8 @@ import ChatApiRequest from "@/apiRequest/chat";
 import ChatMemberBox from "@/components/ChatMemberBox";
 import { useToast } from "@/hooks/use-toast";
 // import NotificationApiRequest from "@/apiRequest/notification";
-
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 const eventSchema = EventBody
 
 interface event {
@@ -68,6 +69,7 @@ interface chat {
 
 function ClubLayout({ children }: { children: React.ReactNode }) {
     // const clubId = useSelector((state: RootState) => state.club.clubId);
+    const event = useSelector((state: RootState) => state.event.event);
     const [club, setClub] = useState("")
     const { toast } = useToast()
     const location = useLocation()
@@ -83,7 +85,10 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
         if (clubId && adminList?.includes(clubId)) {
             setCheckRole(true)
         }
-    }, [])
+        else {
+            setCheckRole(false)
+        }
+    }, [location])
 
     const getName = async () => {
         try {
@@ -182,7 +187,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     }
     useEffect(() => {
         getJoinedEvent()
-    }, [localStorage.getItem("callEvent")])
+    }, [localStorage.getItem("callEvent"), location, event])
 
     const getChat = async () => {
         try {
@@ -193,7 +198,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
     }
     useEffect(() => {
         getChat()
-    }, [])
+    }, [location])
 
     const handleDeleteClub = async () => {
         try {
@@ -211,7 +216,7 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
         <div className="flex ">
             <div className=" bg-[#2b2d31] min-w-[280px] h-screen flex flex-col">
                 <div className="w-full p-2 flex justify-between items-center">
-                    <Input className="text-[#888888] bg-[#1e1f22] focus-visible:ring-0 focus:outline-none focus:border-none focus:ring-none border-transparent ring-offset-0" placeholder="Tìm kiếm cuộc trò chuyện"></Input>
+                    <Input className="text-[#888888] bg-[#1e1f22] focus-visible:ring-0 focus:outline-none focus:border-none focus:ring-none border-transparent ring-offset-0 " placeholder="HI xin chào"></Input>
                 </div>
                 <div className="overflow-auto flex-1 scrollbar-hide">
                     <div className="flex items-center justify-between p-2 cursor-pointer" onClick={() => navigate(`/club/${clubId}`)}>
@@ -363,19 +368,20 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
 
                     </div>
 
-                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className={!focusNoti ? "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] hover:bg-[#393e46]" : "cursor-pointer p-1 flex items-center justify-center space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] bg-[#393e46]"}>
+                    <div onClick={() => navigate(`/club/${clubId}/notification`)} className={!focusNoti ? "cursor-pointer p-1 pl-4 flex items-center  space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] hover:bg-[#393e46]" : "cursor-pointer p-1 flex items-center  space-x-4 pt-2 pb-2 border-t-[1px] border-b-[1px] border-[#393e46] bg-[#393e46]"}>
                         <BellRing size={24} />
                         <p className="text-[20px]">Thông báo tổng</p>
                     </div>
-
+                    <div className="cursor-pointer hover:bg-[#393e46] p-1 pl-4 flex items-center  space-x-4 pt-2 pb-2  border-b-[1px] border-[#393e46] " onClick={() => navigate(`/club/listEvent/${clubId}`)}>
+                        {/* <ChevronRight /> */}
+                        <CalendarIcon size={24} />
+                        <h1 className="text-[20px]">Sự kiện</h1>
+                    </div>
                     <div className="space-y-2 pt-1 mt-2 pb-1">
                         {/* <FeatureBox group="Các ban trực thuộc" /> */}
                         {/* <FeatureBox group="Sự kiện chưa đăng ký" /> */}
-                        <div className="flex items-center hover:bg-slate-400 cursor-pointer select-none" onClick={() => navigate(`/club/listEvent/${clubId}`)}>
-                            <ChevronRight />
-                            <h1 className="text-[20px]">Sự kiện chưa đăng ký</h1>
-                        </div>
-                        <FeatureBox group="Sự kiện đã đăng ký" names={joinedEvent} />
+
+                        <FeatureBox group="Sự kiện đã tham gia" names={joinedEvent} />
                         <FeatureBox group="Các nhóm chat" chats={chats} />
                     </div>
                 </div>

@@ -21,7 +21,7 @@ interface ClientToServerEvents {
 }
 
 // Tạo kết nối với backend
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://fall2024c8g7.int3306.freeddns.org", {
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:8080/api/v1", {
     transports: ["websocket"], // Ưu tiên WebSocket
 });
 

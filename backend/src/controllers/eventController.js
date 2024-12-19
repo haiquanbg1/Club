@@ -343,7 +343,7 @@ const askToJoin = async (req, res) => {
 
         return successResponse(res, StatusCodes.CREATED, "Đã đăng ký tham gia thành công.");
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

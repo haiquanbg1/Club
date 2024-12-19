@@ -37,6 +37,10 @@ import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import ClubApiRequest from "@/apiRequest/club"
 import { useToast } from "@/hooks/use-toast";
+import { useDispatch } from "react-redux";
+import { setEvent } from "@/redux/eventSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 const eventSchema = EventBody
 
 
@@ -59,7 +63,17 @@ export default function Header({ title, isAdmin, description, resetInfo, resetMe
     const [open, setOpen] = useState<boolean>(false)
     const [openSetting, setOpenSetting] = useState<boolean>(false)
     const [eventOpen, setEventOpen] = useState(false)
-
+    const dispatch = useDispatch();
+    const event = useSelector((state: RootState) => state.event.event);
+    const update = () => {
+        if (event == "") {
+            dispatch(setEvent("newFriendValue"));
+        }
+        else {
+            dispatch(setEvent(""));
+        }
+        // Cập nhật Redux state
+    };
     const navigate = useNavigate()
     const { eventId, clubId } = useParams()
 
@@ -110,12 +124,14 @@ export default function Header({ title, isAdmin, description, resetInfo, resetMe
                 start_time: format(values.start_time, "yyyy/MM/dd"),
             }
             await ClubApiRequest.updateEvent(body)
+            update()
             toast({
 
                 title: "Thành công",
                 description: "Đã lưu thay đổi",
 
             })
+            eventForm.reset()
             setEventOpen(false)
             resetInfo()
         } catch (error) {

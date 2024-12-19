@@ -96,7 +96,7 @@ export default function Message({
     socketRef.current.emit("delete-my-message", content.id);
     try {
       const response = await axios.delete(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/delete`,
+        `http://localhost:8080/api/v1/api/v1/message/delete`,
         {
           data: {
             message_id: content.id,
@@ -124,7 +124,7 @@ export default function Message({
     });
     try {
       const response = await axios.post(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/deleteOtherMessage`,
+        `http://localhost:8080/api/v1/api/v1/message/deleteOtherMessage`,
         {
           message_id: content.id,
           user_id: userId,
@@ -169,7 +169,7 @@ export default function Message({
   const createReact = async (reactObj: ReactType) => {
     try {
       const response = await axios.post(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/createReact`,
+        `http://localhost:8080/api/v1/api/v1/message/createReact`,
         {
           message_id: reactObj.message_id,
           react: reactObj.react,
@@ -199,7 +199,7 @@ export default function Message({
       try {
         axios
           .get(
-            "http://fall2024c8g7.int3306.freeddns.org/api/v1/message/react",
+            "http://localhost:8080/api/v1/api/v1/message/react",
             {
               params: {
                 message_id: content.id,
@@ -269,7 +269,7 @@ export default function Message({
                 console.log("update 1 lan");
                 return prevReactList.map((react) =>
                   react.user_id === reactObj.user_id &&
-                  react.message_id === content.id
+                    react.message_id === content.id
                     ? { ...reactObj }
                     : react
                 );
@@ -317,14 +317,12 @@ export default function Message({
 
   return (
     <div
-      className={`flex w-full ${
-        orientation === "right" ? "justify-end" : "justify-start"
-      } group relative mt-2 mb-2`}
+      className={`flex w-full ${orientation === "right" ? "justify-end" : "justify-start"
+        } group relative mt-2 mb-2`}
     >
       <div
-        className={`flex w-fit max-w-[75%] items-end py-[5px] ${
-          orientation === "right" ? "flex-row-reverse" : "flex-row"
-        } `}
+        className={`flex w-fit max-w-[75%] items-end py-[5px] ${orientation === "right" ? "flex-row-reverse" : "flex-row"
+          } `}
       >
         <Avatar
           className={orientation === "right" ? "ml-[10px]" : "mr-[10px]"}
@@ -335,9 +333,8 @@ export default function Message({
         />
 
         <div
-          className={`flex-1 rounded-2xl px-[10px] py-[6px] ${
-            orientation === "right" ? "bg-red-500" : "bg-green-400"
-          } shadow-md max-w-[75%] relative`}
+          className={`flex-1 rounded-2xl px-[10px] py-[6px] ${orientation === "right" ? "bg-red-500" : "bg-green-400"
+            } shadow-md max-w-[75%] relative`}
           style={{
             wordWrap: "break-word",
             wordBreak: "break-word",
@@ -345,16 +342,14 @@ export default function Message({
           }}
         >
           <div
-            className={`flex items-end text-sm font-semibold ${
-              orientation === "right"
-                ? "flex-row-reverse text-right"
-                : "flex-row text-left"
-            }`}
+            className={`flex items-end text-sm font-semibold ${orientation === "right"
+              ? "flex-row-reverse text-right"
+              : "flex-row text-left"
+              }`}
           ></div>
           <div
-            className={`${
-              orientation === "right" ? "justify-end" : "justify-start"
-            } flex w-full text-base leading-tight light:text-black dark:text-white`}
+            className={`${orientation === "right" ? "justify-end" : "justify-start"
+              } flex w-full text-base leading-tight light:text-black dark:text-white`}
           >
             {content.message.split("/n").map((line, i) => (
               <React.Fragment key={i}>
@@ -366,9 +361,8 @@ export default function Message({
 
           {/* Hover Action */}
           <div
-            className={`absolute top-full ${
-              orientation === "right" ? "right-full" : "left-full"
-            } hidden group-hover:flex items-center gap-2 bg-none p-1 text-white text-xs rounded shadow-lg`}
+            className={`absolute top-full ${orientation === "right" ? "right-full" : "left-full"
+              } hidden group-hover:flex items-center gap-2 bg-none p-1 text-white text-xs rounded shadow-lg`}
             style={
               orientation === "right"
                 ? { transform: "translateY(-100%) translateX(-10%)" }
@@ -408,9 +402,8 @@ export default function Message({
           </div>
           {/* Hover Time */}
           <div
-            className={`absolute w-max top-full ${
-              orientation === "right" ? "left-0" : "right-0"
-            } hidden group-hover:flex items-center gap-2 bg-gray-700 text-white text-xs p-1 rounded shadow-lg`}
+            className={`absolute w-max top-full ${orientation === "right" ? "left-0" : "right-0"
+              } hidden group-hover:flex items-center gap-2 bg-gray-700 text-white text-xs p-1 rounded shadow-lg`}
             style={
               orientation === "right"
                 ? { transform: "translateY(-100%) translateX(-180%)" }
@@ -422,9 +415,8 @@ export default function Message({
           {showEmojiPicker && (
             <div
               ref={emojiPickerRef}
-              className={`absolute bottom-full ${
-                orientation === "right" ? "left-0" : "right-0"
-              }`}
+              className={`absolute bottom-full ${orientation === "right" ? "left-0" : "right-0"
+                }`}
               style={
                 orientation === "right"
                   ? { transform: "translateY(20%) translateX(-50%)" }

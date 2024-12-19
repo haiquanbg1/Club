@@ -69,7 +69,7 @@ export default function ChatPage() {
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get(
-        "http://fall2024c8g7.int3306.freeddns.org/api/v1/user/profile",
+        "http://localhost:8080/api/v1/api/v1/user/profile",
         {
           params: {
             user_id: "@me",
@@ -92,7 +92,7 @@ export default function ChatPage() {
   const fetchInfoClub = async () => {
     try {
       const response = await axios.get(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/club/`,
+        `http://localhost:8080/api/v1/api/v1/club/`,
         {
           params: {
             club_id: clubId,
@@ -115,7 +115,7 @@ export default function ChatPage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/club/${conversationId}/`,
+        `http://localhost:8080/api/v1/api/v1/message/club/${conversationId}/`,
         {
           params: {
             offset,
@@ -159,7 +159,7 @@ export default function ChatPage() {
     const channelId = `${conversationId}/${clubId}`;
 
     socketRef.current = socketIOClient(
-      "http://fall2024c8g7.int3306.freeddns.org",
+      "http://localhost:8080/api/v1",
       {
         query: {
           channelId,

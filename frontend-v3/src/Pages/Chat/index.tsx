@@ -7,7 +7,7 @@ import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import userApiRequest from "@/apiRequest/userProfile";
 
-const host = "http://fall2024c8g7.int3306.freeddns.org";
+const host = "http://localhost:8080/api/v1";
 
 export type UserChat = {
   avatar: string;
@@ -67,7 +67,7 @@ export default function ChatPage() {
 
   const fetchFriendProfile = async () => {
     try {
-      // const response = await axios.get('http://fall2024c8g7.int3306.freeddns.org/api/v1/user/profile', {
+      // const response = await axios.get('http://localhost:8080/api/v1/api/v1/user/profile', {
       //     params: {
       //         user_id: friendId
       //     },
@@ -99,7 +99,7 @@ export default function ChatPage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/${userId}/old`,
+        `http://localhost:8080/api/v1/api/v1/message/friend/${userId}/old`,
         {
           params: {
             offset,
@@ -259,7 +259,7 @@ export default function ChatPage() {
               setMessagesList={setMessagesList}
               userProfile={userProfile}
               friendProfile={friendProfile}
-              // isFeatching={loading}
+            // isFeatching={loading}
             />
           )}
         </div>

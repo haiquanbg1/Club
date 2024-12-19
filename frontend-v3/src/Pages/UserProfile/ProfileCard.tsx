@@ -13,8 +13,9 @@ interface info {
     birthday: string;
     gender: boolean;
     resetInfo?: () => Promise<void>
+    check: boolean
 }
-export default function ProfileCard({ id, resetInfo, display_name, email, avatar, birthday, gender }: info) {
+export default function ProfileCard({ id, resetInfo, display_name, email, avatar, birthday, gender, check }: info) {
 
     // const navigate = useNavigate()
 
@@ -34,7 +35,11 @@ export default function ProfileCard({ id, resetInfo, display_name, email, avatar
                         </div>
                     </div>
                     <div className='mt-[5px] pr-[10px]'>
-                        <ChangeWindow resetInfo={resetInfo} display_name={display_name || ""} birthDay={convertDay(birthday)} />
+                        {
+                            check &&
+                            <ChangeWindow resetInfo={resetInfo} display_name={display_name || ""} birthDay={convertDay(birthday)} />
+
+                        }
                     </div>
                 </div>
                 <div className='p-[10px]'>

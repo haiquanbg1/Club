@@ -61,6 +61,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         // dispatch(setClubId(club_id));
         // dispatch(setRoles(club_id, club_role))
         localStorage.setItem('club_id', club_id)
+
         navigate(`/club/${club_id}`)
     }
 

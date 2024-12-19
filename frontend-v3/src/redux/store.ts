@@ -1,10 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import friendReducer from "./friendSlice";
 import clubReducer from "./clubSlice"
+import eventReducer from "./eventSlice"
+
 export const store = configureStore({
     reducer: {
+        club: clubReducer,
         friend: friendReducer,
-        club: clubReducer
+        event: eventReducer,
     },
 });
 

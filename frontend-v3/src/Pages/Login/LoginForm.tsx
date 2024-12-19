@@ -42,7 +42,7 @@ export default function LoginForm() {
     // const token = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
 
     // // Gửi token đến backend để xác minh CAPTCHA
-    // const res = await fetch("http://fall2024c8g7.int3306.freeddns.org/api/v1/auth/verify-turnstile", {
+    // const res = await fetch("http://localhost:8080/api/v1/api/v1/auth/verify-turnstile", {
     //     method: "POST",
     //     headers: {
     //         "Content-Type": "application/json",

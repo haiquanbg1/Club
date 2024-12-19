@@ -19,6 +19,12 @@ export default function UserProfilePage() {
     // Lấy giá trị của userId từ query string
     const userId = queryParams.get('userId');
     // console.log(userId)
+
+    const [check, setCheck] = useState(localStorage.getItem("user_id") == userId || !userId)
+
+    useEffect(() => {
+        setCheck(localStorage.getItem("user_id") == userId || !userId)
+    }, [location])
     const getInfo = async () => {
         try {
             const result = await userApiRequest.getProfile(userId || "")
@@ -40,10 +46,16 @@ export default function UserProfilePage() {
     return (
         <div className='space-y-5 w-full md:w-[50%] xl:w-[40%] 2xl:w-[30%] m-auto bg-[#2b2d31]'>
             <h3 className='text-[20px]'>Tài khoản của tôi</h3>
-            <ProfileCard resetInfo={getInfo} id={info?.data.id || ""} display_name={info?.data.display_name || ""} email={info?.data.email || ""} avatar={info?.data.avatar || ""} birthday={info?.data.birthday || ""} gender={info?.data.gender || true} />
-            <Password />
-            <Account />
-            <ChangeAvatar resetInfo={getInfo} />
+            <ProfileCard check={check} resetInfo={getInfo} id={info?.data.id || ""} display_name={info?.data.display_name || ""} email={info?.data.email || ""} avatar={info?.data.avatar || ""} birthday={info?.data.birthday || ""} gender={info?.data.gender || true} />
+            {
+                check &&
+                <>
+                    <Password />
+                    <Account />
+                    <ChangeAvatar resetInfo={getInfo} />
+                </>
+            }
+
         </div>
     )
 }
