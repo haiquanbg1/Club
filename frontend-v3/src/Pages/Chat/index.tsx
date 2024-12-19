@@ -36,7 +36,7 @@ export type Profile = {
   display_name: string;
   email: string;
   birthday: string;
-  gender: boolean;
+  gender: number;
   avatar: string;
 };
 

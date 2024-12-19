@@ -11,7 +11,7 @@ interface info {
     email: string;
     avatar: string;
     birthday: string;
-    gender: boolean;
+    gender: number;
     resetInfo?: () => Promise<void>
     check: boolean
 }
@@ -87,7 +87,7 @@ export default function ProfileCard({ id, resetInfo, display_name, email, avatar
                         <div className='flex justify-between '>
                             <div>
                                 <div className='text-[16px] text-[#ccc]'>Giới tính</div>
-                                <div className='text-[14px]'>{gender ? "Nam" : "Nữ"}</div>
+                                <div className='text-[14px]'>{gender == 1 ? "Nam" : "Nữ"}</div>
                             </div>
                             <div>
 

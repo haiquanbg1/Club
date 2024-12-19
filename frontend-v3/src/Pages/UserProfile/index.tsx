@@ -45,8 +45,11 @@ export default function UserProfilePage() {
         , [location])
     return (
         <div className='space-y-5 w-full md:w-[50%] xl:w-[40%] 2xl:w-[30%] m-auto bg-[#2b2d31]'>
-            <h3 className='text-[20px]'>Tài khoản của tôi</h3>
-            <ProfileCard check={check} resetInfo={getInfo} id={info?.data.id || ""} display_name={info?.data.display_name || ""} email={info?.data.email || ""} avatar={info?.data.avatar || ""} birthday={info?.data.birthday || ""} gender={info?.data.gender || true} />
+            {
+                check &&
+                <h3 className='text-[20px]'>Tài khoản của tôi</h3>
+            }
+            <ProfileCard check={check} resetInfo={getInfo} id={info?.data.id || ""} display_name={info?.data.display_name || ""} email={info?.data.email || ""} avatar={info?.data.avatar || ""} birthday={info?.data.birthday || ""} gender={info?.data.gender || 1} />
             {
                 check &&
                 <>
