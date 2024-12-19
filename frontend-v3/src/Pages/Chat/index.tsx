@@ -266,7 +266,7 @@ export default function ChatPage() {
       }
       {userProfile && friendProfile && (
         <Footer
-          className="w-full mt-2"
+          className="w-full mt-2 absolute bottom-9"
           socketRef={socketRef}
           setMessagesList={setMessagesList}
           userProfile={userProfile}
