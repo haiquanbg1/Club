@@ -242,12 +242,12 @@ function ClubLayout({ children }: { children: React.ReactNode }) {
                                         >
                                             Thêm nhóm chat
                                         </DropdownMenuCheckboxItem>
-                                        <DropdownMenuCheckboxItem
+                                        {/* <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                             onClick={() => navigate(`/club/changeProfile/${clubId}`)}
                                         >
                                             Đổi thông tin
-                                        </DropdownMenuCheckboxItem>
+                                        </DropdownMenuCheckboxItem> */}
                                         <DropdownMenuCheckboxItem
                                             className="pl-2  text-[18px] focus:bg-gray-300 focus:text-[black]"
                                             onClick={handleDeleteClub}

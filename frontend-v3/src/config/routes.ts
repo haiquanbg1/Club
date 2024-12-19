@@ -13,7 +13,7 @@ const routes = {
     report: "/report/:clubId",
     reportList: "/reportList/:clubId",
     notification: "/club/:clubId/notification",
-    clubInfo: "/club/changeProfile/:clubId",
+    // clubInfo: "/club/changeProfile/:clubId",
     listEvent: "/club/listEvent/:clubId",
     detailsEvent: "/club/eventDetails/:clubId/:eventId"
 };

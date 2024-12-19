@@ -11,7 +11,7 @@ import CreateClubPage from "@/Pages/CreateClub";
 import FriendPage from "@/Pages/Friend";
 import ReportPage from "@/Pages/Report";
 import NotificationPage from "@/Pages/NotiPage";
-import ClubInfoPage from "@/Pages/ClubInfo";
+// import ClubInfoPage from "@/Pages/ClubInfo";
 import ChatClubPage from "@/Pages/ChatClub";
 // import { Component } from "react";
 import ListEventPage from "@/Pages/ListEvent";
@@ -26,9 +26,8 @@ const publicRoutes = [
     { path: routeConfig.routes.userProfile, component: UserProfilePage, layout: "no" },
     { path: routeConfig.routes.club, component: ClubPage, layout: "clubLayout" },
     { path: routeConfig.routes.chat, component: ChatPage, layout: "chatLayout" },
-    // { path: routeConfig.routes.event, component: EventPage, layout: "clubLayout" },
     { path: routeConfig.routes.notification, component: NotificationPage, layout: "clubLayout" },
-    { path: routeConfig.routes.clubInfo, component: ClubInfoPage, layout: "clubLayout" },
+    // { path: routeConfig.routes.clubInfo, component: ClubInfoPage, layout: "clubLayout" },
     { path: routeConfig.routes.createClub, component: CreateClubPage, layout: "no" },
     { path: routeConfig.routes.friend, component: FriendPage },
     { path: routeConfig.routes.report, component: ReportPage, layout: "no" },
