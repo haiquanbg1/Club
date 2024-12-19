@@ -63,7 +63,7 @@ const findAll = async (club_id, user_id, page) => {
 
 const updateSeen = async (notification_id, user_id) => {
     return await UserNotification.update({
-        read_at: new Date.now()
+        read_at: new Date()
     }, {
         where: {
             user_id,

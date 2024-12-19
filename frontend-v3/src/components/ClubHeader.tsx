@@ -13,7 +13,7 @@ export default function ClubHeader() {
     }
   };
   return (
-    <div className="w-full  bg-[#434242] p-2 flex justify-between items-center">
+    <div className="w-full  bg-[#3d3f46] p-2 flex justify-between items-center">
       <Button
         onClick={handleCLick}
         className="ml-auto bg-[#fffafaa2] text-[white] text-sm hover:bg-[#fffafa75]"

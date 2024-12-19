@@ -53,6 +53,7 @@ const findOne = async (req, res) => {
             createdAt: formatDate(notification.createdAt)
         });
     } catch (error) {
+        console.log(error)
         return errorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,

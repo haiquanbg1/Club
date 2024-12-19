@@ -8,7 +8,7 @@ interface notification {
     status: string
 }
 
-export default function NotiList({ notifications, loading }: { notifications: notification[], loading: boolean }) {
+export default function NotiList({ notifications, loading, setReload }: { notifications: notification[], loading: boolean, setReload: React.Dispatch<React.SetStateAction<boolean>> }) {
 
 
     return (
@@ -25,7 +25,7 @@ export default function NotiList({ notifications, loading }: { notifications: no
             </div>
             <div className="space-y-2">
                 {notifications.map((notification, idx) => (
-                    <NotiItem key={idx} id={notification.id} status={notification.status} description={notification.description} title={notification.title}></NotiItem>
+                    <NotiItem setReload={setReload} key={idx} id={notification.id} status={notification.status} description={notification.description} title={notification.title}></NotiItem>
                 ))}
             </div>
             {loading && (
