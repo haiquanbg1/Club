@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import MemberApiRequest from "@/apiRequest/member"
 import { useParams } from "react-router-dom"
+import { useToast } from "@/hooks/use-toast"
 interface User {
     user_id: string,
     display_name: string,
@@ -11,6 +12,7 @@ interface User {
 }
 
 export default function AdminAdd({ listAdding, setOpen, getAdmin }: { listAdding: User[], setOpen: React.Dispatch<React.SetStateAction<boolean>>, getAdmin: () => Promise<void> }) {
+    const { toast } = useToast()
     const [selected, setSelected] = useState("")
     const { clubId } = useParams()
     const handleSelect = (id: string) => {
@@ -31,7 +33,10 @@ export default function AdminAdd({ listAdding, setOpen, getAdmin }: { listAdding
             const res = await MemberApiRequest.addAdmin(body)
             setOpen(false)
             getAdmin()
-            console.log(res)
+            toast({
+                title: "Thành công",
+                description: res.payload.message,
+            })
         } catch (error) {
 
         }

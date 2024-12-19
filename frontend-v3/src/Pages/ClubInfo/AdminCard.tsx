@@ -19,7 +19,7 @@ interface User {
     // role: string
 }
 
-export default function AdminCard({ user_id, display_name, avatar, noMore }: User) {
+export default function AdminCard({ display_name, avatar, noMore }: User) {
     return (
         <div className="flex items-center">
             <div className="flex items-center flex-1">
