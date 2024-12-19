@@ -56,7 +56,7 @@ export default function Footer({
       // setSelectedImage(null);
       try {
         const response = await axios.post(
-          `http://localhost:8080/api/v1/api/v1/message/create`,
+          `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/create`,
           {
             id: messageObject.id,
             conversation_id: conversationId,

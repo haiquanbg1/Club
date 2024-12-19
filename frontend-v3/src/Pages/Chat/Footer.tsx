@@ -56,8 +56,8 @@ export default function Footer({
       setSelectedImage(null);
       // Gửi tin nhắn qua API
       try {
-        await axios.post(
-          `http://localhost:8080/api/v1/api/v1/message/friend/${friendProfile.id}/send`,
+        const response = await axios.post(
+          `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/${friendProfile.id}/send`,
           {
             message: messageObject.message,
             message_id: messageObject.id,
