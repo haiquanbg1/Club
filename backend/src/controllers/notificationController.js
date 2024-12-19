@@ -47,7 +47,7 @@ const findOne = async (req, res) => {
         await notificationService.updateSeen(notification_id, user.id);
 
         return successResponse(res, StatusCodes.OK, "Thành công.", {
-            notification_id: notification.id,
+            notification_id,
             title: notification.title,
             description: notification.description,
             createdAt: formatDate(notification.createdAt)

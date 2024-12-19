@@ -118,7 +118,7 @@ const findAllUserWithKey = async (req, res) => {
                 user_id: participants[i].user.id,
                 display_name: participants[i].display_name,
                 avatar: image,
-                role: 2 ? 1 : participants[i].user.id == manager.user_id
+                role: participants[i].user.id == manager.user_id ? 2 : 1
             });
         }
 
