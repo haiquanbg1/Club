@@ -104,9 +104,12 @@ const findAllUserWithKey = async (req, res) => {
         const participants = await conversationService.findAllUser(conversation_id, text);
 
         const conversation = await conversationService.findOne({ id: conversation_id });
-        const manager = await roleService.findOne({
+        const manager = await roleService.findAll({
             role_id: 2,
             club_id: conversation.club_id
+        });
+        const users = manager.map((user) => {
+            return user.user_id
         });
 
         const data = [];
@@ -118,7 +121,7 @@ const findAllUserWithKey = async (req, res) => {
                 user_id: participants[i].user.id,
                 display_name: participants[i].display_name,
                 avatar: image,
-                role: participants[i].user.id == manager.user_id ? 2 : 1
+                role: users.includes(participants[i].user.id) ? 2 : 1
             });
         }
 
