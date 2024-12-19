@@ -12,7 +12,7 @@ const reactItem = ({ reactItemChild, socketRef }: Props) => {
   // thằng này lắng nghe sự kiện thay đổi của react con
   useEffect(() => {
     if (socketRef.current) {
-      socketRef.current.on("react-message", (reactObj: ReactType) => {
+      socketRef.current.on("react-item", (reactObj: ReactType) => {
         if (
           reactObj.message_id === reactItemChild.message_id &&
           reactObj.user_id === reactItemChild.user_id

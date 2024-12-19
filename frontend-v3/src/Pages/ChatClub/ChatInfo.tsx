@@ -3,10 +3,11 @@ import Avatar from '../Chat/Avatar';
 
 type Props = {
     clubProfile: ClubProfile;
+    conversationName: string;
 };
 
 
-export default function ChatInfo({clubProfile} : Props) {
+export default function ChatInfo({clubProfile, conversationName} : Props) {
  
     return (
         <div className='flex hover:shadow-lg p-1 rounded cursor-pointer'>
@@ -17,7 +18,7 @@ export default function ChatInfo({clubProfile} : Props) {
                     orientation='left'
                 />
             <div className='ml-3 justify-center align-middle'>
-                <span>{clubProfile.name}</span>
+                <span>{conversationName}</span>
                 <p className='text-sm font-medium text-gray-500'>{clubProfile.description}</p>
             </div>
         </div>

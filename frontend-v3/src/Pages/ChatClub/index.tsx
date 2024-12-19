@@ -47,6 +47,8 @@ export default function ChatPage() {
 
   const [clubProfile, setClubProfile] = useState<ClubProfile | null>(null);
 
+  const [conversationName, setConversationName] = useState<string | null>(null);
+
   const location = useLocation();
 
   // control message List
@@ -108,6 +110,21 @@ export default function ChatPage() {
       setClubProfile(response.data.data[0]);
     } catch (error) {
       console.error("Error fetching club profile:", error);
+    }
+  };
+
+  const fetchInfoConversation = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/conversation/getInfoConversation/${conversationId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setConversationName(response.data.data.name);
+    } catch (error) {
+      console.error("Error fetching conversation:", error);
     }
   };
 
@@ -216,6 +233,7 @@ export default function ChatPage() {
       messagesRef.current = [];
       setLastScrollTop(0);
       await fetchInfoClub();
+      await fetchInfoConversation();
       await fetchUserProfile();
       await fetchMessages();
       if (conversationId) {
@@ -248,8 +266,8 @@ export default function ChatPage() {
   }, [messagesList]);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-700 relative">
-      {clubProfile && <Header clubProfile={clubProfile} />}
+    <div className="h-screen flex flex-col bg-[#313338] relative">
+      {clubProfile && conversationName && <Header clubProfile={clubProfile} conversationName={conversationName}/>}
       {
         <div
           ref={scrollContainerRef}

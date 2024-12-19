@@ -100,7 +100,7 @@ export default function Footer({
     <div className={`${className} relative flex mb-1`}>
       <form
         onSubmit={handleSubmit}
-        className="w-full h-9 p-1 ml-1 text-white bg-gray-800 rounded-3xl flex items-center relative"
+        className="w-full h-9 p-1 ml-1 text-white bg-[#44474e] rounded-3xl flex items-center relative"
       >
         <input
           id="msg"
@@ -109,7 +109,7 @@ export default function Footer({
           placeholder={`Aa`}
           required
           onChange={handleChange}
-          className="flex-1 h-full p-1.5 bg-gray-800 text-white rounded-3xl outline-none"
+          className="flex-1 h-full p-1.5 bg-[#44474e] text-white rounded-3xl outline-none"
         />
         <button
           type="button"
@@ -122,7 +122,7 @@ export default function Footer({
       </form>
       <button
         type="submit"
-        className="ml-2 mr-2 p-2 bg-blue-500 text-white rounded-3xl flex items-center"
+        className="ml-2 mr-2 p-2 bg-[#44474e] text-white rounded-3xl flex items-center"
         onClick={handleSubmit}
       >
         <FaPaperPlane size={18} />

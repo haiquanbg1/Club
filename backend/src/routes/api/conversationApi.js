@@ -13,5 +13,6 @@ router.get("/participant/:conversation_id", authMiddleware, conversationControll
 router.post("/participant/add", authMiddleware, managerMiddleware, conversationController.addParticipant);
 router.delete("/participant/kick", authMiddleware, managerMiddleware, conversationController.kick);
 router.delete("/out", authMiddleware, conversationController.outConversation);
+router.get("/getInfoConversation/:conversation_id", authMiddleware, conversationController.getConversation);
 
 module.exports = router;

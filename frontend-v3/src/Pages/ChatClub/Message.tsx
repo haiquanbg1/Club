@@ -88,6 +88,7 @@ export default function Message({
     if (socketRef.current) {
       socketRef.current.emit("receive-react", reactObject);
       socketRef.current.emit("receive-react-list", reactObject);
+      socketRef.current.emit('react-item', reactObject);
     }
     createReact(reactObject);
   };

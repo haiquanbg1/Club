@@ -182,6 +182,20 @@ const kick = async (req, res) => {
     }
 }
 
+const getConversation = async (req, res) => {
+    const { conversation_id } = req.params;
+
+    try {
+        const conversation = await conversationService.findOne({
+            id: conversation_id
+        });
+
+        return successResponse(res, StatusCodes.OK, "Thành công.", conversation);
+    } catch (error) {
+        return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
+}
+
 module.exports = {
     create,
     update,
@@ -190,5 +204,6 @@ module.exports = {
     findAllUserWithKey,
     addParticipant,
     outConversation,
-    kick
+    kick,
+    getConversation
 }

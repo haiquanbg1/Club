@@ -103,6 +103,10 @@ module.exports = (app) => {
         socket.on('receive-react-list', (message) => {
             io.to(channelId).emit('receive-react-list', message);
         });
+
+        socket.on('react-item', (message) => {
+            io.to(channelId).emit('react-item', message);
+        });
     });
 
 
