@@ -272,7 +272,7 @@ const outEvent = async (req, res) => {
         await eventService.outEvent(event_id, user.id);
 
         const event = await eventService.findOneEvent(event_id);
-        const manager = await roleService.findOne({
+        const manager = await roleService.findAll({
             role_id: 2,
             club_id: event.club_id
         });
@@ -281,10 +281,12 @@ const outEvent = async (req, res) => {
             title: "Hoạt động",
             description: `${user.display_name} đã rời khỏi ${event.name}.`
         });
-        await notificationService.addNotificationForUser(
-            manager.user_id,
-            notification.id
-        );
+        manager.forEach((user) => {
+            notificationService.addNotificationForUser(
+                user.user_id,
+                notification.id
+            );
+        });
 
         return successResponse(res, StatusCodes.OK, "Rời hoạt động thành công.");
     } catch (error) {
@@ -323,7 +325,7 @@ const askToJoin = async (req, res) => {
         await eventService.askToJoin(user.id, event_id);
 
         const event = await eventService.findOneEvent(event_id);
-        const manager = await roleService.findOne({
+        const manager = await roleService.findAll({
             role_id: 2,
             club_id: event.club_id
         });
@@ -332,10 +334,12 @@ const askToJoin = async (req, res) => {
             title: "Thành viên hoạt động",
             description: `${user.display_name} xin tham gia ${event.name}.`
         });
-        await notificationService.addNotificationForUser(
-            manager.user_id,
-            notification.id
-        );
+        manager.forEach((user) => {
+            notificationService.addNotificationForUser(
+                user.user_id,
+                notification.id
+            );
+        });
 
         return successResponse(res, StatusCodes.CREATED, "Đã đăng ký tham gia thành công.");
     } catch (error) {

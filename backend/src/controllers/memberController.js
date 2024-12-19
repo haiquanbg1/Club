@@ -71,7 +71,7 @@ const outMember = async (req, res) => {
     try {
         await memberService.deleteMember(club_id, user.id);
 
-        const manager = await roleService.findOne({
+        const manager = await roleService.findAll({
             role_id: 2,
             club_id
         });
@@ -80,10 +80,12 @@ const outMember = async (req, res) => {
             title: "Câu lạc bộ",
             description: `${user.display_name} đã rời khỏi câu lạc bộ.`
         });
-        await notificationService.addNotificationForUser(
-            manager.user_id,
-            notification.id
-        );
+        manager.forEach((user) => {
+            notificationService.addNotificationForUser(
+                user.user_id,
+                notification.id
+            );
+        });
 
         return successResponse(res, StatusCodes.OK, "Thành công.");
     } catch (error) {
