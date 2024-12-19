@@ -136,13 +136,13 @@ export default function ChatMemberBox() {
             {
                 checkRole &&
                 <div className="text-center absolute bottom-2 right-20">
-                    <Button variant={"denied"} onClick={handleDelete}>Xóa câu lạc bộ</Button>
+                    <Button variant={"denied"} onClick={handleDelete}>Xóa câu đoạn chat</Button>
                 </div>
             }
             {
                 !checkRole &&
                 <div className="text-center absolute bottom-2 right-20">
-                    <Button variant={"denied"} onClick={handleOut}>Rời câu lạc bộ</Button>
+                    <Button variant={"denied"} onClick={handleOut}>Rời câu đoạn chat</Button>
                 </div>
             }
         </div >

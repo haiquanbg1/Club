@@ -6,8 +6,8 @@ export const RegisterBody = z
         gender: z.number(),
         birthday: z.string(),
         username: z.string().email(),
-        password: z.string().min(6).max(100),
-        confirmPassword: z.string().min(6).max(100)
+        password: z.string(),
+        confirmPassword: z.string()
     })
     .strict()
     .superRefine(({ confirmPassword, password }, ctx) => {
@@ -31,7 +31,7 @@ export type RegisterResType = z.TypeOf<typeof RegisterRes>
 
 export const loginBody = z.object({
     username: z.string().email(),
-    password: z.string().min(6).max(100)
+    password: z.string()
 }).strict()
 
 export type LoginBodyType = z.TypeOf<typeof loginBody>

@@ -9,9 +9,7 @@ const findOne = async (whereClause) => {
 
 const findAll = async (whereClause) => {
     return await member_role.findAll({
-        where: {
-            whereClause
-        }
+        where: whereClause
     });
 }
 
