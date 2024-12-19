@@ -64,9 +64,9 @@ export default function ClubInfoPage({ name, avatar, id, description, getClub }:
             club_id: clubId
         }
         try {
-            console.log(body)
+            // console.log(body)
             const res = await ClubApiRequest.change(body)
-            console.log(res)
+            // console.log(res)
             getClub()
             reset()
             toast({

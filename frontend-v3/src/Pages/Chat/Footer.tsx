@@ -51,12 +51,12 @@ export default function Footer({
         },
       };
       socketRef.current.emit("on-chat", messageObject);
-      console.log("Id:", messageObject.id);
+      // console.log("Id:", messageObject.id);
       setMessage(""); // Xóa nội dung input sau khi gửi
       setSelectedImage(null);
       // Gửi tin nhắn qua API
       try {
-        const response = await axios.post(
+        await axios.post(
           `http://localhost:8080/api/v1/api/v1/message/friend/${friendProfile.id}/send`,
           {
             message: messageObject.message,
@@ -66,9 +66,9 @@ export default function Footer({
             withCredentials: true,
           }
         );
-        console.log("Messages:", response);
+        // console.log("Messages:", response);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
   };

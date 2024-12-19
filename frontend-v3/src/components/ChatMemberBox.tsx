@@ -69,7 +69,7 @@ export default function ChatMemberBox() {
 
 
         } catch (error) {
-            console.log(error)
+
         }
     }
     useEffect(() => {
@@ -82,13 +82,14 @@ export default function ChatMemberBox() {
                 "club_id": localStorage.getItem("club_id")
             }
             const res = await MemberApiRequest.out(body)
-            console.log(res)
+
             toast({
-                description: "Success",
+                title: "Success",
+                description: res.payload.message,
             })
             navigate("/")
         } catch (error) {
-            console.log(error)
+
         }
     }
 
@@ -98,8 +99,12 @@ export default function ChatMemberBox() {
                 "club_id": clubId || ""
             }
             const res = await ClubApiRequest.delete(body)
+            toast({
+                title: "Success",
+                description: res.payload.message,
+            })
             navigate("/")
-            console.log(res)
+
         } catch (error) {
 
         }

@@ -73,9 +73,9 @@ export default function ChatPage() {
       //     },
       //     withCredentials: true
       // });
-      console.log(userId);
+      // console.log(userId);
       const response = await userApiRequest.getProfile(userId);
-      console.log(response);
+      // console.log(response);
       setFriendProfile(response.payload.data);
       // console.log('Friend profile:', response.data.data);
     } catch (error) {
@@ -126,7 +126,7 @@ export default function ChatPage() {
         messagesRef.current.length == 0
       ) {
         messagesRef.current = [...messages, ...messagesRef.current];
-        console.log("fetch 1 lan");
+        // console.log("fetch 1 lan");
       }
 
       // console.log('fetch message:', messages);
