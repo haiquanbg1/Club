@@ -14,13 +14,13 @@ import ListReact from "./ListReact";
 import { v4 } from "uuid";
 
 type Props = {
-    orientation: "left" | "right";
-    author: UserChat;
-    content: ContentProps;
-    socketRef: React.RefObject<any>;
-    userId: string;
-    userProfile: Profile;
-    conversationId: string;
+  orientation: "left" | "right";
+  author: UserChat;
+  content: ContentProps;
+  socketRef: React.RefObject<any>;
+  userId: string;
+  userProfile: Profile;
+  conversationId: string;
 };
 
 type ContentProps = {
@@ -33,13 +33,13 @@ type ContentProps = {
 };
 
 export default function Message({
-    orientation,
-    author,
-    content,
-    socketRef,
-    userId,
-    userProfile,
-    conversationId
+  orientation,
+  author,
+  content,
+  socketRef,
+  userId,
+  userProfile,
+  conversationId,
 }: Props) {
   const formatDate = (date: Date) => {
     return moment(date).format("MMMM D, YYYY, HH:mm");
@@ -96,7 +96,7 @@ export default function Message({
     socketRef.current.emit("delete-my-message", content.id);
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/message/delete`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/delete`,
         {
           data: {
             message_id: content.id,
@@ -117,26 +117,32 @@ export default function Message({
     }
   };
 
-    const handleDeleteForOtherMessage = async () => {
-        socketRef.current.emit('delete-other-message', { messageId: content.id, userId: userId });
-        try {
-            const response = await axios.post(`http://localhost:8080/api/v1/message/deleteOtherMessage`, {
-                message_id: content.id,
-                user_id: userId,
-                conversation_id: conversationId,
-            }, {
-                withCredentials: true
-            });
-            if (response.status === 200) {
-                console.log('delete success');
-            } else {
-                console.error('delete failed');
-            }
+  const handleDeleteForOtherMessage = async () => {
+    socketRef.current.emit("delete-other-message", {
+      messageId: content.id,
+      userId: userId,
+    });
+    try {
+      const response = await axios.post(
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/deleteOtherMessage`,
+        {
+          message_id: content.id,
+          user_id: userId,
+          conversation_id: conversationId,
+        },
+        {
+          withCredentials: true,
         }
-        catch (error) {
-            console.error(error);
-        }
-    };
+      );
+      if (response.status === 200) {
+        console.log("delete success");
+      } else {
+        console.error("delete failed");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const confirmDeleteForMyMessage = () => {
     handleDeleteForMyMessage();
@@ -163,7 +169,7 @@ export default function Message({
   const createReact = async (reactObj: ReactType) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/message/createReact`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/createReact`,
         {
           message_id: reactObj.message_id,
           react: reactObj.react,
@@ -187,24 +193,29 @@ export default function Message({
     }
   };
 
-    // fetch lần đầu
-    useEffect(() => {
-        const fetchReactList = async () => {
-            try {
-                axios.get('http://localhost:8080/api/v1/message/react', {
-                    params: {
-                        message_id: content.id
-                    },
-                    withCredentials: true
-                }).then(res => {
-                    setReactListStated(res.data.data);
-                });
-            } catch (error) {
-                console.log('error', error);
+  // fetch lần đầu
+  useEffect(() => {
+    const fetchReactList = async () => {
+      try {
+        axios
+          .get(
+            "http://fall2024c8g7.int3306.freeddns.org/api/v1/message/react",
+            {
+              params: {
+                message_id: content.id,
+              },
+              withCredentials: true,
             }
-        }
-        fetchReactList();
-    }, [reactList]);
+          )
+          .then((res) => {
+            setReactListStated(res.data.data);
+          });
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchReactList();
+  }, [reactList]);
 
   // const handleReceiveReactList = (reactObj: ReactType) => {
   //     // if (isDataLoaded) {
@@ -228,48 +239,49 @@ export default function Message({
     };
   }, []);
 
-    // nhận sự kiện từ socket
-    useEffect(() => {
-        if (socketRef.current) {
-            socketRef.current.on('receive-react', (reactObj: ReactType) => {
-
-                if (reactObj.message_id === content.id) {
-                    setReactList((prevReactList) => {
-                        const existReact = prevReactList.find(
-                            react => react.user_id === reactObj.user_id && react.message_id === content.id
-                        );
-                        console.log('reactList 1:', prevReactList);
-                        console.log('reactObj:', reactObj);
-                        if (existReact) {
-                            console.log('existReact 2:', existReact);
-                            if (existReact.react === reactObj.react) {
-                                // Xóa react nếu giống nhau
-                                console.log('remove 1 lan')
-                                return prevReactList.filter(
-                                    react => !(react.user_id === reactObj.user_id && react.react === reactObj.react)
-                                );
-
-                            } else {
-                                // Thay thế react
-                                console.log('update 1 lan')
-                                return prevReactList.map(react =>
-                                    react.user_id === reactObj.user_id && react.message_id === content.id
-                                        ? { ...reactObj }
-                                        : react
-                                );
-
-                            }
-                        } else {
-                            // Thêm mới react
-                            console.log('add 1 lan')
-                            return [...prevReactList, { ...reactObj }];
-                        }
-                    });
-
-
-                }
-
-            });
+  // nhận sự kiện từ socket
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on("receive-react", (reactObj: ReactType) => {
+        if (reactObj.message_id === content.id) {
+          setReactList((prevReactList) => {
+            const existReact = prevReactList.find(
+              (react) =>
+                react.user_id === reactObj.user_id &&
+                react.message_id === content.id
+            );
+            console.log("reactList 1:", prevReactList);
+            console.log("reactObj:", reactObj);
+            if (existReact) {
+              console.log("existReact 2:", existReact);
+              if (existReact.react === reactObj.react) {
+                // Xóa react nếu giống nhau
+                console.log("remove 1 lan");
+                return prevReactList.filter(
+                  (react) =>
+                    !(
+                      react.user_id === reactObj.user_id &&
+                      react.react === reactObj.react
+                    )
+                );
+              } else {
+                // Thay thế react
+                console.log("update 1 lan");
+                return prevReactList.map((react) =>
+                  react.user_id === reactObj.user_id &&
+                  react.message_id === content.id
+                    ? { ...reactObj }
+                    : react
+                );
+              }
+            } else {
+              // Thêm mới react
+              console.log("add 1 lan");
+              return [...prevReactList, { ...reactObj }];
+            }
+          });
+        }
+      });
 
       // socketRef.current.on('receive-react-list', (reactObj: ReactType) => {
       //     // kiểm tra reactObj có phải là tin nhắn này ko

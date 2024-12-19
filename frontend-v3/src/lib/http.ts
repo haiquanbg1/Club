@@ -14,7 +14,7 @@ export class HttpError extends Error {
 // Tạo instance của Axios với cấu hình mặc định
 const apiClient: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_PUBLIC_API_ENDPOINT,
-    // baseURL: "http://localhost:8080",
+    // baseURL: "http://fall2024c8g7.int3306.freeddns.org",
     // headers: {
     //     'Content-Type': 'application/json',
     // },

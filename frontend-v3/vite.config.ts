@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/middleware': {
-        target: 'http://localhost:8080',
+        target: 'http://fall2024c8g7.int3306.freeddns.org',
         changeOrigin: true,
         secure: false
       }

@@ -56,7 +56,7 @@ export default function Footer({
       // setSelectedImage(null);
       try {
         const response = await axios.post(
-          `http://localhost:8080/api/v1/message/create`,
+          `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/create`,
           {
             id: messageObject.id,
             conversation_id: conversationId,
@@ -98,7 +98,6 @@ export default function Footer({
 
   return (
     <div className={`${className} relative flex mb-1`}>
-
       <form
         onSubmit={handleSubmit}
         className="w-full h-9 p-1 ml-1 text-white bg-gray-800 rounded-3xl flex items-center relative"

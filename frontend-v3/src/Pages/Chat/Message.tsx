@@ -76,7 +76,7 @@ export default function Message({
   const fetchReact = async (emoji: string) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/v1/message/friend/changeReact`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/changeReact`,
         {
           message_id: content.id,
           react: emoji,
@@ -110,7 +110,7 @@ export default function Message({
     socketRef.current.emit("delete-my-message", content.id);
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/message/friend/delete`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/delete`,
         {
           data: {
             // Sử dụng `data` thay vì `params`
@@ -136,7 +136,7 @@ export default function Message({
     });
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/v1/message/friend/changeStatusMessage`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/changeStatusMessage`,
         {
           status: "hided",
           message_id: content.id,

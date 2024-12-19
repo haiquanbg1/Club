@@ -69,7 +69,7 @@ export default function ChatPage() {
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/user/profile",
+        "http://fall2024c8g7.int3306.freeddns.org/api/v1/user/profile",
         {
           params: {
             user_id: "@me",
@@ -91,17 +91,20 @@ export default function ChatPage() {
 
   const fetchInfoClub = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/club/`, {
-        params: {
-          club_id: clubId,
-        },
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/club/`,
+        {
+          params: {
+            club_id: clubId,
+          },
+          headers: {
+            "Cache-Control":
+              "no-store, no-cache, must-revalidate, proxy-revalidate",
+            Pragma: "no-cache",
+          },
+          withCredentials: true,
+        }
+      );
       setClubProfile(response.data.data[0]);
     } catch (error) {
       console.error("Error fetching club profile:", error);
@@ -112,7 +115,7 @@ export default function ChatPage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8080/api/v1/message/club/${conversationId}/`,
+        `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/club/${conversationId}/`,
         {
           params: {
             offset,
@@ -155,11 +158,14 @@ export default function ChatPage() {
   const connectSocket = () => {
     const channelId = `${conversationId}/${clubId}`;
 
-    socketRef.current = socketIOClient("http://localhost:8080", {
-      query: {
-        channelId,
-      },
-    });
+    socketRef.current = socketIOClient(
+      "http://fall2024c8g7.int3306.freeddns.org",
+      {
+        query: {
+          channelId,
+        },
+      }
+    );
 
     // Xử lý sự kiện kết nối
     socketRef.current.on("connect", () => {

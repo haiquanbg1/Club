@@ -57,7 +57,7 @@ export default function Footer({
       // Gửi tin nhắn qua API
       try {
         const response = await axios.post(
-          `http://localhost:8080/api/v1/message/friend/${friendProfile.id}/send`,
+          `http://fall2024c8g7.int3306.freeddns.org/api/v1/message/friend/${friendProfile.id}/send`,
           {
             message: messageObject.message,
             message_id: messageObject.id,
@@ -97,7 +97,6 @@ export default function Footer({
 
   return (
     <div className={`${className} relative flex mb-1`}>
-      
       <form
         onSubmit={handleSubmit}
         className="w-full ml-1 h-9 p-1 text-white bg-[#44474e] rounded-3xl flex items-center relative"
