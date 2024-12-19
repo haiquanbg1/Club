@@ -11,6 +11,7 @@ const notification = require("./api/notificationApi");
 const report = require("./api/reportApi");
 const message = require("./api/messageApi");
 const schedule = require("./api/scheduleApi");
+const role = require("./api/roleApi");
 
 const router = express.Router();
 
@@ -26,5 +27,6 @@ router.use("/notification", notification);
 router.use("/report", report);
 router.use("/message", message);
 router.use("/schedule", schedule);
+router.use("/role", role);
 
 module.exports = router;

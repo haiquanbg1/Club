@@ -104,7 +104,8 @@ const findUserInClub = async (req, res) => {
             data.push({
                 user_id: members[i].user_id,
                 display_name: members[i].users.display_name,
-                avatar: image
+                avatar: image,
+                role: members[i].roles.name
             });
         }
 

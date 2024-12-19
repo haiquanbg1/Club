@@ -1,9 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
 const conversationService = require("../services/conversationService");
 const userService = require("../services/userService");
+const roleService = require("../services/roleService");
 const { successResponse, errorResponse } = require("../utils/response");
 const cloudinary = require("../utils/cloudinary");
-const conversation = require("../models/conversation");
 
 const create = async (req, res) => {
     const { club_id, name } = req.body;
@@ -103,15 +103,23 @@ const findAllUserWithKey = async (req, res) => {
     try {
         const participants = await conversationService.findAllUser(conversation_id, text);
 
+        const conversation = await conversationService.findOne({ id: conversation_id });
+        const manager = await roleService.findOne({
+            role_id: 2,
+            club_id: conversation.club_id
+        });
+
         const data = [];
 
         for (let i = 0; i < participants.length; i++) {
             const image = await cloudinary.getImage("Avatar", participants[i].user.avatar);
 
+
             data.push({
                 user_id: participants[i].user.id,
                 display_name: participants[i].display_name,
-                avatar: image
+                avatar: image,
+                role: 2 ? 1 : participants[i].user.id == manager.user_id
             });
         }
 

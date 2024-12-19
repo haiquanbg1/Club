@@ -1,4 +1,4 @@
-const { member_role, User } = require("../models/index");
+const { member_role, User, Role } = require("../models/index");
 
 const addMember = async (club_id, user_id, role_id) => {
     return await member_role.create({
@@ -22,6 +22,9 @@ const findAll = async (club_id) => {
         include: [{
             model: User,
             as: 'users'
+        }, {
+            model: Role,
+            as: 'roles'
         }],
         where: {
             club_id
