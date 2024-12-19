@@ -22,7 +22,8 @@ export const GetClubRes = z.object({
         name: z.string(),
         avatar: z.string(),
         id: z.string(),
-        role: z.string()
+        role: z.string(),
+        description: z.string()
     }))
 })
     .strict()

@@ -1,19 +1,32 @@
 import ClubApiRequest from "@/apiRequest/club";
 import ClubHeader from "@/components/ClubHeader";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Pencil } from "lucide-react";
+import {
+    Dialog,
+    // DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import ClubInfoPage from "../ClubInfo";
+// import { Button } from "@/components/ui/button";
 // import ProfileCard from "../ClubInfo/ProfileCard";
 interface Club {
     name: string,
     avatar: string,
     id: string,
-    role: string
+    role: string,
+    description: string
 }
 export default function ClubPage() {
     const { clubId } = useParams()
     const [club, setClub] = useState<Club>()
-
+    const [open, setOpen] = useState(false)
+    const location = useLocation()
     const getClub = async () => {
         try {
             const res = await ClubApiRequest.get(clubId || "")
@@ -26,7 +39,7 @@ export default function ClubPage() {
     useEffect(() => {
         getClub()
     }
-        , [])
+        , [location])
 
 
     return (
@@ -44,10 +57,24 @@ export default function ClubPage() {
                 {
                     club?.role == "Người quản lý" &&
                     (
-                        <div className="flex text-[#4a99ff] w-fit p-2 rounded-lg text-[20px] items-center space-x-2 cursor-pointer hover:bg-[#3d3f46]">
-                            <span><Pencil /></span>
-                            <span>Chỉnh sửa câu lạc bộ</span>
-                        </div>
+                        <>
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger>
+                                    <div className="flex text-[#4a99ff] w-fit p-2 rounded-lg text-[20px] items-center space-x-2 cursor-pointer hover:bg-[#3d3f46]">
+                                        <span><Pencil /></span>
+                                        <span>Chỉnh sửa câu lạc bộ</span>
+                                    </div>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-screen bg-[#2b2d31] h-full  ">
+                                    <DialogHeader className="h-0 hidden">
+                                        <DialogTitle></DialogTitle>
+                                        <DialogDescription>
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <ClubInfoPage getClub={getClub} description={club.description} name={club.name} avatar={club.avatar} id={club.id} />
+                                </DialogContent>
+                            </Dialog>
+                        </>
                     )
                 }
                 <div className="h-2"></div>

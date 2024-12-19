@@ -14,7 +14,8 @@ export const GetMemberRes = z.object({
     data: z.array(z.object({
         display_name: z.string(),
         avatar: z.string(),
-        user_id: z.string()
+        user_id: z.string(),
+        role: z.string()
     }))
 })
     .strict()

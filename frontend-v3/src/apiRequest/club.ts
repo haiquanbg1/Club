@@ -8,6 +8,7 @@ import { GetEventResType, GetParticipantResType, GetScheduleResType, ScheduleSen
 const ClubApiRequest = {
     create: (body: FormData) => http.post<RegisterClubResType>('/club/create', body),
     get: (clubId: string) => http.get<GetClubResType>(`/club/?club_id=${clubId}`),
+    change: (body: any) => http.patch<any>(`/club/update`, body),
     delete: (body: { club_id: string }) => http.delete<any>("/club/delete", body),
     getClub: (id: string) => http.get<GetClubResType>(`club/?club_id=${id}`),
     createEvent: (body: SendEventBodyType) => http.post<any>('/event/create', body),

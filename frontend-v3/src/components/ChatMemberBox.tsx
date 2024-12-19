@@ -24,7 +24,19 @@ import ChatApiRequest from "@/apiRequest/chat";
 interface Member {
     display_name: string;
     avatar: string;
-    user_id: string
+    user_id: string;
+    role: string
+}
+function prioritizeManager(members: Member[]): Member[] {
+    return members.sort((a, b) => {
+        if (a.role == "2" && b.role != "2") {
+            return -1; // a comes first
+        }
+        if (a.role != "2" && b.role == "2") {
+            return 1; // b comes first
+        }
+        return 0; // keep order for other roles
+    });
 }
 
 export default function ChatMemberBox() {
@@ -50,11 +62,12 @@ export default function ChatMemberBox() {
         // }
         try {
             const response = await ChatApiRequest.getParticipant(conversationId || "")
-            console.log(response)
+            const sortedMembers = prioritizeManager(response.payload.data)
+            setMembers(sortedMembers);
             // Giả sử API trả về mảng các object có cấu trúc tương tự Item
-            setMembers(response.payload.data);
-            console.log(`chat`)
-            console.log(response)
+            // setMembers(response.payload.data);
+
+
         } catch (error) {
             console.log(error)
         }
@@ -117,7 +130,7 @@ export default function ChatMemberBox() {
             </div>
             <div className="pl-2 pr-2 space-y-2">
                 {members.map((member, index) => (
-                    <MemberCard admin={checkRole} chatPage={true} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
+                    <MemberCard adminList={member.role == "2"} admin={checkRole} chatPage={true} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
                 ))}
             </div>
             {

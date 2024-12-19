@@ -47,7 +47,7 @@ export default function NotificationPage() {
         } finally {
             setLoading(false);
         }
-    }, [clubId, page]);
+    }, [clubId, page, reload]);
 
     const handleScroll = useCallback(() => {
         if (!hasMore || loading || !listRef.current) return;

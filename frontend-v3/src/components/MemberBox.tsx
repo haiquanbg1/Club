@@ -23,7 +23,20 @@ import ClubApiRequest from "@/apiRequest/club";
 interface Member {
     display_name: string;
     avatar: string;
-    user_id: string
+    user_id: string;
+    role: string
+}
+
+function prioritizeManager(members: Member[]): Member[] {
+    return members.sort((a, b) => {
+        if (a.role === "Người quản lý" && b.role !== "Người quản lý") {
+            return -1; // a comes first
+        }
+        if (a.role !== "Người quản lý" && b.role === "Người quản lý") {
+            return 1; // b comes first
+        }
+        return 0; // keep order for other roles
+    });
 }
 
 export default function MemberBox() {
@@ -43,8 +56,8 @@ export default function MemberBox() {
     const getMember = async () => {
         try {
             const response = await MemberApiRequest.get(clubId || "")
-            setMembers(response.payload.data);
-
+            const sortedMembers = prioritizeManager(response.payload.data)
+            setMembers(sortedMembers);
         } catch (error) {
 
         }
@@ -116,7 +129,7 @@ export default function MemberBox() {
             </div>
             <div className="pl-2 pr-2 space-y-2">
                 {members.map((member, index) => (
-                    <MemberCard admin={checkRole} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
+                    <MemberCard adminList={member.role == "Người quản lý"} admin={checkRole} resetMember={getMember} key={index} name={member.display_name} noMore={false} id={member.user_id} avatar={member.avatar}></MemberCard>
                 ))}
             </div>
             {

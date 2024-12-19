@@ -76,7 +76,7 @@ const findAllByClub = async (req, res) => {
                 id: notifications[i].notification.id,
                 title: notifications[i].notification.title,
                 description: notifications[i].notification.description,
-                status: 1 ? 0 : notifications[i].readAt,
+                status: notifications[i].read_at ? 1 : 0,
                 createdAt: formatDate(notifications[i].notification.createdAt)
             });
         }

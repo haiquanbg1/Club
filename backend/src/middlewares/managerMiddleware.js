@@ -13,6 +13,7 @@ const managerMiddleware = async (req, res, next) => {
         }
         next();
     } catch (error) {
+        console.log(error)
         return errorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }
 }

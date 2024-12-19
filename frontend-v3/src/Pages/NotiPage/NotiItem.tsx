@@ -33,22 +33,12 @@ export default function NotiItem({ id, title, description, status, setReload }: 
                 <span>.</span>
             </div>
             {
-                status == "no" &&
+                status == "0" &&
                 <div className="flex items-center">
                     <div className="w-5 h-5 bg-blue-500 rounded-full"></div>
                 </div>
             }
 
-            <div className="select-none flex-1">
-                <p className="font-bold capitalize text-[22px]">{title}</p>
-                <span className="text-[18px]">{description}</span>
-                <span>.</span>
-            </div>
-            {status == "no" && (
-                <div className="flex items-center">
-                    <div className="w-5 h-5 bg-blue-500 rounded-full"></div>
-                </div>
-            )}
         </div>
     );
 }

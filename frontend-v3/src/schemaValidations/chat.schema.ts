@@ -42,6 +42,7 @@ export const ChatParticipantGetRes = z.object({
         user_id: z.string(),
         display_name: z.string(),
         avatar: z.string(),
+        role: z.string()
     }))
 })
 export type ChatParticipantGetResType = z.TypeOf<typeof ChatParticipantGetRes>

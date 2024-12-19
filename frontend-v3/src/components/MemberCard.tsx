@@ -3,7 +3,7 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { Ellipsis } from "lucide-react"
+import { Crown, Ellipsis } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,13 +23,14 @@ interface Member {
     pending?: boolean,
     event?: boolean,
     admin?: boolean,
-    chatPage?: boolean
+    chatPage?: boolean,
+    adminList?: boolean,
     resetMember?: () => Promise<void>
     resetMember2?: () => Promise<void>
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 import { useToast } from "@/hooks/use-toast"
-export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admin, avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
+export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, adminList, admin, avatar, id, event, noMore = false, resetMember, pending, setOpen, resetMember2 }: Member) {
     const { toast } = useToast()
     const { clubId, eventId, conversationId } = useParams()
     const handleDelete = async () => {
@@ -157,14 +158,20 @@ export default function MemberCard({ name = "Lê Trọng Khánh", chatPage, admi
     }
     return (
         <div className={pending ? "space-y-2" : "flex items-center"}>
-            <div className="flex items-center">
+            <div className="flex items-center flex-1">
                 <Avatar className="mr-2">
                     <AvatarImage src={avatar} alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <div>{name}</div>
+                <div className="flex-1">{name}</div>
+                {
+                    adminList && (
+                        <div><Crown /></div>
+                    )
+                }
+
             </div>
-            {(!noMore && admin && id != localStorage.getItem("user_id")) &&
+            {(!noMore && admin && !adminList) &&
                 (<div className="ml-auto cursor-pointer">
                     <DropdownMenu>
                         <DropdownMenuTrigger><Ellipsis /></DropdownMenuTrigger>
