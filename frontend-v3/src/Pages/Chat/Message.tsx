@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Avatar from "./Avatar";
 import { FaSmile } from "react-icons/fa";
 import { UserChat } from ".";
-import { MdReply } from "react-icons/md";
 import EmojiPicker from "./EmojiPicker";
 import { MessageStatus } from ".";
 // import { MessageType } from ".";
@@ -188,7 +187,7 @@ export default function Message({
           setReact(message.react);
         }
       });
-  
+
       socketRef.current.on("remove-react", (message: any) => {
         if (message.id === content.id) {
           setReact("");
@@ -201,7 +200,7 @@ export default function Message({
     } else {
       console.error("Socket is not connected");
     }
-  
+
     // Cleanup khi component bị hủy
     return () => {
       if (socketRef.current) {
@@ -209,8 +208,7 @@ export default function Message({
         socketRef.current.off("remove-react");
       }
     };
-  }, [socketRef.current, socketRef]); 
-  
+  }, [socketRef.current, socketRef]);
 
   useEffect(() => {
     if (react !== "") {

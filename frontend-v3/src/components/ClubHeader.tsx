@@ -1,7 +1,5 @@
 import { Button } from "./ui/button";
 import { useNavigate, useParams } from "react-router-dom";
-import socketIOClient from "socket.io-client";
-import { useRef } from "react";
 
 export default function ClubHeader() {
   const navigate = useNavigate();

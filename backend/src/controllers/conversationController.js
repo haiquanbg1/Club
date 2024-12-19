@@ -114,7 +114,6 @@ const findAllUserWithKey = async (req, res) => {
         for (let i = 0; i < participants.length; i++) {
             const image = await cloudinary.getImage("Avatar", participants[i].user.avatar);
 
-
             data.push({
                 user_id: participants[i].user.id,
                 display_name: participants[i].display_name,

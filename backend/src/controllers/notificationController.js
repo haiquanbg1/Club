@@ -17,7 +17,7 @@ const create = async (req, res) => {
         const users = await memberService.findAll(club_id);
         users.forEach((user) => {
             notificationService.addNotificationForUser(
-                user.user.id,
+                user.user_id,
                 notification.id
             );
         });
@@ -47,6 +47,7 @@ const findOne = async (req, res) => {
         await notificationService.updateSeen(notification_id, user.id);
 
         return successResponse(res, StatusCodes.OK, "Thành công.", {
+            notification_id: notification.id,
             title: notification.title,
             description: notification.description,
             createdAt: formatDate(notification.createdAt)
